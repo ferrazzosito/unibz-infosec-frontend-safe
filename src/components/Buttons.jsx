@@ -8,4 +8,15 @@ const ConfirmationButton = ({title, onClick}) => (
     >{title}</Button>
 )
 
-export {ConfirmationButton};
+const BuyButton = ({alreadyOwned}) => (
+    <>
+        {
+            alreadyOwned ?
+            <Button size="medium" variant="outlined" color="secondary" disabled>Already Owned</Button>
+            :
+            <Button size="medium" variant="contained">Buy Now</Button>
+        }
+    </>
+)
+
+export {ConfirmationButton, BuyButton};

@@ -6,6 +6,8 @@ import { ConfirmationButton } from './components/Buttons';
 import { SignInForm, SignUpForm } from './fragments/Forms';
 import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
+import { BasicProductCard } from './fragments/ProductCards';
+import BuyerHomePage from './pages/BuyerHomePage';
 
 function App() {
 
@@ -13,7 +15,8 @@ function App() {
 
   return (
     <div className="App">
-      <RegistrationPage />
+      {/* <RegistrationPage /> */}
+      <BuyerHomePage />
     </div>
   );
 }
