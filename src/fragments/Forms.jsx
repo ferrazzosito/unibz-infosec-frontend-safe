@@ -1,7 +1,8 @@
-import { EmailField, PasswordField, StringField } from '../components/FormComponents';
+import { EmailField, PasswordField, StringField, TextArea } from '../components/FormComponents';
 import { useState } from 'react';
 import { ConfirmationButton } from '../components/Buttons';
 import { Grid, Item } from '@mui/material';
+import {Card, CardContent,Typography} from '@mui/material';
 
 const SignUpForm = () => {
 
@@ -51,4 +52,36 @@ const SignInForm = () => {
     )
 }
 
-export {SignUpForm, SignInForm};
+const ReviewForm = ({header}) => {
+
+    const [stars, setStars] = useState("");
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+
+    return (
+        <Card sx={{ minWidth: 275 }}>
+            <CardContent>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    {header}
+                </Typography>
+                <Grid container rowSpacing={2} columnSpacing={2}  justifyContent="center">
+                    <Grid item xs={12}>
+                        <StringField string={stars} setString={setStars} title={"Stars"}  />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <StringField string={title} setString={setTitle} title={"Title"}  />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextArea text={description} setText={setDescription} placeholder={"Insert the description of your review.."}  />
+                    </Grid>
+                    <Grid item xs={7}>
+                        <ConfirmationButton title={"Publish"} onClick={() => {}} />
+                    </Grid>
+                </Grid>
+            </CardContent>
+        </Card>
+    )
+
+}
+
+export {SignUpForm, SignInForm, ReviewForm};
