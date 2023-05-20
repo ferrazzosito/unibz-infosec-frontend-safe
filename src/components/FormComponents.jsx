@@ -60,4 +60,21 @@ const TextArea = ({text, setText, placeholder}) => {
 
 }
 
-export {EmailField, PasswordField, StringField, TextArea};
+const NumericField = ({number, setNumber, title}) => {
+
+    const isFieldValid = (fieldVal) => (fieldVal !== '' && !isNaN(fieldVal) && fieldVal !== null)
+
+    return (
+        <TextField
+            id="numeric-field"
+            label={title}
+            variant="outlined"
+            onChange={setNumber}
+            error = { !isFieldValid(number) }
+            fullWidth
+            
+        />
+    )
+}
+
+export {EmailField, PasswordField, StringField, TextArea, NumericField};

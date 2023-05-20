@@ -19,4 +19,6 @@ const BuyButton = ({alreadyOwned}) => (
     </>
 )
 
-export {ConfirmationButton, BuyButton};
+const DeleteButton = () => (<Button size="medium" variant="contained" color="error">Delete</Button>)
+
+export {ConfirmationButton, BuyButton, DeleteButton};

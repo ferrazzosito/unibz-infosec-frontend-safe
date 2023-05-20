@@ -9,6 +9,7 @@ import RegistrationPage from './pages/RegistrationPage';
 import { BasicProductCard, ReviewCard } from './fragments/ProductCards';
 import BuyerHomePage from './pages/BuyerHomePage';
 import ProductPage from './pages/ProductPage';
+import VendorHomePage from './pages/VendorHomePage';
 
 function App() {
 
@@ -17,9 +18,10 @@ function App() {
       {/* <RegistrationPage /> */}
       {/* <BuyerHomePage /> */}
         {/* <ReviewForm /> */}
-        {/* <BuyerHomePage /> */}
+        <VendorHomePage />
         {/* <LoginPage /> */}
         {/* <RegistrationPage /> */}
+        
     
     </div>
   );
