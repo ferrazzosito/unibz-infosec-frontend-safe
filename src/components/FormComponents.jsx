@@ -1,6 +1,7 @@
 
 import { TextField } from "@mui/material"
 import { useState } from "react";
+import { TextareaAutosize } from '@mui/base';
 
 const StringField = ({string, setString, title}) => (
     <TextField 
@@ -45,4 +46,18 @@ const PasswordField = ({password, setPassword}) => {
     );
 }
 
-export {EmailField, PasswordField, StringField};
+const TextArea = ({text, setText, placeholder}) => {
+
+    //TODO: validation
+
+    return (
+        <TextareaAutosize
+            onChange={setText}
+            placeholder={placeholder}
+            style={{minWidth: "100%",minHeight: "10%"}}
+        />
+    )
+
+}
+
+export {EmailField, PasswordField, StringField, TextArea};
