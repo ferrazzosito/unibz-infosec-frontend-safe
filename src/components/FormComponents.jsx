@@ -2,6 +2,8 @@
 import { TextField } from "@mui/material"
 import { useState } from "react";
 import { TextareaAutosize } from '@mui/base';
+import InputAdornment from '@mui/material/InputAdornment';
+import Search from '@mui/icons-material/Search'; 
 
 const StringField = ({string, setString, title}) => (
     <TextField 
@@ -77,4 +79,24 @@ const NumericField = ({number, setNumber, title}) => {
     )
 }
 
-export {EmailField, PasswordField, StringField, TextArea, NumericField};
+const SearchField =  ({query, setQuery}) => {
+
+    return (
+        <TextField
+            id="input-with-icon-textfield"
+            label="Search"
+            InputProps={{
+            startAdornment: (
+                    <InputAdornment position="end">
+                        <Search />
+                    </InputAdornment>
+                ),
+            }}
+            onChange={(e) => setQuery(e.target.value)}
+            style={{width: "100%"}}
+            variant="standard"
+        />
+    )
+}
+
+export {EmailField, PasswordField, StringField, TextArea, NumericField, SearchField};

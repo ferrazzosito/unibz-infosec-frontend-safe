@@ -16,12 +16,12 @@ function App() {
   return (
     <div className="App">
       {/* <RegistrationPage /> */}
-      {/* <BuyerHomePage /> */}
+      <BuyerHomePage />
         {/* <ReviewForm /> */}
-        <VendorHomePage />
+        {/* <VendorHomePage /> */}
         {/* <LoginPage /> */}
         {/* <RegistrationPage /> */}
-        
+        {/* <ProductPage />       */}
     
     </div>
   );
