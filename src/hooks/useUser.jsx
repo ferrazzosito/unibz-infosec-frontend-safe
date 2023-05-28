@@ -1,42 +1,59 @@
 import { useState, useEffect } from 'react';
-import {client as axios} from '../utils/axios'
+import {client as axios} from '../utils/axios';
+import jwt_decode from "jwt-decode";
 
-function parseJwt (token) {
-  return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-}
-
-export default function useUser (email, password) {
+export default function useUser () {
 
     const [user, setUser] = useState({});
 
-    async function log({email, password}) {
+    async function log(email, password) {
 
-      return axios.post('/v1/users/login', {
-          email: email,
-          password: password
-      })
-      .then(response => response.json())
-      .catch(e => {throw new Error("Error while logging the user: " + e.message)})
+      
+      let data = {
+        "email": email,
+        "password": password
+      };
+      
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'http://localhost:8080/auth/login',
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        data : JSON.stringify(data)
+      };
+
+      // return 
+      // axios.post('/auth/login', {
+      //     email: email,
+      //     password: password
+      // })
+      return axios.request(config)
+      .then(response => response.data)
+      .catch(e => {throw new Error("Error while registering the user: " + e.message)})
     }
 
-    async function logUser(user) {
-      const response = await log(user);
-      setUser({
-        accessToken : response.accessToken,
-        payload: parseJwt(user.accessToken)
+    function logUser(email, password) {
+      log(email, password)
+      .then(response => {
+        setUser({
+          accessToken : response.accessToken,
+          payload: jwt_decode(response.accessToken)
+        })
       })
     }
 
-    useEffect (
-      () =>  {
-          logUser({email,  password})
-          .catch(e => {}) //TODO: there's should be a sort of alert or smth 
-      }, []
-    )
+    // useEffect (
+    //   () =>  {
+    //       logUser({email,  password})
+    //       .catch(e => {}) //TODO: there's should be a sort of alert or smth 
+    //   }, []
+    // )
 
     async function register({/*name, lastName, */email, password, type}) {
 
-      return axios.post('/v1/users/register', {
+      return axios.post('/auth/register', {
           email: email,
           password: password,
           type: type
@@ -45,7 +62,7 @@ export default function useUser (email, password) {
       .catch(e => {throw new Error("Error while registering the user: " + e.message)})
     }
 
-    function registerUser(user) {
+    function registerUser({/*name, lastName, */email, password, type}) {
       const response = register(user);
     }
 

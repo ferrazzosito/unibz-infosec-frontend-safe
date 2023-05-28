@@ -25,7 +25,7 @@ const EmailField = ({email, setEmail}) => {
             fullWidth
             variant="outlined"
             label="Email" 
-            onChange={setEmail}
+            onChange={(e) => setEmail(e.target.value)}
             error={!isValidEmail(email)} 
         />
     );
@@ -41,7 +41,7 @@ const PasswordField = ({password, setPassword}) => {
             fullWidth
             variant="outlined"
             label="Password" 
-            onChange={setPassword}
+            onChange={(e) => setPassword(e.target.value)}
             error={!isValidPassword(password)} 
             type="password"
         />

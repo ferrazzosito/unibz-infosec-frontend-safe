@@ -12,7 +12,7 @@ const LoginPage = () => {
         <Grid container justifyContent="center" >
             <Grid item xs={8}>
                 <Title text="Log in" />
-                <SignInForm />
+                <SignInForm onSubmitForm = {logUser}/>
                 <span>New Here? Sign up as a vendor or sign up as a client</span>
             </Grid>
         </Grid>
