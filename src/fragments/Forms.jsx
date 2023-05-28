@@ -5,7 +5,7 @@ import { Grid, Item } from '@mui/material';
 import {Card, CardContent,Typography} from '@mui/material';
 import useUser from '../hooks/useUser';
 
-const SignUpForm = () => {
+const SignUpForm = ({onSubmitForm}) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -27,7 +27,7 @@ const SignUpForm = () => {
                 <PasswordField password = {password} setPassword={setPassword}/>
             </Grid>
             <Grid item xs={7}>
-                <ConfirmationButton title={"Sign Up"} onClick={() => {}} />
+                <ConfirmationButton title={"Sign Up"} onClick={() => onSubmitForm(email, password)} />
             </Grid>
         </Grid>
     )

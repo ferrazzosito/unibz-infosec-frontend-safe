@@ -15,11 +15,11 @@ function App() {
 
   return (
     <div className="App">
-      {/* <RegistrationPage /> */}
+      <RegistrationPage />
       {/* <BuyerHomePage /> */}
         {/* <ReviewForm /> */}
         {/* <VendorHomePage /> */}
-        <LoginPage />
+        {/* <LoginPage /> */}
         {/* <RegistrationPage /> */}
         {/* <ProductPage />       */}
     

@@ -8,7 +8,6 @@ export default function useUser () {
 
     async function log(email, password) {
 
-      
       let data = {
         "email": email,
         "password": password
@@ -24,11 +23,6 @@ export default function useUser () {
         data : JSON.stringify(data)
       };
 
-      // return 
-      // axios.post('/auth/login', {
-      //     email: email,
-      //     password: password
-      // })
       return axios.request(config)
       .then(response => response.data)
       .catch(e => {throw new Error("Error while registering the user: " + e.message)})
@@ -44,63 +38,30 @@ export default function useUser () {
       })
     }
 
-    // useEffect (
-    //   () =>  {
-    //       logUser({email,  password})
-    //       .catch(e => {}) //TODO: there's should be a sort of alert or smth 
-    //   }, []
-    // )
+    async function register({/*name, lastName, */email, password /*, type*/ }) {
 
-    async function register({/*name, lastName, */email, password, type}) {
+      let data = {
+        "email": email,
+        "password": password
+      };
+      
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'http://localhost:8080/auth/register',
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        data : JSON.stringify(data)
+      };
 
-      return axios.post('/auth/register', {
-          email: email,
-          password: password,
-          type: type
-      })
-      .then(response => response.json())
+      return axios.request(config)
+      .then(response => JSON.stringify(response.data))
       .catch(e => {throw new Error("Error while registering the user: " + e.message)})
     }
 
-    function registerUser({/*name, lastName, */email, password, type}) {
-      const response = register(user);
+    function registerUser({/*name, lastName, */email, password /*, type*/}) {
+      const response = register({email, password});
     }
 
-    // async function get(email, password) {
-      
-    //   const {data} = axios.post('/v1/users/login', {
-    //     email: email,
-    //     password: password
-    //   }).then(response => {
-
-    //     return response;
-
-    //   })
-    // }
-
-    // function getUser(email, password) {
-    //   get(email, password)
-    // }
-
-    // useEffect(getUser, []);
-
-    return [user, logUser, registerUser]
-
-    // useEffect(getPlaces, []);
-
-    //riflettere on how to handle login with the hook
-    //magari ne handlo solo uno
-
-    // async function get() {
-    //   const { data } = await axios.get('/v1/users/getAll');
-    //   setPlaces(data);  
-    // }
-
-    // function getPlaces() {
-    //   get()
-    // }
-
-    // useEffect(getPlaces, []);
-    
-    // return [places, setPlace];
 }
