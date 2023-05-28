@@ -1,8 +1,11 @@
 import { Grid } from "@mui/material";
 import { SignInForm } from "../fragments/Forms";
 import { Title } from "../components/Typography";
+import useUser from "../hooks/useUser";
 
 const LoginPage = () => { 
+
+    const [user, logUser] = useUser();
 
     return(
         //cambia che sta a 12 ma cambia lo stile
