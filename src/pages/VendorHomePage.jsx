@@ -2,8 +2,11 @@ import { Grid } from "@mui/material";
 import { BasicProductCard, BuyerProductCard, OrderCard, VendorProductCard } from "../fragments/ProductCards";
 import { Title } from "../components/Typography";
 import { ProductForm } from "../fragments/Forms";
+import useAuthentication from "../hooks/useAuthentication";
 
-const VendorHomePage = () => {
+const VendorHomePage = ({user}) => {
+
+    useAuthentication(user);
 
     return (
         <Grid container justifyContent="center" >

@@ -28,13 +28,14 @@ export default function useUser () {
       .catch(e => {throw new Error("Error while registering the user: " + e.message)})
     }
 
-    function logUser(email, password) {
+    async function logUser(email, password) {
       log(email, password)
       .then(response => {
         setUser({
           accessToken : response.accessToken,
           payload: jwt_decode(response.accessToken)
         })
+        
       })
     }
 
@@ -60,8 +61,10 @@ export default function useUser () {
       .catch(e => {throw new Error("Error while registering the user: " + e.message)})
     }
 
-    function registerUser({/*name, lastName, */email, password /*, type*/}) {
-      const response = register({email, password});
+    async function registerUser({/*name, lastName, */email, password /*, type*/}) {
+      return await register({email, password});
     }
+
+    return [user, logUser, registerUser];
 
 }
