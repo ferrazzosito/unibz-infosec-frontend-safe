@@ -17,7 +17,7 @@ const ContentProductCard = ({type, name, price, description}) => (
             {name}
         </Typography>
         <Typography variant="h5" sx={{ mb: 1.5 }} color="text.secondary">
-            {price}
+            {price} $
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
             by vendor x

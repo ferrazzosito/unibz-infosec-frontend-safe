@@ -5,7 +5,7 @@ import { Grid, Item } from '@mui/material';
 import {Card, CardContent,Typography} from '@mui/material';
 import useUser from '../hooks/useUser';
 
-const SignUpForm = ({onSubmitForm}) => {
+const SignUpForm = ({onSubmitForm, redirect}) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -27,13 +27,17 @@ const SignUpForm = ({onSubmitForm}) => {
                 <PasswordField password = {password} setPassword={setPassword}/>
             </Grid>
             <Grid item xs={7}>
-                <ConfirmationButton title={"Sign Up"} onClick={() => onSubmitForm(email, password)} />
+                <ConfirmationButton title={"Sign Up"} onClick={() => {
+                    onSubmitForm({email, password})   
+                    .then(response => redirect())
+                    }} 
+                />
             </Grid>
         </Grid>
     )
 }
 
-const SignInForm = ({onSubmitForm}) => {
+const SignInForm = ({onSubmitForm, redirect}) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -47,7 +51,10 @@ const SignInForm = ({onSubmitForm}) => {
                 <PasswordField password = {password} setPassword={setPassword}/>
             </Grid>
             <Grid item xs={7}>
-                <ConfirmationButton title={"Sign In"} onClick={() => onSubmitForm(email, password)} />
+                <ConfirmationButton title={"Sign In"} onClick={() => { 
+                    onSubmitForm(email, password)
+                    .then( () => redirect())
+                }} />
             </Grid>
         </Grid>
     )
