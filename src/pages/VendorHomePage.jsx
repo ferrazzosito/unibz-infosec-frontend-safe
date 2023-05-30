@@ -3,10 +3,12 @@ import { BasicProductCard, BuyerProductCard, OrderCard, VendorProductCard } from
 import { Title } from "../components/Typography";
 import { ProductForm } from "../fragments/Forms";
 import { useUser } from "../hooks/useUser";
+import AuthConsumer from "../hooks/useUser";
+import { ConfirmationButton } from "../components/Buttons";
 
 const VendorHomePage = () => {
 
-    const {user} = useUser();
+    const {user, logUser, registerUser, logout} = AuthConsumer();    
 
     return (
         <Grid container justifyContent="center" >
@@ -71,6 +73,13 @@ const VendorHomePage = () => {
                             date="10/20/2024"
                         />
                     </Grid>
+                </Grid>
+            </Grid>
+            <Grid item container xs={12} justifyContent="center">
+                <Grid item xs={7}>
+                    <ConfirmationButton title={"Logout"} onClick={() => { 
+                        logout()
+                    }} />
                 </Grid>
             </Grid>
         </Grid>

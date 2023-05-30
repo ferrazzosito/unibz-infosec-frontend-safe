@@ -3,6 +3,7 @@ import { SignUpForm } from "../fragments/Forms";
 import { Title } from "../components/Typography";
 import { useNavigate } from "react-router";
 import { useUser } from "../hooks/useUser";
+import AuthConsumer from "../hooks/useUser";
 
 const RegistrationPage = () => { 
     
@@ -10,7 +11,7 @@ const RegistrationPage = () => {
 
     const redirect = () => navigate("/login");
 
-    const {user, logUser, registerUser, logout} = useUser();
+    const {user, logUser, registerUser, logout} = AuthConsumer();    
 
     return(
         <Grid container justifyContent="center" spacing={2}>

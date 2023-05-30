@@ -32,16 +32,13 @@ export function useUser () {
     }
 
     async function logUser(email, password) {
-      log(email, password)
-      .then(response => {
+      await log(email, password)
+      .then(async response => {
         
         setUser({
           accessToken : response.accessToken,
           payload: jwt_decode(response.accessToken)
         })
-
-        console.log(JSON.stringify(user))
-        // console.log(JSON.stringify(user && user.accessToken))
   
       })
     }

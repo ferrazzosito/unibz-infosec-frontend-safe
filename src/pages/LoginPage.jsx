@@ -3,7 +3,8 @@ import { SignInForm } from "../fragments/Forms";
 import { Title } from "../components/Typography";
 import { useNavigate } from "react-router";
 import { useUser } from "../hooks/useUser";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import AuthConsumer from "../hooks/useUser";
 
 const LoginPage = () => { 
 
@@ -11,7 +12,7 @@ const LoginPage = () => {
 
     const redirect = () => navigate("/");
 
-    const {user, logUser, registerUser, logout} = useUser();
+    const {user, logUser, registerUser, logout} = AuthConsumer();    
 
     useEffect( () => {
         console.log(JSON.stringify(user))
@@ -19,8 +20,8 @@ const LoginPage = () => {
   
     }, [])
 
+    //cambia che sta a 12 ma cambia lo stile
     return(
-        //cambia che sta a 12 ma cambia lo stile
         <Grid container justifyContent="center" >
             <Grid item xs={8}>
                 <Title text="Log in" />
