@@ -7,12 +7,13 @@ import SearchBar from "../fragments/SearchBar";
 import { useNavigate } from "react-router";
 import useAuthentication from "../hooks/useAuthentication";
 import { useProducts } from "../hooks/useProducts";
+import { useUser } from "../hooks/useUser";
 
-const BuyerHomePage = ({user}) => {
-
-    useAuthentication(user);    
+const BuyerHomePage = () => {
 
     const [query, setQuery] = useState("");
+
+    const {user} = useUser();
 
     const [products] = useProducts(user.accessToken);
 

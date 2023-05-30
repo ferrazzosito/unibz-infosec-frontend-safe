@@ -3,10 +3,11 @@ import { BasicProductCard, BuyerProductCard, OrderCard, VendorProductCard } from
 import { Title } from "../components/Typography";
 import { ProductForm } from "../fragments/Forms";
 import useAuthentication from "../hooks/useAuthentication";
+import { useUser } from "../hooks/useUser";
 
-const VendorHomePage = ({user}) => {
+const VendorHomePage = () => {
 
-    useAuthentication(user);
+    const {user} = useUser();
 
     return (
         <Grid container justifyContent="center" >

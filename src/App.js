@@ -12,18 +12,19 @@ import ProductPage from './pages/ProductPage';
 import VendorHomePage from './pages/VendorHomePage';
 import { Route, Routes } from "react-router-dom";
 import useUser from './hooks/useUser';
+import RequireAuth from './fragments/RequireAuth';
 
 function App() {
 
-  const [user, logUser, registerUser] = useUser();
+  // const {user, logUser, registerUser, logout} = useUser();
 
   return (
     <div className="App">
       <Routes> 
-        <Route path="/login" element={<LoginPage user={user} logUser={logUser}/>}/>
-        <Route path="/sign-up" element={<RegistrationPage user={user} registerUser={registerUser}/>} />
-        <Route path="/" element={<BuyerHomePage user={user} />} />
-        <Route path="/selling" element={<VendorHomePage user={user}/>} />
+        <Route path="/login" element={<LoginPage/>}/>
+        <Route path="/sign-up" element={<RegistrationPage/>} />
+        <Route path="/" element={<RequireAuth> <BuyerHomePage/> </RequireAuth>} />
+        <Route path="/selling" element={<RequireAuth> <VendorHomePage/> </RequireAuth>} />
           {/* <ReviewForm /> */}
           {/* <VendorHomePage /> */}
           {/* <LoginPage /> */}

@@ -1,17 +1,17 @@
 
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
+// import { useEffect } from "react";
+// import { useNavigate } from "react-router";
 
-export default function useAuthentication (user) {
+// export default function useAuthentication (user) {
 
-    const navigate = useNavigate();
+//     const navigate = useNavigate();
 
-    useEffect(() => 
-        {
-            if(!user || !user.accessToken){
-                navigate('/login')
-                // console.log(JSON.stringify(user))
-                }
-        }
-    , []);
-}
+//     useEffect(() => 
+//         {
+//             if(!user || !user.accessToken){
+//                 navigate('/login')
+//                 // console.log(JSON.stringify(user))
+//                 }
+//         }
+//     , []);
+// }

@@ -2,12 +2,15 @@ import { Grid } from "@mui/material";
 import { SignInForm } from "../fragments/Forms";
 import { Title } from "../components/Typography";
 import { useNavigate } from "react-router";
+import { useUser } from "../hooks/useUser";
 
-const LoginPage = ({user, logUser}) => { 
+const LoginPage = () => { 
 
     const navigate = useNavigate();
 
     const redirect = () => navigate("/");
+
+    const {user, logUser, registerUser, logout} = useUser();
 
     return(
         //cambia che sta a 12 ma cambia lo stile
