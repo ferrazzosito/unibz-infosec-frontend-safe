@@ -3,6 +3,7 @@ import { SignInForm } from "../fragments/Forms";
 import { Title } from "../components/Typography";
 import { useNavigate } from "react-router";
 import { useUser } from "../hooks/useUser";
+import { useEffect } from "react";
 
 const LoginPage = () => { 
 
@@ -11,6 +12,12 @@ const LoginPage = () => {
     const redirect = () => navigate("/");
 
     const {user, logUser, registerUser, logout} = useUser();
+
+    useEffect( () => {
+        console.log(JSON.stringify(user))
+        console.log(JSON.stringify(user && user.accessToken))
+  
+    }, [])
 
     return(
         //cambia che sta a 12 ma cambia lo stile

@@ -5,7 +5,6 @@ import { SearchField } from "../components/FormComponents";
 import { useEffect, useState } from "react";
 import SearchBar from "../fragments/SearchBar";
 import { useNavigate } from "react-router";
-import useAuthentication from "../hooks/useAuthentication";
 import { useProducts } from "../hooks/useProducts";
 import { useUser } from "../hooks/useUser";
 

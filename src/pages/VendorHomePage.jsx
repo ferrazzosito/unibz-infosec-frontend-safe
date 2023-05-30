@@ -2,7 +2,6 @@ import { Grid } from "@mui/material";
 import { BasicProductCard, BuyerProductCard, OrderCard, VendorProductCard } from "../fragments/ProductCards";
 import { Title } from "../components/Typography";
 import { ProductForm } from "../fragments/Forms";
-import useAuthentication from "../hooks/useAuthentication";
 import { useUser } from "../hooks/useUser";
 
 const VendorHomePage = () => {
