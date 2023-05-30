@@ -5,14 +5,16 @@ import { SearchField } from "../components/FormComponents";
 import { useEffect, useState } from "react";
 import SearchBar from "../fragments/SearchBar";
 import { useNavigate } from "react-router";
-import useAuthentication from "../hooks/useAuthentication";
 import { useProducts } from "../hooks/useProducts";
+import { useUser } from "../hooks/useUser";
+import AuthConsumer from "../hooks/useUser";
+import { ConfirmationButton } from "../components/Buttons";
 
-const BuyerHomePage = ({user}) => {
-
-    useAuthentication(user);    
+const BuyerHomePage = () => {
 
     const [query, setQuery] = useState("");
+
+    const {user, logUser, registerUser, logout} = AuthConsumer();    
 
     const [products] = useProducts(user.accessToken);
 
@@ -58,6 +60,14 @@ const BuyerHomePage = ({user}) => {
                     </Grid>
                 </Grid>
             </Grid>
+            <Grid item container xs={12} justifyContent="center">
+                <Grid item xs={7}>
+                    <ConfirmationButton title={"Logout"} onClick={() => { 
+                        logout()
+                    }} />
+                </Grid>
+            </Grid>
+            
         </Grid>
     )
 

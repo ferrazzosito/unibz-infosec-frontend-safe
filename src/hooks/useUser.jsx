@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import {client as axios} from '../utils/axios';
 import jwt_decode from "jwt-decode";
+import * as React from "react";
 
-export default function useUser () {
+const authContext = React.createContext();
+
+export function useUser () {
 
     const [user, setUser] = useState({});
 
@@ -29,13 +32,14 @@ export default function useUser () {
     }
 
     async function logUser(email, password) {
-      log(email, password)
-      .then(response => {
+      await log(email, password)
+      .then(async response => {
+        
         setUser({
           accessToken : response.accessToken,
           payload: jwt_decode(response.accessToken)
         })
-        
+  
       })
     }
 
@@ -65,6 +69,20 @@ export default function useUser () {
       return await register({email, password});
     }
 
-    return [user, logUser, registerUser];
+    function logout () {
+      setUser({});
+    }
 
+    return {user, logUser, registerUser, logout};
+
+}
+
+export function AuthProvider({ children }) {
+  const auth = useUser();
+
+  return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+}
+
+export default function AuthConsumer() {
+  return React.useContext(authContext);
 }

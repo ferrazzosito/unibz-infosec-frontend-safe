@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { ConfirmationButton } from '../components/Buttons';
 import { Grid, Item } from '@mui/material';
 import {Card, CardContent,Typography} from '@mui/material';
-import useUser from '../hooks/useUser';
 
 const SignUpForm = ({onSubmitForm, redirect}) => {
 

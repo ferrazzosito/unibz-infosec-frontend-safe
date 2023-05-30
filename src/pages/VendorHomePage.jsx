@@ -2,11 +2,13 @@ import { Grid } from "@mui/material";
 import { BasicProductCard, BuyerProductCard, OrderCard, VendorProductCard } from "../fragments/ProductCards";
 import { Title } from "../components/Typography";
 import { ProductForm } from "../fragments/Forms";
-import useAuthentication from "../hooks/useAuthentication";
+import { useUser } from "../hooks/useUser";
+import AuthConsumer from "../hooks/useUser";
+import { ConfirmationButton } from "../components/Buttons";
 
-const VendorHomePage = ({user}) => {
+const VendorHomePage = () => {
 
-    useAuthentication(user);
+    const {user, logUser, registerUser, logout} = AuthConsumer();    
 
     return (
         <Grid container justifyContent="center" >
@@ -71,6 +73,13 @@ const VendorHomePage = ({user}) => {
                             date="10/20/2024"
                         />
                     </Grid>
+                </Grid>
+            </Grid>
+            <Grid item container xs={12} justifyContent="center">
+                <Grid item xs={7}>
+                    <ConfirmationButton title={"Logout"} onClick={() => { 
+                        logout()
+                    }} />
                 </Grid>
             </Grid>
         </Grid>
