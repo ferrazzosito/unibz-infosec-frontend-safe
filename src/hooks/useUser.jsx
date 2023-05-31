@@ -85,7 +85,8 @@ export function useUser () {
 
       let data = {
         "email": email,
-        "password": password
+        "password": password,
+        "role" : "customer"
       };
       
       let config = {

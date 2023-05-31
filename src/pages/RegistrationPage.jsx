@@ -12,9 +12,9 @@ const RegistrationPage = () => {
 
     const redirect = () => navigate("/login");
 
-    const {user, logUser, registerUser, logout, reload} = useContext(authContext);
+    const {user, logUser, registerUser, logout} = useContext(authContext);
 
-    reload();
+    // reload();
 
     return(
         <Grid container justifyContent="center" spacing={2}>

@@ -12,10 +12,10 @@ export default function RequireAuth({ children }) {
     
     // reload();
 
-    useEffect( () => {
-        console.log(user)
-        // console.log(JSON.stringify(user && user.accessToken))  
-    }, [])
+    // useEffect( () => {
+    //     console.log(user)
+    //     // console.log(JSON.stringify(user && user.accessToken))  
+    // }, [])
 
     // console.log(JSON.stringify(user))
     // console.log(JSON.stringify(user && user.accessToken))

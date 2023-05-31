@@ -10,7 +10,7 @@ const StringField = ({string, setString, title}) => (
         fullWidth
         variant="outlined"
         label={title} 
-        onChange={setString}
+        onChange={(e) => setString(e.target.value)}
         error={string == ""} 
     />
 )
@@ -54,7 +54,7 @@ const TextArea = ({text, setText, placeholder}) => {
 
     return (
         <TextareaAutosize
-            onChange={setText}
+        onChange={(e) => setText(e.target.value)}
             placeholder={placeholder}
             style={{minWidth: "100%",minHeight: "10%"}}
         />
@@ -71,7 +71,7 @@ const NumericField = ({number, setNumber, title}) => {
             id="numeric-field"
             label={title}
             variant="outlined"
-            onChange={setNumber}
+            onChange={(e) => setNumber(+e.target.value)}
             error = { !isFieldValid(number) }
             fullWidth
             

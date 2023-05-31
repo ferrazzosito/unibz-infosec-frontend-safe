@@ -20,7 +20,7 @@ function App() {
 
   const auth = useUser();
 
-  console.log(JSON.stringify(auth.user));
+  // console.log(JSON.stringify(auth.user));
 
   return (
     <authContext.Provider value={auth}>

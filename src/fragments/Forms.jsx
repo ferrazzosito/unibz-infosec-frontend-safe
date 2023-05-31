@@ -91,12 +91,12 @@ const ReviewForm = ({header}) => {
 
 }
 
-const ProductForm = () => {
+const ProductForm = ({onSubmitForm}) => {
 
     const [type, setType] = useState("");
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [price, setPrice] = useState(0);
+    const [cost, setCost] = useState(0);
 
     return (
         <Card sx={{ minWidth: 275 }}>
@@ -105,20 +105,20 @@ const ProductForm = () => {
                     Create a Product
                 </Typography>
                 <Grid container rowSpacing={2} columnSpacing={2}  justifyContent="center">
-                    <Grid item xs={6}>
+                    {/* <Grid item xs={6}>
                         <StringField string={type} setString={setType} title={"Type"}  />
-                    </Grid>
-                    <Grid item xs={6}>
+                    </Grid> */}
+                    <Grid item xs={12}>
                         <StringField string={name} setString={setName} title={"Name"}  />
                     </Grid>
                     <Grid item xs={12}>
-                        <NumericField text={price} setText={setPrice} title= "Price" />
+                        <StringField string={cost} setString={(e) => setCost(+e)} title= "Price" />
                     </Grid>
-                    <Grid item xs={12}>
+                    {/* <Grid item xs={12}>
                         <TextArea text={description} setText={setDescription} placeholder={"Insert the description of your product.."}  />
-                    </Grid>
+                    </Grid> */}
                     <Grid item xs={7}>
-                        <ConfirmationButton title={"Add"} onClick={() => {}} />
+                        <ConfirmationButton title={"Add"} onClick={() => onSubmitForm({name, cost})} />
                     </Grid>
                 </Grid>
             </CardContent>

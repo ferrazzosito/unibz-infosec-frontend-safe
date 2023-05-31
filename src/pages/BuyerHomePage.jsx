@@ -18,20 +18,11 @@ const BuyerHomePage = () => {
 
     const {user, logUser, registerUser, logout} = useContext(authContext);     
 
-    const [products] = useProducts(user.accessToken);
+    const {products} = useProducts(user.accessToken);
 
     const navigate = useNavigate();
     const redirect = () => navigate("/selling");
 
-    // const products = [{type: "vulnerability", price: "15$", name: "Salt in Passwords", description: "lorem ipsum lorem ipsum lorem ipsum"},
-    //                     {type: "vulnerability", price: "15$", name: "Salt in Passwords", description: "lorem ipsum lorem ipsum lorem ipsum"},  
-    //                     {type: "vulnerability", price: "15$", name: "Salt in Passwords", description: "lorem ipsum lorem ipsum lorem ipsum"},
-    //                     {type: "vulnerability", price: "15$", name: "Salt in Passwords", description: "lorem ipsum lorem ipsum lorem ipsum"},
-    //                     {type: "vulnerability", price: "15$", name: "Salt in Passwords", description: "lorem ipsum lorem ipsum lorem ipsum"},
-    //                     {type: "vulnerability", price: "15$", name: "Salt in Passwords", description: "lorem ipsum lorem ipsum lorem ipsum"},  
-    //                 ]
-
-    //Do better the match stuff
     //TODO: should this be done through a backend call, to retrieve fewer objects?
     const queriedProducts = () => products.filter((prod) => (prod.name.indexOf(query) >= 0));
 
