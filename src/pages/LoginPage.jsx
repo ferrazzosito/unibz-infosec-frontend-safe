@@ -2,9 +2,8 @@ import { Grid } from "@mui/material";
 import { SignInForm } from "../fragments/Forms";
 import { Title } from "../components/Typography";
 import { useNavigate } from "react-router";
-import { useUser } from "../hooks/useUser";
+import { authContext, useUser } from "../hooks/useUser";
 import { useContext, useEffect } from "react";
-import AuthConsumer from "../hooks/useUser";
 
 const LoginPage = () => { 
 
@@ -12,7 +11,9 @@ const LoginPage = () => {
 
     const redirect = () => navigate("/");
 
-    const {user, logUser, registerUser, logout} = AuthConsumer();    
+    const {user, logUser, registerUser, logout, reload} = useContext(authContext);   
+    
+    // reload();
 
     useEffect( () => {
         console.log(JSON.stringify(user))

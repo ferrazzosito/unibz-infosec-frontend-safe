@@ -9,14 +9,19 @@ import { useProducts } from "../hooks/useProducts";
 import { useUser } from "../hooks/useUser";
 import AuthConsumer from "../hooks/useUser";
 import { ConfirmationButton } from "../components/Buttons";
+import { useContext } from "react";
+import { authContext } from "../hooks/useUser";
 
 const BuyerHomePage = () => {
 
     const [query, setQuery] = useState("");
 
-    const {user, logUser, registerUser, logout} = AuthConsumer();    
+    const {user, logUser, registerUser, logout} = useContext(authContext);     
 
     const [products] = useProducts(user.accessToken);
+
+    const navigate = useNavigate();
+    const redirect = () => navigate("/selling");
 
     // const products = [{type: "vulnerability", price: "15$", name: "Salt in Passwords", description: "lorem ipsum lorem ipsum lorem ipsum"},
     //                     {type: "vulnerability", price: "15$", name: "Salt in Passwords", description: "lorem ipsum lorem ipsum lorem ipsum"},  
@@ -58,6 +63,13 @@ const BuyerHomePage = () => {
                     <Grid item xs ={12} >
 
                     </Grid>
+                </Grid>
+            </Grid>
+            <Grid item container xs={12} justifyContent="center">
+                <Grid item xs={7}>
+                    <ConfirmationButton title={"Logout"} onClick={() => { 
+                        redirect()
+                    }} />
                 </Grid>
             </Grid>
             <Grid item container xs={12} justifyContent="center">

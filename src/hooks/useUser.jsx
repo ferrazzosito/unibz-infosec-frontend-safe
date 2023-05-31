@@ -2,12 +2,50 @@ import { useState, useEffect } from 'react';
 import {client as axios} from '../utils/axios';
 import jwt_decode from "jwt-decode";
 import * as React from "react";
+import store from 'store';
 
-const authContext = React.createContext();
+export const authContext = React.createContext();
 
 export function useUser () {
 
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState(undefined);
+
+    // useEffect(() => {
+
+    //   if(user !== undefined)
+    //     store.set('user', user);
+
+    //   // console.log("user:" + JSON.stringify(store.get('user')));
+    // }, [user]);
+
+    // useEffect(() => {
+    //   const userStore = store.get('user');
+
+    //   // console.log(JSON.stringify(userStore));
+
+    //   if (userStore) {
+    //    setUser(userStore);
+    //   }
+    // }, []); 
+
+    const retrieveFromStore = () => {
+      
+      const userStore = store.get('user');
+
+      if(userStore) {
+        setUser(userStore)
+      }
+
+    }
+
+    useEffect (retrieveFromStore, [])
+
+    useEffect (() => {
+      
+      if(user !== undefined)
+        store.set('user', user);
+
+    }, [])
 
     async function log(email, password) {
 
@@ -73,16 +111,20 @@ export function useUser () {
       setUser({});
     }
 
-    return {user, logUser, registerUser, logout};
+    function reload() {
+      retrieveFromStore();
+    }
+
+    return {user, logUser, registerUser, logout/*, reload*/};
 
 }
 
-export function AuthProvider({ children }) {
-  const auth = useUser();
+// export function AuthProvider({ children }) {
+//   const auth = useUser();
 
-  return <authContext.Provider value={auth}>{children}</authContext.Provider>;
-}
+//   return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+// }
 
-export default function AuthConsumer() {
-  return React.useContext(authContext);
-}
+// export default function AuthConsumer() {
+//   return React.useContext(authContext);
+// }

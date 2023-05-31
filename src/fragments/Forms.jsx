@@ -8,17 +8,17 @@ const SignUpForm = ({onSubmitForm, redirect}) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [name, setName] = useState("");
-    const [lastName, setLastName] = useState("");
+    // const [name, setName] = useState("");
+    // const [lastName, setLastName] = useState("");
 
     return (
         <Grid container rowSpacing={2} columnSpacing={2}  justifyContent="center">
-            <Grid item xs={6}>
+            {/* <Grid item xs={6}>
                 <StringField string={name} setString={setName} title={"Name"} />
             </Grid>
             <Grid item xs={6}>
                <StringField string={lastName} setString={setLastName} title={"Last Name"} />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12}>
                 <EmailField email = {email} setEmail={setEmail}/>
             </Grid>

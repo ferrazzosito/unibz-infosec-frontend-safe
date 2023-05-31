@@ -11,29 +11,37 @@ import BuyerHomePage from './pages/BuyerHomePage';
 import ProductPage from './pages/ProductPage';
 import VendorHomePage from './pages/VendorHomePage';
 import { Route, Routes } from "react-router-dom";
-import useUser from './hooks/useUser';
+import {useUser} from './hooks/useUser';
 import RequireAuth from './fragments/RequireAuth';
+import { BrowserRouter } from 'react-router-dom';
+import { authContext } from './hooks/useUser';
 
 function App() {
 
-  // const {user, logUser, registerUser, logout} = useUser();
+  const auth = useUser();
+
+  console.log(JSON.stringify(auth.user));
 
   return (
-    <div className="App">
-      <Routes> 
-        <Route path="/login" element={<LoginPage/>}/>
-        <Route path="/sign-up" element={<RegistrationPage/>} />
-        <Route path="/" element={<RequireAuth> <BuyerHomePage/> </RequireAuth>} />
-        <Route path="/selling" element={<RequireAuth> <VendorHomePage/> </RequireAuth>} />
-          {/* <ReviewForm /> */}
-          {/* <VendorHomePage /> */}
-          {/* <LoginPage /> */}
-          {/* <RegistrationPage /> */}
-          {/* <ProductPage />       */}
+    <authContext.Provider value={auth}>
+      <BrowserRouter>
+        <div className="App">
+          <Routes> 
+            <Route path="/login" element={<LoginPage/>}/>
+            <Route path="/sign-up" element={<RegistrationPage/>} />
+            <Route path="/" element={<RequireAuth> <BuyerHomePage/> </RequireAuth>} />
+            <Route path="/selling" element={<RequireAuth> <VendorHomePage/> </RequireAuth>} />
+              {/* <ReviewForm /> */}
+              {/* <VendorHomePage /> */}
+              {/* <LoginPage /> */}
+              {/* <RegistrationPage /> */}
+              {/* <ProductPage />       */}
 
-        </Routes>
-    
-    </div>
+            </Routes>
+        
+        </div>
+      </BrowserRouter>
+    </authContext.Provider>
   );
 }
 

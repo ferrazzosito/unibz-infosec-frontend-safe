@@ -3,12 +3,14 @@ import { BasicProductCard, BuyerProductCard, OrderCard, VendorProductCard } from
 import { Title } from "../components/Typography";
 import { ProductForm } from "../fragments/Forms";
 import { useUser } from "../hooks/useUser";
-import AuthConsumer from "../hooks/useUser";
+// import AuthConsumer from "../hooks/useUser";
 import { ConfirmationButton } from "../components/Buttons";
+import { useContext } from "react";
+import { authContext } from "../hooks/useUser";
 
 const VendorHomePage = () => {
 
-    const {user, logUser, registerUser, logout} = AuthConsumer();    
+    const {user, logUser, registerUser, logout} = useContext(authContext);    
 
     return (
         <Grid container justifyContent="center" >
