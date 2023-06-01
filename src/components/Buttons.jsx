@@ -8,13 +8,13 @@ const ConfirmationButton = ({title, onClick}) => (
     >{title}</Button>
 )
 
-const BuyButton = ({alreadyOwned}) => (
+const BuyButton = ({alreadyOwned, buyFunction}) => (
     <>
         {
             alreadyOwned ?
             <Button size="medium" variant="outlined" color="secondary" disabled>Already Owned</Button>
             :
-            <Button size="medium" variant="contained">Buy Now</Button>
+            <Button size="medium" variant="contained" onClick={buyFunction}>Buy Now</Button>
         }
     </>
 )

@@ -40,7 +40,7 @@ const BasicProductCard = ({type, name, price, description}) => {
 
 }
 
-const BuyerProductCard = ({id, type, name, price, description}) => {
+const BuyerProductCard = ({id, type, name, price, description, buyFunction}) => {
 
     const navigate = useNavigate();
     const redirect = () => navigate(`/product?id=${id}`);
@@ -51,7 +51,7 @@ const BuyerProductCard = ({id, type, name, price, description}) => {
             <CardActions >
                 <div style={{margin: "auto"}}>
                     <Button size="small" style={{marginRight: 10}} onClick={() => redirect()}>See Reviews</Button>
-                    <BuyButton alreadyOwned={false}/>
+                    <BuyButton alreadyOwned={false}  buyFunction={buyFunction} />
                 </div>
             </CardActions>
         </Card>

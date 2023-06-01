@@ -11,6 +11,7 @@ import AuthConsumer from "../hooks/useUser";
 import { ConfirmationButton } from "../components/Buttons";
 import { useContext } from "react";
 import { authContext } from "../hooks/useUser";
+import { useOrders } from "../hooks/useOrders";
 
 const BuyerHomePage = () => {
 
@@ -20,6 +21,8 @@ const BuyerHomePage = () => {
 
     const {products} = useProducts(user.accessToken);
 
+    const {makeAnOrder} = useOrders(user.accessToken);
+
     const navigate = useNavigate();
     const redirect = () => navigate("/selling");
 
@@ -27,6 +30,7 @@ const BuyerHomePage = () => {
     const queriedProducts = () => products.filter((prod) => (prod.name.indexOf(query) >= 0));
 
     const usedProducts = queriedProducts();
+    
 
     return (
         <Grid container justifyContent="center" >
@@ -45,6 +49,7 @@ const BuyerHomePage = () => {
                                 price={prod.cost} 
                                 name={prod.name} 
                                 description={prod.description}
+                                buyFunction={() => makeAnOrder(prod.id, user.payload.id)}
                             />
                         </Grid>
                     ))}
@@ -59,7 +64,7 @@ const BuyerHomePage = () => {
             </Grid>
             <Grid item container xs={12} justifyContent="center">
                 <Grid item xs={7}>
-                    <ConfirmationButton title={"Logout"} onClick={() => { 
+                    <ConfirmationButton title={"Other"} onClick={() => { 
                         redirect()
                     }} />
                 </Grid>
