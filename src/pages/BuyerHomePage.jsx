@@ -41,6 +41,7 @@ const BuyerHomePage = () => {
                     {usedProducts.map((prod) => (
                         <Grid item xs={3}>
                             <BuyerProductCard /*type={prod.type}*/ 
+                                id={prod.id}
                                 price={prod.cost} 
                                 name={prod.name} 
                                 description={prod.description}
