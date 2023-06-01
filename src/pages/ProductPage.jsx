@@ -51,7 +51,7 @@ const ProductPage = () => {
             </Grid>
             <Grid item container xs={9} spacing={7} justifyContent="center" >
                 <Grid item xs={3}>
-                    <BasicProductCard type="" name={product.name} description="" />
+                    <BasicProductCard type="" name={product.name} description="" price={product.cost} />
                 </Grid>
             </Grid>
             <Review />
