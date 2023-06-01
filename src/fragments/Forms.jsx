@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { ConfirmationButton } from '../components/Buttons';
 import { Grid, Item } from '@mui/material';
 import {Card, CardContent,Typography} from '@mui/material';
+import { useReviews } from '../hooks/useReviews';
 
 const SignUpForm = ({onSubmitForm, redirect}) => {
 
@@ -59,7 +60,7 @@ const SignInForm = ({onSubmitForm, redirect}) => {
     )
 }
 
-const ReviewForm = ({header}) => {
+const ReviewForm = ({header, isReply, replyFromReviewId, onSubmitForm}) => {
 
     const [stars, setStars] = useState("");
     const [title, setTitle] = useState("");
@@ -72,9 +73,12 @@ const ReviewForm = ({header}) => {
                     {header}
                 </Typography>
                 <Grid container rowSpacing={2} columnSpacing={2}  justifyContent="center">
-                    <Grid item xs={12}>
-                        <StringField string={stars} setString={setStars} title={"Stars"}  />
-                    </Grid>
+                    {
+                        isReply ?  <></> :
+                        <Grid item xs={12}>
+                            <StringField string={stars} setString={setStars} title={"Stars"}  />
+                        </Grid>
+                    }
                     <Grid item xs={12}>
                         <StringField string={title} setString={setTitle} title={"Title"}  />
                     </Grid>
@@ -82,7 +86,7 @@ const ReviewForm = ({header}) => {
                         <TextArea text={description} setText={setDescription} placeholder={"Insert the description of your review.."}  />
                     </Grid>
                     <Grid item xs={7}>
-                        <ConfirmationButton title={"Publish"} onClick={() => {}} />
+                        <ConfirmationButton title={"Publish"} onClick={() => onSubmitForm({title, description, stars, replyFromReviewId})} />
                     </Grid>
                 </Grid>
             </CardContent>

@@ -6,20 +6,23 @@ import { useSearchParams } from "react-router-dom";
 import { useProducts } from "../hooks/useProducts";
 import { useContext, useEffect, useState } from "react";
 import { authContext } from "../hooks/useUser";
+import { useReviews } from "../hooks/useReviews";
 
-const Review = () => (
+const Review = ({id, title, description, stars, author, replyFromReviewId}) => (
     <>
         <Grid item container xs={9} spacing={7} justifyContent="center" >
             <Grid item xs={12}>
                 <ReviewCard 
-                    rating = "5 stars" 
-                    title = "Awesome Product" 
-                    writer="Jesus Holy Christ" 
-                    description="It changed my life, my workflow is now more solid and less secure exactly as I wanted it to be" 
+                    rating = {`${stars} stars`}
+                    title = {title} 
+                    writer= {author} 
+                    description= {description}
                     
-                    answer={(
-                        <ReviewForm header="Answer to client's review"/>
-                    )}
+                    answer={
+                            replyFromReviewId === 0 ?
+                            <ReviewForm header="Answer to client's review" replyFromReviewId={id} isReply={true}/> :
+                            <></>
+                        }
                 />
             </Grid>
         </Grid>
@@ -31,17 +34,23 @@ const ProductPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const id = searchParams.get("id");
 
-    console.log(id);
 
     const {user} = useContext(authContext);    
     const {getProduct} = useProducts(user.accessToken);
 
     const [product, setProduct] = useState({});
 
+    const {reviews, createAReview} = useReviews(user.accessToken);
+
+    const authorId = user.payload.id;
+    const productId = id;
+
     useEffect(() => {
+
         getProduct(id)
         .then((result) => setProduct(result))
         .catch(e => setProduct({}));
+        
     }, [])
 
     return (
@@ -54,8 +63,23 @@ const ProductPage = () => {
                     <BasicProductCard type="" name={product.name} description="" price={product.cost} />
                 </Grid>
             </Grid>
-            <Review />
-            <Review />
+            <ReviewForm header="Add a review to this product" replyFromReviewId={0} onSubmitForm={(review) => createAReview({...review, productId, authorId})} />
+            
+            {
+                reviews.map((review) => (
+                    <Review 
+                        id = {review.id}
+                        title = {review.title}
+                        description = {review.description}
+                        stars={review.stars}
+                        author={review.author}
+                        replyFromReviewId = {review.replyFromReviewId}
+                    />
+                ))
+            }
+
+            {/* <Review />
+            <Review /> */}
         </Grid>
     )
 
