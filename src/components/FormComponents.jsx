@@ -2,13 +2,15 @@
 import { TextField } from "@mui/material"
 import { useState } from "react";
 import { TextareaAutosize } from '@mui/base';
+import InputAdornment from '@mui/material/InputAdornment';
+import Search from '@mui/icons-material/Search'; 
 
 const StringField = ({string, setString, title}) => (
     <TextField 
         fullWidth
         variant="outlined"
         label={title} 
-        onChange={setString}
+        onChange={(e) => setString(e.target.value)}
         error={string == ""} 
     />
 )
@@ -23,7 +25,7 @@ const EmailField = ({email, setEmail}) => {
             fullWidth
             variant="outlined"
             label="Email" 
-            onChange={setEmail}
+            onChange={(e) => setEmail(e.target.value)}
             error={!isValidEmail(email)} 
         />
     );
@@ -39,7 +41,7 @@ const PasswordField = ({password, setPassword}) => {
             fullWidth
             variant="outlined"
             label="Password" 
-            onChange={setPassword}
+            onChange={(e) => setPassword(e.target.value)}
             error={!isValidPassword(password)} 
             type="password"
         />
@@ -52,7 +54,7 @@ const TextArea = ({text, setText, placeholder}) => {
 
     return (
         <TextareaAutosize
-            onChange={setText}
+        onChange={(e) => setText(e.target.value)}
             placeholder={placeholder}
             style={{minWidth: "100%",minHeight: "10%"}}
         />
@@ -69,7 +71,7 @@ const NumericField = ({number, setNumber, title}) => {
             id="numeric-field"
             label={title}
             variant="outlined"
-            onChange={setNumber}
+            onChange={(e) => setNumber(+e.target.value)}
             error = { !isFieldValid(number) }
             fullWidth
             
@@ -77,4 +79,24 @@ const NumericField = ({number, setNumber, title}) => {
     )
 }
 
-export {EmailField, PasswordField, StringField, TextArea, NumericField};
+const SearchField =  ({query, setQuery}) => {
+
+    return (
+        <TextField
+            id="input-with-icon-textfield"
+            label="Search"
+            InputProps={{
+            startAdornment: (
+                    <InputAdornment position="end">
+                        <Search />
+                    </InputAdornment>
+                ),
+            }}
+            onChange={(e) => setQuery(e.target.value)}
+            style={{width: "100%"}}
+            variant="standard"
+        />
+    )
+}
+
+export {EmailField, PasswordField, StringField, TextArea, NumericField, SearchField};
