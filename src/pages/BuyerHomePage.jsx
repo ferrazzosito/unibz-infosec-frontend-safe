@@ -1,9 +1,9 @@
 import { Grid } from "@mui/material";
 import { BasicProductCard, BuyerProductCard, VendorProductCard } from "../fragments/ProductCards";
 import { Title } from "../components/Typography";
-import { SearchField } from "../components/FormComponents";
+import { SearchField, UnsafeStringField } from "../components/FormComponents";
 import { useEffect, useState } from "react";
-import SearchBar from "../fragments/SearchBar";
+import {SearchBar, UnsafeSearchBar} from "../fragments/SearchBar";
 import { useNavigate } from "react-router";
 import { useProducts } from "../hooks/useProducts";
 import { useUser } from "../hooks/useUser";
@@ -34,7 +34,7 @@ const BuyerHomePage = () => {
                 <Title text="Home Page" />
             </Grid>
             <Grid item xs={12}>
-                <SearchBar query={query} setQuery={setQuery} />
+                <UnsafeSearchBar query={query} setQuery={setQuery} />
             </Grid>
             <Grid item container xs={12} justifyContent="center">
                 <Grid item container xs={9} spacing={7} justifyContent="center" >
