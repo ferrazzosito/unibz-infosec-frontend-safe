@@ -3,12 +3,24 @@ import { BasicProductCard, BuyerProductCard, OrderCard, VendorProductCard } from
 import { Title } from "../components/Typography";
 import { ProductForm } from "../fragments/Forms";
 import { useUser } from "../hooks/useUser";
-import AuthConsumer from "../hooks/useUser";
+// import AuthConsumer from "../hooks/useUser";
 import { ConfirmationButton } from "../components/Buttons";
+import { useContext } from "react";
+import { authContext } from "../hooks/useUser";
+import { useEffect } from "react";
+import { useProducts } from "../hooks/useProducts";
 
-const VendorHomePage = () => {
+const VendorHomePage = ({value}) => {
 
-    const {user, logUser, registerUser, logout} = AuthConsumer();    
+    const {user, logUser, registerUser, logout} = useContext(authContext);    
+    // reload();
+
+    // useEffect( () => {
+    //     console.log(user)
+    //     // console.log(JSON.stringify(user && user.accessToken))  
+    // }, [])
+
+    const {products, myProducts, addProduct, deleteProduct} = useProducts(user.accessToken);
 
     return (
         <Grid container justifyContent="center" >
@@ -17,14 +29,14 @@ const VendorHomePage = () => {
             </Grid>
             <Grid item container xs={12} justifyContent="center"> 
                 <Grid item xs={7}>
-                    <ProductForm />
+                    <ProductForm  onSubmitForm={addProduct}/>
                 </Grid>
             </Grid>
             <Grid item xs={12}>
                 <Title text="Your Products" />
             </Grid>
             <Grid item container xs={9} spacing={7} justifyContent="center" >
-                <Grid item xs={3}>
+                {/* <Grid item xs={3}>
                     <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
                 </Grid>
                 <Grid item xs={3}>
@@ -41,7 +53,20 @@ const VendorHomePage = () => {
                 </Grid>
                 <Grid item xs={3}>
                     <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
+                </Grid> */}
+                {
+                myProducts.map((prod) => (
+                        <Grid item xs={3}>
+                            <VendorProductCard /*type={prod.type}*/ 
+                                id={prod.id}
+                                price={prod.cost} 
+                                name={prod.name} 
+                                description={prod.description}
+                                deleteFunction={deleteProduct}
+                            />
+                        </Grid>
+                    ))
+                    }
             </Grid>
             <Grid item xs={12}>
                 <Title text="Your Sellings" />

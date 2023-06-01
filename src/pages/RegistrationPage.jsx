@@ -2,16 +2,27 @@ import { Grid } from "@mui/material";
 import { SignUpForm } from "../fragments/Forms";
 import { Title } from "../components/Typography";
 import { useNavigate } from "react-router";
-import { useUser } from "../hooks/useUser";
+import { authContext, useUser } from "../hooks/useUser";
 import AuthConsumer from "../hooks/useUser";
+import { useContext } from "react";
+import { useEffect } from "react";
 
 const RegistrationPage = () => { 
     
     const navigate = useNavigate();
 
-    const redirect = () => navigate("/login");
+    const redirect = () => navigate("/");
 
-    const {user, logUser, registerUser, logout} = AuthConsumer();    
+    const {user, logUser, registerUser, logout} = useContext(authContext);
+
+    useEffect( () => {
+        
+        if(user && user.accessToken)
+            redirect();
+        
+    }, [])
+
+    // reload();
 
     return(
         <Grid container justifyContent="center" spacing={2}>

@@ -19,6 +19,6 @@ const BuyButton = ({alreadyOwned}) => (
     </>
 )
 
-const DeleteButton = () => (<Button size="medium" variant="contained" color="error">Delete</Button>)
+const DeleteButton = ({onClick}) => (<Button size="medium" variant="contained" color="error" onClick={onClick}>Delete</Button>)
 
 export {ConfirmationButton, BuyButton, DeleteButton};

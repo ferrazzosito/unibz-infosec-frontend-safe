@@ -2,9 +2,8 @@ import { Grid } from "@mui/material";
 import { SignInForm } from "../fragments/Forms";
 import { Title } from "../components/Typography";
 import { useNavigate } from "react-router";
-import { useUser } from "../hooks/useUser";
+import { authContext, useUser } from "../hooks/useUser";
 import { useContext, useEffect } from "react";
-import AuthConsumer from "../hooks/useUser";
 
 const LoginPage = () => { 
 
@@ -12,12 +11,15 @@ const LoginPage = () => {
 
     const redirect = () => navigate("/");
 
-    const {user, logUser, registerUser, logout} = AuthConsumer();    
+    const {user, logUser, registerUser, logout} = useContext(authContext);   
+    
+    // reload();
 
     useEffect( () => {
-        console.log(JSON.stringify(user))
-        console.log(JSON.stringify(user && user.accessToken))
-  
+        
+        if(user && user.accessToken)
+            redirect();
+        
     }, [])
 
     //cambia che sta a 12 ma cambia lo stile
