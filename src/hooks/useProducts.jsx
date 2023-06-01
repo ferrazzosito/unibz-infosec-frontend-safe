@@ -55,7 +55,6 @@ export function useProducts (token) {
 
         try {
             const { data } = await axios.get('/v1/products/getAll', { headers: {"Authorization" : `Bearer ${token}`} });
-            console.log(data);
 
             if(!data.error) {
                 setProducts(data); 
