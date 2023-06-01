@@ -12,22 +12,6 @@ export function useProducts (token) {
 
     async function post({name, cost}) {
 
-    //   return axios.post('/v1/products/create', 
-    //   {
-    //       name: name,
-    //       cost: cost,
-
-    //   },
-    //   { headers: {"Authorization" : `Bearer ${token}`} }
-    //   ).then(response => {
-
-    //     getProducts();
-    //     return response;
-
-    //   })
-
-    console.log(cost)
-
       let data = {
         "name": name,
         "cost": +cost,
@@ -53,17 +37,38 @@ export function useProducts (token) {
     function addProduct(product) {
       return post(product).then(() => getProducts());
     }
+
+    async function deleteMethod(id) {
+
+        return await axios.get(`/v1/products/delete/${id}`, { headers: {"Authorization" : `Bearer ${token}`} })
+        .then(response => JSON.stringify(response.data))
+        .catch(e => {throw new Error("Error while deleting the product " + id + ": " + e.message)})
+      }
+
+    function deleteProduct(id) {
+        return deleteMethod(id).then(() => getProducts());
+    }
     
 
 
     async function get() {
 
-        // if(token !== null && token !== undefined && token !== "") {
+        try {
             const { data } = await axios.get('/v1/products/getAll', { headers: {"Authorization" : `Bearer ${token}`} });
-            setProducts(data); 
-            setMyProducts(data); 
-        // } else 
-        //     throw new Error("")
+            console.log(data);
+
+            if(!data.error) {
+                setProducts(data); 
+                setMyProducts(data); 
+            }
+
+        } catch (e) {
+            console.log("Error: " + e.message);
+
+            setProducts([]); 
+            setMyProducts([]); 
+        }
+
     }
 
     function getProducts() {
@@ -72,5 +77,5 @@ export function useProducts (token) {
 
     useEffect(getProducts, []);
     
-    return {products, myProducts, addProduct};
+    return {products, myProducts, addProduct, deleteProduct};
 }

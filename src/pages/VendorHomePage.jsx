@@ -20,7 +20,7 @@ const VendorHomePage = ({value}) => {
     //     // console.log(JSON.stringify(user && user.accessToken))  
     // }, [])
 
-    const {products, myProducts, addProduct} = useProducts(user.accessToken);
+    const {products, myProducts, addProduct, deleteProduct} = useProducts(user.accessToken);
 
     return (
         <Grid container justifyContent="center" >
@@ -58,9 +58,11 @@ const VendorHomePage = ({value}) => {
                 myProducts.map((prod) => (
                         <Grid item xs={3}>
                             <VendorProductCard /*type={prod.type}*/ 
+                                id={prod.id}
                                 price={prod.cost} 
                                 name={prod.name} 
                                 description={prod.description}
+                                deleteFunction={deleteProduct}
                             />
                         </Grid>
                     ))

@@ -55,7 +55,7 @@ const BuyerProductCard = ({type, name, price, description}) => {
 
 }
 
-const VendorProductCard = ({type, name, price, description}) => {
+const VendorProductCard = ({id, type, name, price, description, deleteFunction}) => {
 
     return (
         <Card sx={{ minWidth: 275 }}>
@@ -63,7 +63,7 @@ const VendorProductCard = ({type, name, price, description}) => {
             <CardActions >
                 <div style={{margin: "auto"}}>
                     <Button size="small" style={{marginRight: 10}}>See Reviews</Button>
-                    <DeleteButton/>
+                    <DeleteButton onClick={() => deleteFunction(id)}/>
                 </div>
             </CardActions>
         </Card>
