@@ -45,7 +45,7 @@ export function useUser () {
       if(user !== undefined)
         store.set('user', user);
 
-    }, [])
+    }, [user])
 
     async function log(email, password) {
 

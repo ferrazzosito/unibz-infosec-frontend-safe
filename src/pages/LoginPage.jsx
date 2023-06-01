@@ -11,14 +11,15 @@ const LoginPage = () => {
 
     const redirect = () => navigate("/");
 
-    const {user, logUser, registerUser, logout, reload} = useContext(authContext);   
+    const {user, logUser, registerUser, logout} = useContext(authContext);   
     
     // reload();
 
     useEffect( () => {
-        console.log(JSON.stringify(user))
-        console.log(JSON.stringify(user && user.accessToken))
-  
+        
+        if(user && user.accessToken)
+            redirect();
+        
     }, [])
 
     //cambia che sta a 12 ma cambia lo stile

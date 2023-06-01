@@ -7,6 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { BuyButton, DeleteButton } from '../components/Buttons';
+import { useNavigate } from 'react-router';
 
 const ContentProductCard = ({type, name, price, description}) => (
     <CardContent>
@@ -57,12 +58,15 @@ const BuyerProductCard = ({type, name, price, description}) => {
 
 const VendorProductCard = ({id, type, name, price, description, deleteFunction}) => {
 
+    const navigate = useNavigate();
+    const redirect = () => navigate(`/product?id=${id}`);
+
     return (
         <Card sx={{ minWidth: 275 }}>
             <ContentProductCard type={type} name = {name} price ={price}  description={description }/>
             <CardActions >
                 <div style={{margin: "auto"}}>
-                    <Button size="small" style={{marginRight: 10}}>See Reviews</Button>
+                    <Button size="small" style={{marginRight: 10}} onClick={() => redirect()}>See Reviews</Button>
                     <DeleteButton onClick={() => deleteFunction(id)}/>
                 </div>
             </CardActions>

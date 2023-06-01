@@ -75,6 +75,17 @@ export function useProducts (token) {
     }
 
     useEffect(getProducts, []);
+
+    async function getAProduct(id) {
+
+        return await axios.get(`/v1/products/${id}`, { headers: {"Authorization" : `Bearer ${token}`} });
+    }
+
+    async function getProduct(id) {
+        return getAProduct(id)
+        .then(({data}) => data)
+        .catch((e) => {throw new Error(e.message)});
+    }
     
-    return {products, myProducts, addProduct, deleteProduct};
+    return {products, myProducts, addProduct, deleteProduct, getProduct};
 }

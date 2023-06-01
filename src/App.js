@@ -31,11 +31,15 @@ function App() {
             <Route path="/sign-up" element={<RegistrationPage/>} />
             <Route path="/" element={<RequireAuth> <BuyerHomePage/> </RequireAuth>} />
             <Route path="/selling" element={<RequireAuth> <VendorHomePage/> </RequireAuth>} />
+            <Route path="/product" element={<RequireAuth> <ProductPage/> </RequireAuth>} />
               {/* <ReviewForm /> */}
               {/* <VendorHomePage /> */}
               {/* <LoginPage /> */}
               {/* <RegistrationPage /> */}
               {/* <ProductPage />       */}
+
+              {//todo: 404 goes in login
+              }
 
             </Routes>
         
