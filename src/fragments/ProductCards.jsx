@@ -30,6 +30,20 @@ const ContentProductCard = ({type, name, price, description}) => (
     </CardContent>
 )
 
+const UnsafeContentProductCard = ({type, name, price, description}) => (
+    <CardContent>
+        <div color="text.secondary" gutterBottom dangerouslySetInnerHTML={{type}}/>
+           
+        <div dangerouslySetInnerHTML={{name}}/>
+        <div sx={{ mb: 1.5 }} color="text.secondary" dangerouslySetInnerHTML={{price}}/>
+        <div sx={{ mb: 1.5 }} color="text.secondary">
+            by vendor x
+        </div>
+        <div variant="body2" dangerouslySetInnerHTML={{description}}/>
+        <br />
+    </CardContent>
+)
+
 const BasicProductCard = ({type, name, price, description}) => {
 
     return (
