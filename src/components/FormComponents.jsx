@@ -1,5 +1,5 @@
 
-import { TextField } from "@mui/material"
+import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 import { useState } from "react";
 import { TextareaAutosize } from '@mui/base';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -99,4 +99,27 @@ const SearchField =  ({query, setQuery}) => {
     )
 }
 
-export {EmailField, PasswordField, StringField, TextArea, NumericField, SearchField};
+const OptionsSelector = ({fieldTitle, options, selectedOption, setSelectedOption}) => {
+    const isFieldValid = (fieldVal) => (fieldVal !== undefined && fieldVal !== null && fieldVal !== "");
+    
+    return (
+        <FormControl fullWidth error = { !isFieldValid(selectedOption)}>
+            <InputLabel>{fieldTitle}</InputLabel>
+            <Select
+                id="options-selector"
+                variant="outlined"
+                value={selectedOption}
+                label={fieldTitle}
+                onChange={(e) => setSelectedOption(e.target.value)}
+            >
+                {
+                    options.map(option => 
+                        <MenuItem value={option}>{option}</MenuItem>
+                    )
+                }
+            </Select>
+        </FormControl>
+    )
+}
+
+export {EmailField, PasswordField, StringField, TextArea, NumericField, SearchField, OptionsSelector};

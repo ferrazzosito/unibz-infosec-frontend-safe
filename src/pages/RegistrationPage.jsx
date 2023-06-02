@@ -13,7 +13,7 @@ const RegistrationPage = () => {
 
     const redirect = () => navigate("/");
 
-    const {user, logUser, registerUser, logout} = useContext(authContext);
+    const {user, registerUser} = useContext(authContext);
 
     useEffect( () => {
         
