@@ -15,7 +15,7 @@ import { useOrders } from "../hooks/useOrders";
 import { OrderCard } from "../fragments/ProductCards";
 import { useReviews } from "../hooks/useReviews";
 
-const BuyerProfilePage = () => {
+const VendorProfilePage = () => {
 
     const {user, logUser, registerUser, logout} = useContext(authContext);     
 
@@ -30,20 +30,11 @@ const BuyerProfilePage = () => {
     return (
         <Grid container justifyContent="center" >
             <Grid item xs={12}>
-                <Title text="Profile Page" />
+                <Title text="Your Sellings" />
             </Grid>
             <Grid item container xs={12} justifyContent="center" spacing={7}>
                 <Grid item container xs={12} justifyContent="center"> 
                     {orders.map((ord) => (
-                            // <Grid item xs={3}>
-                            //     <BuyerProductCard /*type={prod.type}*/ 
-                            //         id={prod.id}
-                            //         price={prod.cost} 
-                            //         name={prod.name} 
-                            //         description={prod.description}
-                            //         buyFunction={() => makeAnOrder(prod.id, user.payload.id)}
-                            //     />
-                            // </Grid>
                             <Grid item xs={7}>
                                 <OrderCard
                                     basicProductCard={ 
@@ -52,7 +43,7 @@ const BuyerProfilePage = () => {
                                             name={ord.id}
                                             // escription="lorem ipsum lorem ipsum lorem ipsum" 
                                         />}
-                                    buyer="you"
+                                    buyer={ord.clientId}
                                         // date="10/20/2024"
                                     idProd = {ord.productId}
                                 />
@@ -82,4 +73,4 @@ const BuyerProfilePage = () => {
 
 }
 
-export default BuyerProfilePage;
+export default VendorProfilePage;

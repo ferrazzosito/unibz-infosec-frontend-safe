@@ -8,26 +8,35 @@ import { useContext, useEffect, useState } from "react";
 import { authContext } from "../hooks/useUser";
 import { useReviews } from "../hooks/useReviews";
 
-const Review = ({id, title, description, stars, author, replyFromReviewId}) => (
-    <>
-        <Grid item container xs={9} spacing={7} justifyContent="center" >
-            <Grid item xs={12}>
-                <ReviewCard 
-                    rating = {`${stars} stars`}
-                    title = {title} 
-                    writer= {author} 
-                    description= {description}
-                    
-                    answer={
-                            replyFromReviewId === 0 ?
-                            <ReviewForm header="Answer to client's review" replyFromReviewId={id} isReply={true}/> :
-                            <></>
-                        }
-                />
+const Review = ({id, title, description, stars, author, replyFromReviewId}) =>  {
+
+    const {user, logUser, registerUser, logout} = useContext(authContext);    
+
+    return  (
+        <>
+            <Grid item container xs={9} spacing={7} justifyContent="center" >
+                <Grid item xs={12}>
+                    <ReviewCard 
+                        rating = {`${stars} stars`}
+                        title = {title} 
+                        writer= {author} 
+                        description= {description}                        
+                        answer={
+                                replyFromReviewId === 0 ?
+                                    user.payload.role === "vendor" ? 
+                                        <ReviewForm header="Answer to client's review" replyFromReviewId={id} isReply={true}/> 
+                                        : <></>
+                                    :
+                                <></>
+                            }
+                    />
+                </Grid>
             </Grid>
-        </Grid>
-    </>
-)
+        </>
+    )
+}
+
+
 
 const ProductPage = () => {
 
@@ -63,7 +72,11 @@ const ProductPage = () => {
                     <BasicProductCard type="" name={product.name} description="" price={product.cost} />
                 </Grid>
             </Grid>
-            <ReviewForm header="Add a review to this product" replyFromReviewId={0} onSubmitForm={(review) => createAReview({...review, productId, authorId})} />
+            {
+                user.payload.role === "customer" ?
+                <ReviewForm header="Add a review to this product" replyFromReviewId={0} onSubmitForm={(review) => createAReview({...review, productId, authorId})} />
+                : <></>
+            }
             
             {
                 reviews.map((review) => (

@@ -16,6 +16,7 @@ import RequireAuth, { RequireCustomerAuth, RequireVendorAuth } from './fragments
 import { BrowserRouter } from 'react-router-dom';
 import { authContext } from './hooks/useUser';
 import BuyerProfilePage from './pages/BuyerProfilePage';
+import VendorProfilePage from './pages/VendorProfilePage';
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
             <Route path="/" element={<RequireCustomerAuth> <BuyerHomePage/> </RequireCustomerAuth>} />
             <Route path="/my-profile-buyer" element={<RequireCustomerAuth> <BuyerProfilePage/> </RequireCustomerAuth>} />
             <Route path="/selling" element={<RequireVendorAuth> <VendorHomePage/> </RequireVendorAuth>} />
+            <Route path="/my-profile-vendor" element={<RequireVendorAuth> <VendorProfilePage/> </RequireVendorAuth>} />
             <Route path="/product" element={<RequireAuth> <ProductPage/> </RequireAuth>} />
               {/* <ReviewForm /> */}
               {/* <VendorHomePage /> */}
