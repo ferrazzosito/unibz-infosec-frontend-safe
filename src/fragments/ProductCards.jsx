@@ -117,14 +117,22 @@ const ReviewCard = ({rating, title, description, writer, answer}) => {
     )
 }
 
-const OrderCard = ({basicProductCard, buyer, date}) => {
+const OrderCard = ({basicProductCard, buyer, date, idProd}) => {
+
+    const navigate = useNavigate();
+    const reviewRedirect = () => navigate(`/product?id=${idProd}`);
+
     return (
         <Card sx={{ minWidth: 275 }}>
             <CardContent>
                 {basicProductCard}
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    bought by {buyer} on {date}
+                    bought by {buyer} 
+                    {/* on {date} */}
                 </Typography>
+                <div style={{margin: "auto"}}>
+                    <Button size="small" style={{marginRight: 10}} onClick={() => reviewRedirect()}>See Reviews</Button>
+                </div>
             </CardContent>
         </Card>
     )

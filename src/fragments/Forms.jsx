@@ -1,4 +1,4 @@
-import { EmailField, NumericField, PasswordField, StringField, TextArea } from '../components/FormComponents';
+import { EmailField, NumericField, OptionsSelector, PasswordField, StringField, TextArea } from '../components/FormComponents';
 import { useState } from 'react';
 import { ConfirmationButton } from '../components/Buttons';
 import { Grid, Item } from '@mui/material';
@@ -9,6 +9,7 @@ const SignUpForm = ({onSubmitForm, redirect}) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [role, setRole] = useState("");
     // const [name, setName] = useState("");
     // const [lastName, setLastName] = useState("");
 
@@ -24,11 +25,18 @@ const SignUpForm = ({onSubmitForm, redirect}) => {
                 <EmailField email = {email} setEmail={setEmail}/>
             </Grid>
             <Grid item xs={12}>
+                <OptionsSelector fieldTitle={"Account Type"} 
+                        options = {["customer", "vendor"]}
+                        selectedOption = {role}
+                        setSelectedOption={setRole} />
+            </Grid>
+            <Grid item xs={12}>
                 <PasswordField password = {password} setPassword={setPassword}/>
             </Grid>
             <Grid item xs={7}>
                 <ConfirmationButton title={"Sign Up"} onClick={() => {
-                    onSubmitForm({email, password})   
+                    console.log(role)
+                    onSubmitForm({email, role, password})   
                     .then(response => redirect())
                     }} 
                 />
@@ -53,7 +61,7 @@ const SignInForm = ({onSubmitForm, redirect}) => {
             <Grid item xs={7}>
                 <ConfirmationButton title={"Sign In"} onClick={() => { 
                     onSubmitForm(email, password)
-                    .then( () => redirect())
+                    .then( (user) => redirect(user.payload.role))
                 }} />
             </Grid>
         </Grid>
