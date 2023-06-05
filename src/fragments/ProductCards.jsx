@@ -116,7 +116,7 @@ const ReviewCard = ({rating, title, description, writer, answer}) => {
     )
 }
 
-const OrderCard = ({basicProductCard, buyer, date, idProd}) => {
+const OrderCard = ({basicProductCard, buyer, date, role, approved, idProd}) => {
 
     const navigate = useNavigate();
     const reviewRedirect = () => navigate(`/product?id=${idProd}`);
@@ -124,6 +124,16 @@ const OrderCard = ({basicProductCard, buyer, date, idProd}) => {
     return (
         <Card sx={{ minWidth: 275 }}>
             <CardContent>
+                {
+                    role === "customer" ?
+                        approved ?
+                        <Typography sx={{ mb: 1.5 }} color="green"> Approved by vendor </Typography>    
+                        :            
+                        <Typography sx={{ mb: 1.5 }} color="red"> Not yet approved by vendor </Typography>
+                    :
+                    <></>
+
+                }
                 {basicProductCard}
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                     bought by {buyer} 
