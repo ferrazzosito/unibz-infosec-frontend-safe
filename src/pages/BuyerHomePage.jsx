@@ -24,7 +24,7 @@ const BuyerHomePage = () => {
     const {makeAnOrder} = useOrders(user.accessToken);
 
     const navigate = useNavigate();
-    const redirect = () => navigate("/selling");
+    const redirect = () => navigate("/my-profile-buyer");
 
     //TODO: should this be done through a backend call, to retrieve fewer objects?
     const queriedProducts = () => products.filter((prod) => (prod.name.indexOf(query) >= 0));
@@ -64,7 +64,7 @@ const BuyerHomePage = () => {
             </Grid>
             <Grid item container xs={12} justifyContent="center">
                 <Grid item xs={7}>
-                    <ConfirmationButton title={"Other"} onClick={() => { 
+                    <ConfirmationButton title={"My Account"} onClick={() => { 
                         redirect()
                     }} />
                 </Grid>

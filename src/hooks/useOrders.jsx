@@ -7,6 +7,28 @@ export function useOrders (token) {
     //as well as setProducts for clients should be disabled
     const [orders, setOrders] = useState([]);
 
+    async function get() {
+
+      try {
+          const { data } = await axios.get('/v1/orders/getAll', { headers: {"Authorization" : `Bearer ${token}`} });
+
+          if(!data.error) {
+            setOrders(data); 
+          }
+
+      } catch (e) {
+          console.log("Error: " + e.message);
+
+          setOrders([]);  
+      }
+
+  }
+
+  function getProducts() {
+    get()
+  }
+
+  useEffect(getProducts, []);
 
     async function post(idProduct, idUser) {
 
@@ -35,5 +57,5 @@ export function useOrders (token) {
       return post(idProduct);
     }
     
-    return {makeAnOrder};
+    return {orders, makeAnOrder};
 }

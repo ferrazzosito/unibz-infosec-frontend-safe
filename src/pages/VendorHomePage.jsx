@@ -9,6 +9,7 @@ import { useContext } from "react";
 import { authContext } from "../hooks/useUser";
 import { useEffect } from "react";
 import { useProducts } from "../hooks/useProducts";
+import { useNavigate } from "react-router";
 
 const VendorHomePage = ({value}) => {
 
@@ -21,6 +22,9 @@ const VendorHomePage = ({value}) => {
     // }, [])
 
     const {products, myProducts, addProduct, deleteProduct} = useProducts(user.accessToken);
+
+    const navigate = useNavigate();
+    const redirect = () => navigate("/my-profile-vendor");
 
     return (
         <Grid container justifyContent="center" >
@@ -68,10 +72,10 @@ const VendorHomePage = ({value}) => {
                     ))
                     }
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
                 <Title text="Your Sellings" />
-            </Grid>
-            <Grid item container xs={12} justifyContent="center" spacing={7}>
+            </Grid> */}
+            {/* <Grid item container xs={12} justifyContent="center" spacing={7}>
                 <Grid item container xs={12} justifyContent="center"> 
                     <Grid item xs={7}>
                         <OrderCard
@@ -98,6 +102,13 @@ const VendorHomePage = ({value}) => {
                             date="10/20/2024"
                         />
                     </Grid>
+                </Grid>
+            </Grid> */}
+            <Grid item container xs={12} justifyContent="center">
+                <Grid item xs={7}>
+                    <ConfirmationButton title={"My Account"} onClick={() => { 
+                        redirect()
+                    }} />
                 </Grid>
             </Grid>
             <Grid item container xs={12} justifyContent="center">

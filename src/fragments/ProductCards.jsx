@@ -32,20 +32,19 @@ const ContentProductCard = ({type, name, price, description}) => (
 
 const UnsafeContentProductCard = ({type, name, price, description}) => (
     <CardContent>
-        <div color="text.secondary" gutterBottom dangerouslySetInnerHTML={{type}}/>
-           
-        <div dangerouslySetInnerHTML={{name}}/>
-        <div sx={{ mb: 1.5 }} color="text.secondary" dangerouslySetInnerHTML={{price}}/>
+        <div color="text.secondary" gutterBottom dangerouslySetInnerHTML={{__html: type}}/>
+        <div dangerouslySetInnerHTML={{__html: name}}/>
+        <div sx={{ mb: 1.5 }} color="text.secondary" dangerouslySetInnerHTML={{__html: price}}/>
         <div sx={{ mb: 1.5 }} color="text.secondary">
             by vendor x
         </div>
-        <div variant="body2" dangerouslySetInnerHTML={{description}}/>
+        <div variant="body2" dangerouslySetInnerHTML={{__html: description}}/>
         <br />
     </CardContent>
 )
 
 const BasicProductCard = ({type, name, price, description}) => {
-
+    // <ContentProductCard type={type} name = {name} price ={price} description={description }/>
     return (
         <Card sx={{ minWidth: 275 }}>
             <ContentProductCard type={type} name = {name} price ={price} description={description }/>
@@ -58,11 +57,11 @@ const BuyerProductCard = ({id, type, name, price, description, buyFunction}) => 
 
     const navigate = useNavigate();
     const redirect = () => navigate(`/product?id=${id}`);
-
+        // <ContentProductCard type={type} name = {name} price ={price} description={description }/>
     return (
         <Card sx={{ minWidth: 275 }}>
-            <ContentProductCard type={type} name = {name} price ={price} description={description }/>
-            <CardActions >
+            <UnsafeContentProductCard type={type} name = {name} price ={price} description={description }/>
+            <CardActions>
                 <div style={{margin: "auto"}}>
                     <Button size="small" style={{marginRight: 10}} onClick={() => redirect()}>See Reviews</Button>
                     <BuyButton alreadyOwned={false}  buyFunction={buyFunction} />
@@ -117,14 +116,22 @@ const ReviewCard = ({rating, title, description, writer, answer}) => {
     )
 }
 
-const OrderCard = ({basicProductCard, buyer, date}) => {
+const OrderCard = ({basicProductCard, buyer, date, idProd}) => {
+
+    const navigate = useNavigate();
+    const reviewRedirect = () => navigate(`/product?id=${idProd}`);
+
     return (
         <Card sx={{ minWidth: 275 }}>
             <CardContent>
                 {basicProductCard}
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    bought by {buyer} on {date}
+                    bought by {buyer} 
+                    {/* on {date} */}
                 </Typography>
+                <div style={{margin: "auto"}}>
+                    <Button size="small" style={{marginRight: 10}} onClick={() => reviewRedirect()}>See Reviews</Button>
+                </div>
             </CardContent>
         </Card>
     )
