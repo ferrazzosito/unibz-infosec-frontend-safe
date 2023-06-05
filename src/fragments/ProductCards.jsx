@@ -25,7 +25,7 @@ const ContentProductCard = ({type, name, price, vendorName, vendorId, descriptio
             {name}
         </Typography>
         <Typography variant="h5" sx={{ mb: 1.5 }} color="text.secondary">
-            {price} $
+            {price} €
         </Typography>
         <span onClick = {() => redirectVendorPage()} style={{textDecorationLine : "underline", cursor: "pointer"}}>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
@@ -50,7 +50,7 @@ const UnsafeContentProductCard = ({type, name, price, vendorName, vendorId, desc
     <CardContent>
         <div color="text.secondary" gutterBottom dangerouslySetInnerHTML={{__html: type}}/>
         <div dangerouslySetInnerHTML={{__html: name}}/>
-        <div sx={{ mb: 1.5 }} color="text.secondary" dangerouslySetInnerHTML={{__html: price}}/>
+        <div sx={{ mb: 1.5 }} color="text.secondary" dangerouslySetInnerHTML={{__html: price + " €"}}/>
         <div sx={{ mb: 1.5 }} color="text.secondary" onClick = {() => redirectVendorPage()} style={{textDecorationLine : "underline", cursor: "pointer"}} >
             by vendor {vendorName}
         </div>
