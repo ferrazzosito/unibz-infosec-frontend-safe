@@ -51,8 +51,9 @@ const beginHandshake = function(ws) {
  * 
  * @param {WebSocket} ws 
  * @param {object} msg 
+ * @param {(ws: WebSocket) => void} readyCallback
  */
-const handleHandshake = function(ws, msg) {
+const handleHandshake = function(ws, msg, readyCallback) {
     const { role } = msg;
     if (role === "alice") {
         const {g, n, pub: otherPub} = {
@@ -84,6 +85,7 @@ const handleHandshake = function(ws, msg) {
         ws.send(JSON.stringify({
             "type": "ready"
         }));
+        readyCallback(ws);
     }
 }
 
@@ -108,7 +110,6 @@ const handleWelcome = function(ws, msg) {
  */
 const handleMessage = function(ws, enc, clb) {
     const sharedKey = store.get('shared');
-    console.log("decrypting with key " + sharedKey);
     const plain = desDecrypt(enc, sharedKey);
     clb(ws, plain);
 }
@@ -121,7 +122,6 @@ const handleMessage = function(ws, enc, clb) {
  */
 const sendMessageWrapper = function(ws, plain) {
     const sharedKey = store.get('shared');
-    console.log("encrypting with key " + sharedKey);
     ws.send(JSON.stringify({
         "type": "message",
         "message": desEncrypt(plain, sharedKey)
@@ -135,12 +135,13 @@ const sendMessageWrapper = function(ws, plain) {
  * 
  * @param {string} chatId
  * @param {(this: WebSocket) => void} onOpen 
+ * @param {(ws: WebSocket) => void} onReady 
  * @param {(ws: WebSocket, plain: string) => void} onMessage 
  * @param {(this: WebSocket) => void} onClose
  * @param {(this: WebSocket) => void} onError
  * @returns {[(plain: string) => void, () => void]} array of callbacks containing a callback for sending @see sendMessageWrapper and a wrapper for closing the socket
  */
-const openChatSession = function(chatId, onOpen, onMessage, onClose, onError) {
+const openChatSession = function(chatId, onOpen, onReady, onMessage, onClose, onError) {
     const ws = new WebSocket(`ws://localhost:8080/chat/${chatId}`);
     ws.on('open', onOpen);
     ws.on('message', (data) => {
@@ -150,13 +151,13 @@ const openChatSession = function(chatId, onOpen, onMessage, onClose, onError) {
                 handleMessage(ws, payload.message, onMessage);
                 break;
             case "handshake":
-                handleHandshake(ws, payload);
+                handleHandshake(ws, payload, onReady);
                 break;
             case "welcome":
                 handleWelcome(ws, payload);
                 break;
             case "ready":
-                console.log("nice");
+                onReady(ws);
                 break;
             case "close":
                 ws.close();

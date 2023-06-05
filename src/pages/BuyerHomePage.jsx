@@ -49,7 +49,7 @@ const BuyerHomePage = () => {
                                 price={prod.cost} 
                                 name={prod.name} 
                                 description={prod.description}
-                                buyFunction={() => makeAnOrder(prod.id, user.payload.id)}
+                                buyFunction={() => makeAnOrder(prod.id)}
                             />
                         </Grid>
                     ))}
