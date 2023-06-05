@@ -147,4 +147,14 @@ const OrderCard = ({basicProductCard, buyer, date, role, approved, idProd}) => {
     )
 }
 
-export {BasicProductCard, ReviewCard, BuyerProductCard, VendorProductCard, OrderCard}
+const BalanceCard = ({amount}) => {
+
+    return (
+        <Typography variant="h4"  gutterBottom>
+            Your Current Balance: {amount} €
+        </Typography>
+    )
+
+}
+
+export {BasicProductCard, ReviewCard, BuyerProductCard, VendorProductCard, OrderCard, BalanceCard}

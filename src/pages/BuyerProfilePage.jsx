@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import { BasicProductCard, BuyerProductCard, VendorProductCard } from "../fragments/ProductCards";
+import { BalanceCard, BasicProductCard, BuyerProductCard, VendorProductCard } from "../fragments/ProductCards";
 import { Title } from "../components/Typography";
 import { SearchField, UnsafeStringField } from "../components/FormComponents";
 import { useEffect, useState } from "react";
@@ -14,6 +14,7 @@ import { authContext } from "../hooks/useUser";
 import { useOrders } from "../hooks/useOrders";
 import { OrderCard } from "../fragments/ProductCards";
 import { useReviews } from "../hooks/useReviews";
+import { TopUpMoneyForm } from "../fragments/Forms";
 
 const BuyerProfilePage = () => {
 
@@ -31,6 +32,12 @@ const BuyerProfilePage = () => {
         <Grid container justifyContent="center" >
             <Grid item xs={12}>
                 <Title text="Profile Page" />
+            </Grid>
+            <Grid container xs={12} justifyContent="center">
+                <BalanceCard amount={10}/> 
+            </Grid>
+            <Grid  container xs={12} justifyContent="center">
+                <TopUpMoneyForm onSubmitForm={() => {}}/> 
             </Grid>
             <Grid item xs={12}>
                 <Title text="Your past orders" />
