@@ -96,11 +96,22 @@ export function useUser () {
       setUser({});
     }
 
+    async function findAUser(id) {
+      console.log(user.accessToken);
+      return await axios.get(`/v1/users/${id}`, { headers: {"Authorization" : `Bearer ${user.accessToken}`} });
+    }
+
+   async function findUser(id) {
+        return await findAUser(id)
+        .then(({data}) => data)
+        .catch((e) => {throw new Error(e.message)});
+    }
+
     function reload() {
       retrieveFromStore();
     }
 
-    return {user, logUser, registerUser, logout/*, reload*/};
+    return {user, logUser, registerUser, logout/*, reload*/, findUser};
 
 }
 

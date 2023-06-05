@@ -16,19 +16,43 @@ import { OrderCard } from "../fragments/ProductCards";
 import { useReviews } from "../hooks/useReviews";
 import { TopUpMoneyForm } from "../fragments/Forms";
 
+const ProdCard = ({ordId, prodId, getProduct}) =>{
+
+    const [vendorId, setVendorId] = useState(1);
+
+    useEffect(
+        () => {
+            getProduct(prodId)
+            .then (resp => {
+                // console.log(JSON.stringify(resp))
+                setVendorId(resp.vendorId)});
+        }, []
+    )
+
+    console.log(vendorId);
+
+    return (<BasicProductCard 
+        // type="vulnerability" 
+        name={ordId}
+        vendorId={vendorId}
+        // escription="lorem ipsum lorem ipsum lorem ipsum" 
+    />)
+}
+
 const BuyerProfilePage = () => {
 
     const {user, logUser, registerUser, logout} = useContext(authContext);     
 
     const {orders} = useOrders(user.accessToken);
     const {reviews} = useReviews(user.accessToken);
+    const {getProduct} = useProducts(user.accessToken);
 
     const navigate = useNavigate();
     const redirect = () => navigate("/");
     
-    
 
     return (
+    
         <Grid container justifyContent="center" >
             <Grid item xs={12}>
                 <Title text="Profile Page" />
@@ -47,12 +71,7 @@ const BuyerProfilePage = () => {
                     {orders.map((ord) => (
                             <Grid item xs={7}>
                                 <OrderCard
-                                    basicProductCard={ 
-                                        <BasicProductCard 
-                                            // type="vulnerability" 
-                                            name={ord.id}
-                                            // escription="lorem ipsum lorem ipsum lorem ipsum" 
-                                        />}
+                                    basicProductCard={  <ProdCard ordId = {ord.id} prodId = {ord.productId} getProduct = {getProduct}/>  }
                                     buyer="you"
                                     role={user.payload.role}
                                     approved={ord.approved}
