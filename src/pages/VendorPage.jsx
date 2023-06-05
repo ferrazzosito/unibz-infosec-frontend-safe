@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { BalanceCard, BasicProductCard, BuyerProductCard, VendorProductCard } from "../fragments/ProductCards";
 import { Title } from "../components/Typography";
 import { SearchField, UnsafeStringField } from "../components/FormComponents";
@@ -17,8 +17,17 @@ import { useReviews } from "../hooks/useReviews";
 import { TopUpMoneyForm } from "../fragments/Forms";
 import { useSearchParams } from "react-router-dom";
 import {Typography} from "@mui/material";
+import { Widget, toggleWidget} from 'react-chat-widget';
+
+import 'react-chat-widget/lib/styles.css';
+
+
 
 const VendorPage = () => {
+
+    const getCustomLauncher = (handleToggle) => (
+        <ConfirmationButton title="LIVE CHAT WITH THIS VENDOR" onClick={handleToggle} />
+    )
 
     const {user, logUser, registerUser, logout, findUser} = useContext(authContext);     
 
@@ -44,13 +53,27 @@ const VendorPage = () => {
 
     return (
         <Grid container justifyContent="center" >
+
+            <Widget launcher={handleToggle => getCustomLauncher(handleToggle)} />
+
             <Grid item xs={12}>
                 <Title text="Vendor Page" />
             </Grid>
 
-            <Typography variant="h4"  >
-                Email: {vendor.email}
-            </Typography>
+            <Grid item xs={12}>
+                <Typography variant="h4"  >
+                    Email: {vendor.email} 
+                </Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <Typography variant="h5"  >
+                    Or click in the bottom right corner to live chat with this vendor
+                </Typography>
+            </Grid>
+            
+
+            
+
             
             <Grid item container xs={12} justifyContent="center">
                 <Grid item xs={7}>

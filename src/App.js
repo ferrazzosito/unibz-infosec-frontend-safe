@@ -19,6 +19,7 @@ import BuyerProfilePage from './pages/BuyerProfilePage';
 import VendorProfilePage from './pages/VendorProfilePage';
 import VendorPage from './pages/VendorPage';
 
+
 function App() {
 
   const auth = useUser();
@@ -27,6 +28,8 @@ function App() {
     <authContext.Provider value={auth}>
       <BrowserRouter>
         <div className="App">
+        
+
           <Routes> 
             <Route path="/login" element={<LoginPage/>}/>
             <Route path="/sign-up" element={<RegistrationPage/>} />
