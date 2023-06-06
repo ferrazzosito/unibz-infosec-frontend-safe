@@ -50,7 +50,7 @@ const BuyerHomePage = () => {
                                 name={prod.name} 
                                 vendorId = {prod.vendorId}
                                 description={prod.description}
-                                buyFunction={() => makeAnOrder(prod.id, user.payload.id)}
+                                buyFunction={() => makeAnOrder(prod.id)}
                             />
                         </Grid>
                     )})}
