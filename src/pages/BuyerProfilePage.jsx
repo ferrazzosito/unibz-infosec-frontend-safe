@@ -46,10 +46,16 @@ const BuyerProfilePage = () => {
     const {orders} = useOrders(user.accessToken);
     const {reviews} = useReviews(user.accessToken);
     const {getProduct} = useProducts(user.accessToken);
+    const {topUp} = useUser(user.accessToken);
+
+    const [balance, setBalance] = useState("N/A");
 
     const navigate = useNavigate();
     const redirect = () => navigate("/");
-    
+
+    useEffect(() => {
+        topUp(0).then(r => (setBalance(r.balance) || "N/A").toString());
+    }, []);
 
     return (
     
@@ -58,10 +64,12 @@ const BuyerProfilePage = () => {
                 <Title text="Profile Page" />
             </Grid>
             <Grid container xs={12} justifyContent="center">
-                <BalanceCard amount={10}/> 
+                <BalanceCard amount={balance}/> 
             </Grid>
             <Grid  container xs={12} justifyContent="center">
-                <TopUpMoneyForm onSubmitForm={() => {}}/> 
+                <TopUpMoneyForm onSubmitForm={({money}) => {
+                    topUp(money).then(r => (setBalance(r.balance) || "N/A").toString());
+                }}/> 
             </Grid>
             <Grid item xs={12}>
                 <Title text="Your past orders" />
