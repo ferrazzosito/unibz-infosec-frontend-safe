@@ -8,8 +8,15 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { BuyButton, DeleteButton } from '../components/Buttons';
 import { useNavigate } from 'react-router';
+import { useContext } from 'react';
+import { authContext } from '../hooks/useUser';
 
-const ContentProductCard = ({type, name, price, description}) => (
+const ContentProductCard = ({type, name, price, vendorName, vendorId, description}) => {
+    
+    const navigate = useNavigate();
+    const redirectVendorPage = () => navigate(`/vendor?id=${vendorId}`);
+
+    return(
     <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             {type}
@@ -18,49 +25,89 @@ const ContentProductCard = ({type, name, price, description}) => (
             {name}
         </Typography>
         <Typography variant="h5" sx={{ mb: 1.5 }} color="text.secondary">
-            {price} $
+            {price} €
         </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            by vendor x
-        </Typography>
+        <span onClick = {() => redirectVendorPage()} style={{textDecorationLine : "underline", cursor: "pointer"}}>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                by vendor {vendorName}
+            </Typography>
+        </span>
         <Typography variant="body2">
             {description}
         <br />
         </Typography>
     </CardContent>
-)
+)}
 
-const UnsafeContentProductCard = ({type, name, price, description}) => (
+const UnsafeContentProductCard = ({type, name, price, vendorName, vendorId, description}) => {
+
+    const navigate = useNavigate();
+
+    const redirectVendorPage = () => navigate(`/vendor?id=${vendorId}`);
+
+    
+    return(
     <CardContent>
         <div color="text.secondary" gutterBottom dangerouslySetInnerHTML={{__html: type}}/>
         <div dangerouslySetInnerHTML={{__html: name}}/>
-        <div sx={{ mb: 1.5 }} color="text.secondary" dangerouslySetInnerHTML={{__html: price}}/>
-        <div sx={{ mb: 1.5 }} color="text.secondary">
-            by vendor x
+        <div sx={{ mb: 1.5 }} color="text.secondary" dangerouslySetInnerHTML={{__html: price + " €"}}/>
+        <div sx={{ mb: 1.5 }} color="text.secondary" onClick = {() => redirectVendorPage()} style={{textDecorationLine : "underline", cursor: "pointer"}} >
+            by vendor {vendorName}
         </div>
         <div variant="body2" dangerouslySetInnerHTML={{__html: description}}/>
         <br />
     </CardContent>
 )
-
-const BasicProductCard = ({type, name, price, description}) => {
+}
+const BasicProductCard = ({type, name, price, vendorId, description}) => {
     // <ContentProductCard type={type} name = {name} price ={price} description={description }/>
+    
+    const {findUser} = useContext(authContext);    
+    
+    const [vendor, setVendor] = React.useState({});
+    
+    // findUser(vendorId)
+    // .then(response => setVendor(response));
+
+    React.useEffect(
+        () => {
+            findUser(vendorId)
+            .then(resp => setVendor(resp));
+        }, [vendorId]
+    )
+
     return (
         <Card sx={{ minWidth: 275 }}>
-            <ContentProductCard type={type} name = {name} price ={price} description={description }/>
+            <ContentProductCard type={type} name = {name} price ={price} vendorName={vendor.email}  vendorId={vendorId} description={description }/>
         </Card>
     )
 
 }
 
-const BuyerProductCard = ({id, type, name, price, description, buyFunction}) => {
+const BuyerProductCard = ({id, type, name, price, vendorId, description, buyFunction}) => {
 
     const navigate = useNavigate();
     const redirect = () => navigate(`/product?id=${id}`);
+    const {findUser} = useContext(authContext);    
+    
+    const [vendor, setVendor] = React.useState({});
+    
+    // findUser(vendorId)
+    // .then(response => setVendor(response));
+
+    React.useEffect(
+        () => {
+            findUser(vendorId)
+            .then(resp => setVendor(resp));
+        }, []
+    )
+
+
+    // setVendor(getVendorDetails());
         // <ContentProductCard type={type} name = {name} price ={price} description={description }/>
     return (
         <Card sx={{ minWidth: 275 }}>
-            <UnsafeContentProductCard type={type} name = {name} price ={price} description={description }/>
+            <UnsafeContentProductCard type={type} name = {name} price ={price} vendorName={vendor.email} vendorId = {vendorId} description={description }/>
             <CardActions>
                 <div style={{margin: "auto"}}>
                     <Button size="small" style={{marginRight: 10}} onClick={() => redirect()}>See Reviews</Button>
@@ -72,14 +119,14 @@ const BuyerProductCard = ({id, type, name, price, description, buyFunction}) => 
 
 }
 
-const VendorProductCard = ({id, type, name, price, description, deleteFunction}) => {
+const VendorProductCard = ({id, type, name, price,vendorName, description, deleteFunction}) => {
 
     const navigate = useNavigate();
     const redirect = () => navigate(`/product?id=${id}`);
 
     return (
         <Card sx={{ minWidth: 275 }}>
-            <ContentProductCard type={type} name = {name} price ={price}  description={description }/>
+            <ContentProductCard type={type} name = {name} price ={price} vendorName={vendorName} description={description }/>
             <CardActions >
                 <div style={{margin: "auto"}}>
                     <Button size="small" style={{marginRight: 10}} onClick={() => redirect()}>See Reviews</Button>
@@ -116,7 +163,7 @@ const ReviewCard = ({rating, title, description, writer, answer}) => {
     )
 }
 
-const OrderCard = ({basicProductCard, buyer, date, idProd}) => {
+const OrderCard = ({basicProductCard, buyer, date, role, approved, idProd}) => {
 
     const navigate = useNavigate();
     const reviewRedirect = () => navigate(`/product?id=${idProd}`);
@@ -124,6 +171,16 @@ const OrderCard = ({basicProductCard, buyer, date, idProd}) => {
     return (
         <Card sx={{ minWidth: 275 }}>
             <CardContent>
+                {
+                    role === "customer" ?
+                        approved ?
+                        <Typography sx={{ mb: 1.5 }} color="green"> Approved by vendor </Typography>    
+                        :            
+                        <Typography sx={{ mb: 1.5 }} color="red"> Not yet approved by vendor </Typography>
+                    :
+                    <></>
+
+                }
                 {basicProductCard}
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                     bought by {buyer} 
@@ -137,4 +194,14 @@ const OrderCard = ({basicProductCard, buyer, date, idProd}) => {
     )
 }
 
-export {BasicProductCard, ReviewCard, BuyerProductCard, VendorProductCard, OrderCard}
+const BalanceCard = ({amount}) => {
+
+    return (
+        <Typography variant="h4"  gutterBottom>
+            Your Current Balance: {amount} €
+        </Typography>
+    )
+
+}
+
+export {BasicProductCard, ReviewCard, BuyerProductCard, VendorProductCard, OrderCard, BalanceCard}

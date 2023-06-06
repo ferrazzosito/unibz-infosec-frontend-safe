@@ -138,4 +138,38 @@ const ProductForm = ({onSubmitForm}) => {
     )
 }
 
-export {SignUpForm, SignInForm, ReviewForm, ProductForm};
+const TopUpMoneyForm = ({onSubmitForm}) => {
+    const [money, setMoney] = useState(1);
+
+    const setCheckMoney = (val) => {
+        if(+val < 1)
+            setMoney(1);
+        else
+            setMoney(val);
+    }
+
+    return (
+        <Card sx={{ minWidth: 275 }}>
+            <CardContent>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    Top Up Money
+                </Typography>
+                <Grid container rowSpacing={2} columnSpacing={2}  justifyContent="center">
+                    <Grid item xs={12}>
+                        <NumericField number={money} 
+                            setNumber={setCheckMoney} 
+                            title={"Amount (€)"} 
+                            inputProps={{ inputMode: 'numeric',  pattern: "d*",  min: 1}}  
+                            defaultValue = {1}
+                        />
+                    </Grid>
+                    <Grid item xs={7}>
+                        <ConfirmationButton title={"Top Up"} onClick={() => onSubmitForm({money})} />
+                    </Grid>
+                </Grid>
+            </CardContent>
+        </Card>
+    )
+}
+
+export {SignUpForm, SignInForm, ReviewForm, ProductForm, TopUpMoneyForm};

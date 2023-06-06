@@ -44,7 +44,7 @@ const ProductPage = () => {
     const id = searchParams.get("id");
 
 
-    const {user} = useContext(authContext);    
+    const {user, findUser} = useContext(authContext);    
     const {getProduct} = useProducts(user.accessToken);
 
     const [product, setProduct] = useState({});
@@ -60,7 +60,7 @@ const ProductPage = () => {
         .then((result) => setProduct(result))
         .catch(e => setProduct({}));
         
-    }, [])
+    }, [id])
 
     return (
         <Grid container justifyContent="center" spacing={7} >
@@ -69,7 +69,7 @@ const ProductPage = () => {
             </Grid>
             <Grid item container xs={9} spacing={7} justifyContent="center" >
                 <Grid item xs={3}>
-                    <BasicProductCard type="" name={product.name} description="" price={product.cost} />
+                    <BasicProductCard type="" name={product.name} description="" getVendorDetails = {async () => await findUser(product.vendorId)} price={product.cost} />
                 </Grid>
             </Grid>
             {

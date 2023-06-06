@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import { BasicProductCard, BuyerProductCard, VendorProductCard } from "../fragments/ProductCards";
+import { BalanceCard, BasicProductCard, BuyerProductCard, VendorProductCard } from "../fragments/ProductCards";
 import { Title } from "../components/Typography";
 import { SearchField, UnsafeStringField } from "../components/FormComponents";
 import { useEffect, useState } from "react";
@@ -14,6 +14,30 @@ import { authContext } from "../hooks/useUser";
 import { useOrders } from "../hooks/useOrders";
 import { OrderCard } from "../fragments/ProductCards";
 import { useReviews } from "../hooks/useReviews";
+import { TopUpMoneyForm } from "../fragments/Forms";
+
+const ProdCard = ({ordId, prodId, getProduct}) =>{
+
+    const [vendorId, setVendorId] = useState(1);
+
+    useEffect(
+        () => {
+            getProduct(prodId)
+            .then (resp => {
+                // console.log(JSON.stringify(resp))
+                setVendorId(resp.vendorId)});
+        }, []
+    )
+
+    console.log(vendorId);
+
+    return (<BasicProductCard 
+        // type="vulnerability" 
+        name={ordId}
+        vendorId={vendorId}
+        // escription="lorem ipsum lorem ipsum lorem ipsum" 
+    />)
+}
 
 const BuyerProfilePage = () => {
 
@@ -21,38 +45,36 @@ const BuyerProfilePage = () => {
 
     const {orders} = useOrders(user.accessToken);
     const {reviews} = useReviews(user.accessToken);
+    const {getProduct} = useProducts(user.accessToken);
 
     const navigate = useNavigate();
     const redirect = () => navigate("/");
     
-    
 
     return (
+    
         <Grid container justifyContent="center" >
             <Grid item xs={12}>
                 <Title text="Profile Page" />
             </Grid>
+            <Grid container xs={12} justifyContent="center">
+                <BalanceCard amount={10}/> 
+            </Grid>
+            <Grid  container xs={12} justifyContent="center">
+                <TopUpMoneyForm onSubmitForm={() => {}}/> 
+            </Grid>
+            <Grid item xs={12}>
+                <Title text="Your past orders" />
+            </Grid>
             <Grid item container xs={12} justifyContent="center" spacing={7}>
                 <Grid item container xs={12} justifyContent="center"> 
                     {orders.map((ord) => (
-                            // <Grid item xs={3}>
-                            //     <BuyerProductCard /*type={prod.type}*/ 
-                            //         id={prod.id}
-                            //         price={prod.cost} 
-                            //         name={prod.name} 
-                            //         description={prod.description}
-                            //         buyFunction={() => makeAnOrder(prod.id, user.payload.id)}
-                            //     />
-                            // </Grid>
                             <Grid item xs={7}>
                                 <OrderCard
-                                    basicProductCard={ 
-                                        <BasicProductCard 
-                                            // type="vulnerability" 
-                                            name={ord.id}
-                                            // escription="lorem ipsum lorem ipsum lorem ipsum" 
-                                        />}
+                                    basicProductCard={  <ProdCard ordId = {ord.id} prodId = {ord.productId} getProduct = {getProduct}/>  }
                                     buyer="you"
+                                    role={user.payload.role}
+                                    approved={ord.approved}
                                         // date="10/20/2024"
                                     idProd = {ord.productId}
                                 />
