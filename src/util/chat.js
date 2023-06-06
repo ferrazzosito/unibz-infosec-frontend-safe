@@ -1,9 +1,9 @@
 // @ts-check
 
-const { beginDiffieHellman, reconstructDiffieHellman } = require('./dh.js');
-const { desEncrypt, desDecrypt, decimalToBinaryString } = require('./crypto.js');
-const store = require('store');
-const { WebSocket } = require('ws');
+import { beginDiffieHellman, reconstructDiffieHellman } from './dh.js';
+import { desEncrypt, desDecrypt, decimalToBinaryString } from './crypto.js';
+import { set, get, remove } from 'store';
+import { WebSocket } from 'ws';
 
 const KEY_LENGTH = 1024;
 
@@ -29,7 +29,7 @@ const requestChat = async function(vendor) {
  */
 const beginHandshake = function(ws) {
     const dh = beginDiffieHellman("alice", KEY_LENGTH);
-    store.set('dh', {
+    set('dh', {
         pub: dh.getPublicKey('hex'),
         priv: dh.getPrivateKey('hex'),
         keyLength: KEY_LENGTH,
@@ -51,8 +51,9 @@ const beginHandshake = function(ws) {
  * 
  * @param {WebSocket} ws 
  * @param {object} msg 
+ * @param {(ws: WebSocket) => void} readyCallback
  */
-const handleHandshake = function(ws, msg) {
+const handleHandshake = function(ws, msg, readyCallback) {
     const { role } = msg;
     if (role === "alice") {
         const {g, n, pub: otherPub} = {
@@ -62,7 +63,7 @@ const handleHandshake = function(ws, msg) {
         };
         const dh = beginDiffieHellman("bob", msg.keyLength, n, g);
         const sharedKey = dh.computeSecret(otherPub);
-        store.set('shared', sharedKey.toString('hex'));
+        set('shared', sharedKey.toString('hex'));
         ws.send(JSON.stringify({
             type: "handshake",
             role: "bob",
@@ -71,7 +72,7 @@ const handleHandshake = function(ws, msg) {
         }));
     } else if (role === "bob") {
         const { pub: otherPub } = msg;
-        const { pub, priv, n, g } = store.get('dh');
+        const { pub, priv, n, g } = get('dh');
         const dh = reconstructDiffieHellman(
             Buffer.from(pub, 'hex'), 
             Buffer.from(priv, 'hex'), 
@@ -79,11 +80,12 @@ const handleHandshake = function(ws, msg) {
             Buffer.from(g, 'hex')
         );
         const sharedKey = dh.computeSecret(Buffer.from(otherPub, 'hex'));
-        store.remove('dh');
-        store.set('shared', sharedKey.toString('hex'));
+        remove('dh');
+        set('shared', sharedKey.toString('hex'));
         ws.send(JSON.stringify({
             "type": "ready"
         }));
+        readyCallback(ws);
     }
 }
 
@@ -107,8 +109,7 @@ const handleWelcome = function(ws, msg) {
  * @param {(ws: WebSocket, plain: string) => void} clb 
  */
 const handleMessage = function(ws, enc, clb) {
-    const sharedKey = store.get('shared');
-    console.log("decrypting with key " + sharedKey);
+    const sharedKey = get('shared');
     const plain = desDecrypt(enc, sharedKey);
     clb(ws, plain);
 }
@@ -120,8 +121,7 @@ const handleMessage = function(ws, enc, clb) {
  * @param {string} plain
  */
 const sendMessageWrapper = function(ws, plain) {
-    const sharedKey = store.get('shared');
-    console.log("encrypting with key " + sharedKey);
+    const sharedKey = get('shared');
     ws.send(JSON.stringify({
         "type": "message",
         "message": desEncrypt(plain, sharedKey)
@@ -135,12 +135,13 @@ const sendMessageWrapper = function(ws, plain) {
  * 
  * @param {string} chatId
  * @param {(this: WebSocket) => void} onOpen 
+ * @param {(ws: WebSocket) => void} onReady 
  * @param {(ws: WebSocket, plain: string) => void} onMessage 
  * @param {(this: WebSocket) => void} onClose
  * @param {(this: WebSocket) => void} onError
  * @returns {[(plain: string) => void, () => void]} array of callbacks containing a callback for sending @see sendMessageWrapper and a wrapper for closing the socket
  */
-const openChatSession = function(chatId, onOpen, onMessage, onClose, onError) {
+const openChatSession = function(chatId, onOpen, onReady, onMessage, onClose, onError) {
     const ws = new WebSocket(`ws://localhost:8080/chat/${chatId}`);
     ws.on('open', onOpen);
     ws.on('message', (data) => {
@@ -150,17 +151,17 @@ const openChatSession = function(chatId, onOpen, onMessage, onClose, onError) {
                 handleMessage(ws, payload.message, onMessage);
                 break;
             case "handshake":
-                handleHandshake(ws, payload);
+                handleHandshake(ws, payload, onReady);
                 break;
             case "welcome":
                 handleWelcome(ws, payload);
                 break;
             case "ready":
-                console.log("nice");
+                onReady(ws);
                 break;
             case "close":
                 ws.close();
-                store.remove('shared');
+                remove('shared');
                 break;
         }
     });
@@ -169,4 +170,5 @@ const openChatSession = function(chatId, onOpen, onMessage, onClose, onError) {
     return [(text) => sendMessageWrapper(ws, text), () => ws.close()];
 };
 
-exports.openChatSession = openChatSession;
+const _openChatSession = openChatSession;
+export { _openChatSession as openChatSession };

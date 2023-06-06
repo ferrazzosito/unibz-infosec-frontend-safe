@@ -6,7 +6,7 @@ import store from 'store';
 
 export const authContext = React.createContext();
 
-export function useUser () {
+export function useUser(token = null) {
 
     const [user, setUser] = useState(undefined);
 
@@ -96,11 +96,34 @@ export function useUser () {
       setUser({});
     }
 
+    async function findAUser(id) {
+      console.log(user.accessToken);
+      return await axios.get(`/v1/users/${id}`, { headers: {"Authorization" : `Bearer ${user.accessToken}`} });
+    }
+
+    async function findUser(id) {
+        return await findAUser(id)
+        .then(({data}) => data)
+        .catch((e) => {throw new Error(e.message)});
+    }
+
+    async function topUp(amount) {
+      return await axios.post(`/v1/users/topup`, {
+        balanceIncrease: amount
+      }, {
+        headers: {
+          Authorization: `Bearer ${token || user.accessToken}`
+        }
+      }).then(({data}) => data).catch(err => {
+        throw new Error(err.message);
+      });
+    }
+
     function reload() {
       retrieveFromStore();
     }
 
-    return {user, logUser, registerUser, logout/*, reload*/};
+    return {user, logUser, registerUser, logout/*, reload*/, findUser, topUp};
 
 }
 

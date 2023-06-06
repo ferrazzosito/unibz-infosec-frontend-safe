@@ -18,7 +18,7 @@ const BuyerHomePage = () => {
     const [query, setQuery] = useState("");
     const [qresponse, setQresponse] = useState({"data": {"query": ""}});
 
-    const {user, logUser, registerUser, logout} = useContext(authContext);     
+    const {user, logUser, registerUser, logout, findUser} = useContext(authContext);     
 
     const {postSearchQuery} = useProducts(user.accessToken);
     
@@ -47,7 +47,6 @@ const BuyerHomePage = () => {
     const queriedProducts = () => products.filter((prod) => (prod.name.indexOf(query) >= 0));
 
     const usedProducts = queriedProducts();
-    
 
     return (
         <Grid container justifyContent="center" >
@@ -59,17 +58,19 @@ const BuyerHomePage = () => {
             </Grid>
             <Grid item container xs={12} justifyContent="center">
                 <Grid item container xs={9} spacing={7} justifyContent="center" >
-                    {usedProducts.map((prod) => (
+                    {usedProducts.map((prod, index) => {
+                        return (
                         <Grid item xs={3}>
                             <BuyerProductCard /*type={prod.type}*/ 
                                 id={prod.id}
                                 price={prod.cost} 
                                 name={prod.name} 
+                                vendorId = {prod.vendorId}
                                 description={prod.description}
-                                buyFunction={() => makeAnOrder(prod.id, user.payload.id)}
+                                buyFunction={() => makeAnOrder(prod.id)}
                             />
                         </Grid>
-                    ))}
+                    )})}
                 </Grid>
             </Grid>
             <Grid item container xs={12} >

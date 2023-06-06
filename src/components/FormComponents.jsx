@@ -62,21 +62,33 @@ const TextArea = ({text, setText, placeholder}) => {
 
 }
 
-const NumericField = ({number, setNumber, title}) => {
+const NumericField = ({number, setNumber, title, inputProps}) => {
 
     const isFieldValid = (fieldVal) => (fieldVal !== '' && !isNaN(fieldVal) && fieldVal !== null)
 
     return (
-        <TextField
-            id="numeric-field"
-            label={title}
-            variant="outlined"
-            onChange={(e) => setNumber(+e.target.value)}
-            error = { !isFieldValid(number) }
-            fullWidth
+        // <TextField
+        //     id="numeric-field"
+        //     label={title}
+        //     variant="outlined"
+        //     onChange={(e) => setNumber(+e.target.value)}
+        //     error = { !isFieldValid(number) }
+        //     fullWidth
             
+        // />
+        <TextField id="filled-basic" 
+            onChange = {(val) => setNumber(+val.target.value)} 
+            label={title}
+            variant="outlined" 
+            type="number" 
+            value={number}
+            error = { !isFieldValid(number) }
+            InputLabelProps={{ shrink: true }} 
+            inputProps={inputProps}
         />
+
     )
+
 }
 
 const SearchField =  ({query, setQuery}) => {

@@ -53,8 +53,8 @@ export function useOrders (token) {
       .catch(e => {throw new Error("Error while creating the order: " + e.message)})
     }
 
-    function makeAnOrder(idProduct, idUser) {
-      return post(idProduct, idUser);
+    function makeAnOrder(idProduct) {
+      return post(idProduct);
     }
     
     return {orders, makeAnOrder};
