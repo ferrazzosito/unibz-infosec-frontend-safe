@@ -57,38 +57,6 @@ const VendorHomePage = ({value}) => {
                     : <h1 style={{marginTop: "70px"}}>No Products To Display</h1>
                 }
             </Grid>
-            {/* <Grid item xs={12}>
-                <Title text="Your Sellings" />
-            </Grid> */}
-            {/* <Grid item container xs={12} justifyContent="center" spacing={7}>
-                <Grid item container xs={12} justifyContent="center"> 
-                    <Grid item xs={7}>
-                        <OrderCard
-                            basicProductCard={ <BasicProductCard type="vulnerability" name="Salt in Passwords" description="lorem ipsum lorem ipsum lorem ipsum" />}
-                            buyer="Alessandro"
-                            date="10/20/2024"
-                        />
-                    </Grid>
-                </Grid>
-                <Grid item container xs={12} justifyContent="center"> 
-                    <Grid item xs={7}>
-                        <OrderCard
-                            basicProductCard={ <BasicProductCard type="vulnerability" name="Salt in Passwords" description="lorem ipsum lorem ipsum lorem ipsum" />}
-                            buyer="Alessandro"
-                            date="10/20/2024"
-                        />
-                    </Grid>
-                </Grid>
-                <Grid item container xs={12} justifyContent="center"> 
-                    <Grid item xs={7}>
-                        <OrderCard
-                            basicProductCard={ <BasicProductCard type="vulnerability" name="Salt in Passwords" description="lorem ipsum lorem ipsum lorem ipsum" />}
-                            buyer="Alessandro"
-                            date="10/20/2024"
-                        />
-                    </Grid>
-                </Grid>
-            </Grid> */}
             <Grid item container xs={12} justifyContent="center">
                 <Grid item xs={7}>
                     <ConfirmationButton title={"My Account"} onClick={() => { 

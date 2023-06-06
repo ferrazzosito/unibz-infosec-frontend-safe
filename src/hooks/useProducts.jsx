@@ -61,7 +61,7 @@ export function useProducts (token) {
       if(role === "vendor")
         url += "mine";
 
-      if(role === "vendor")
+      if(role === "customer")
         url += "getAll";
 
         try {
