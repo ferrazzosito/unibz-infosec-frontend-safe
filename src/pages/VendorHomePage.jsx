@@ -40,26 +40,9 @@ const VendorHomePage = ({value}) => {
                 <Title text="Your Products" />
             </Grid>
             <Grid item container xs={9} spacing={7} justifyContent="center" >
-                {/* <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
-                <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
-                <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
-                <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
-                <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
-                <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid> */}
                 {
-                myProducts.map((prod) => (
+                    myProducts.length !== 0 ?    
+                    myProducts.map((prod) => (
                         <Grid item xs={3}>
                             <VendorProductCard /*type={prod.type}*/ 
                                 id={prod.id}
@@ -70,7 +53,9 @@ const VendorHomePage = ({value}) => {
                             />
                         </Grid>
                     ))
-                    }
+
+                    : <h1 style={{marginTop: "70px"}}>No Products To Display</h1>
+                }
             </Grid>
             {/* <Grid item xs={12}>
                 <Title text="Your Sellings" />
