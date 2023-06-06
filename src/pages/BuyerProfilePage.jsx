@@ -16,24 +16,25 @@ import { OrderCard } from "../fragments/ProductCards";
 import { useReviews } from "../hooks/useReviews";
 import { TopUpMoneyForm } from "../fragments/Forms";
 
-const ProdCard = ({ordId, prodId, getProduct}) =>{
+const ProdCard = ({prodName, prodPrice, vendorId}) =>{
 
-    const [vendorId, setVendorId] = useState(1);
+    // const [vendorId, setVendorId] = useState(1);
 
-    useEffect(
-        () => {
-            getProduct(prodId)
-            .then (resp => {
-                // console.log(JSON.stringify(resp))
-                setVendorId(resp.vendorId)});
-        }, []
-    )
+    // useEffect(
+    //     () => {
+    //         getProduct(prodId)
+    //         .then (resp => {
+    //             // console.log(JSON.stringify(resp))
+    //             setVendorId(resp.vendorId)});
+    //     }, []
+    // )
 
-    console.log(vendorId);
+    // console.log(vendorId);
 
     return (<BasicProductCard 
         // type="vulnerability" 
-        name={ordId}
+        name={prodName}
+        price = {prodPrice}
         vendorId={vendorId}
         // escription="lorem ipsum lorem ipsum lorem ipsum" 
     />)
@@ -74,7 +75,11 @@ const BuyerProfilePage = () => {
                         orders.map((ord) => (
                             <Grid item xs={7}>
                                 <OrderCard
-                                    basicProductCard={  <ProdCard ordId = {ord.id} prodId = {ord.productId} getProduct = {getProduct}/>  }
+                                    basicProductCard={  <ProdCard prodName = {ord.product.name} 
+                                                            prodPrice = {ord.product.cost} 
+                                                            vendorId = {ord.product.vendorId}
+                                                            />  
+                                        }
                                     buyer="you"
                                     role={user.payload.role}
                                     approved={ord.approved}

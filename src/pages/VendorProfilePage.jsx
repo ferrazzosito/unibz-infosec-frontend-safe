@@ -44,7 +44,8 @@ const VendorProfilePage = () => {
                                         basicProductCard={ 
                                             <BasicProductCard 
                                                 // type="vulnerability" 
-                                                name={ord.id}
+                                                name={ord.product.name}
+                                                price={ord.product.cost}
                                                 // escription="lorem ipsum lorem ipsum lorem ipsum" 
                                             />}
                                         buyer={ord.clientId}
