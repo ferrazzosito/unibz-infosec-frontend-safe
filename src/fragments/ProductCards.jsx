@@ -40,6 +40,10 @@ const ContentProductCard = ({type, name, price, vendorName, vendorId, descriptio
 )}
 
 const UnsafeContentProductCard = ({type, name, price, vendorName, vendorId, description}) => {
+    
+    const navigate = useNavigate();
+    const redirectVendorPage = () => navigate(`/vendor?id=${vendorId}`);
+    
     <CardContent>
         <div color="text.secondary" gutterBottom dangerouslySetInnerHTML={{__html: type}}/>
         <div dangerouslySetInnerHTML={{__html: name}}/>
