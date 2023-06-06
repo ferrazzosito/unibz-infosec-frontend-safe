@@ -44,7 +44,6 @@ const BuyerProfilePage = () => {
     const {user, logUser, registerUser, logout} = useContext(authContext);     
 
     const {orders} = useOrders(user.accessToken);
-    const {reviews} = useReviews(user.accessToken);
     const {getProduct} = useProducts(user.accessToken);
 
     const navigate = useNavigate();
@@ -68,7 +67,11 @@ const BuyerProfilePage = () => {
             </Grid>
             <Grid item container xs={12} justifyContent="center" spacing={7}>
                 <Grid item container xs={12} justifyContent="center"> 
-                    {orders.map((ord) => (
+                    {
+
+                        orders.length !== 0 ?
+                    
+                        orders.map((ord) => (
                             <Grid item xs={7}>
                                 <OrderCard
                                     basicProductCard={  <ProdCard ordId = {ord.id} prodId = {ord.productId} getProduct = {getProduct}/>  }
@@ -79,7 +82,11 @@ const BuyerProfilePage = () => {
                                     idProd = {ord.productId}
                                 />
                             </Grid>
-                        ))}
+                        ))
+
+                        : <h1 style={{marginTop: "10px"}}>No Orders To Display</h1>
+                    
+                    }
                     
                 </Grid>
             </Grid>
