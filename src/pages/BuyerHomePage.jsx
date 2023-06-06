@@ -16,16 +16,33 @@ import { useOrders } from "../hooks/useOrders";
 const BuyerHomePage = () => {
 
     const [query, setQuery] = useState("");
+    const [qresponse, setQresponse] = useState({"data": {"query": ""}});
 
     const {user, logUser, registerUser, logout} = useContext(authContext);     
 
+    const {postSearchQuery} = useProducts(user.accessToken);
+    
     const {products} = useProducts(user.accessToken);
 
     const {makeAnOrder} = useOrders(user.accessToken);
 
     const navigate = useNavigate();
     const redirect = () => navigate("/my-profile-buyer");
-
+    useEffect(() => {
+        const performSearch = async () => {
+          try {
+            const response = await postSearchQuery({ query });
+            setQresponse(response);
+            console.log('Search results:', response);
+          } catch (error) {
+            console.log('Error:', error);
+          }
+        };
+      
+        if (query !== "") {
+          performSearch();
+        }
+      }, [query]);
     //TODO: should this be done through a backend call, to retrieve fewer objects?
     const queriedProducts = () => products.filter((prod) => (prod.name.indexOf(query) >= 0));
 
@@ -38,7 +55,7 @@ const BuyerHomePage = () => {
                 <Title text="Home Page" />
             </Grid>
             <Grid item xs={12}>
-                <UnsafeSearchBar query={query} setQuery={setQuery} />
+                <UnsafeSearchBar query={qresponse.data.query} setQuery={setQuery}/>
             </Grid>
             <Grid item container xs={12} justifyContent="center">
                 <Grid item container xs={9} spacing={7} justifyContent="center" >

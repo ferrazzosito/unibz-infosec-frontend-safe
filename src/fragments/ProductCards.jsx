@@ -30,6 +30,7 @@ const ContentProductCard = ({type, name, price, description}) => (
     </CardContent>
 )
 
+
 const UnsafeContentProductCard = ({type, name, price, description}) => (
     <CardContent>
         <div color="text.secondary" gutterBottom dangerouslySetInnerHTML={{__html: type}}/>
@@ -88,7 +89,6 @@ const VendorProductCard = ({id, type, name, price, description, deleteFunction})
             </CardActions>
         </Card>
     )
-
 }
 
 const ReviewCard = ({rating, title, description, writer, answer}) => {

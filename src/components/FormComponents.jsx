@@ -80,7 +80,6 @@ const NumericField = ({number, setNumber, title}) => {
 }
 
 const SearchField =  ({query, setQuery}) => {
-
     return (
         <TextField
             id="input-with-icon-textfield"
@@ -88,7 +87,7 @@ const SearchField =  ({query, setQuery}) => {
             InputProps={{
             startAdornment: (
                     <InputAdornment position="end">
-                        <Search />
+                        <Search/>
                     </InputAdornment>
                 ),
             }}
