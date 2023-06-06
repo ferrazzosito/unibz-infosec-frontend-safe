@@ -1,6 +1,6 @@
 const { openChatSession } = require('./src/util/chat');
 
-const chatid = "65e79451-f92d-458a-911f-fb1b7d8ca391";
+const chatid = "6a8f58f4-18a1-4cd7-b4ff-aec2bd213ae9";
 const onMessage = (ws, msg) => console.log("message: " + msg);
 const onReady = (ws) => console.log("ready");
 const onOpen = () => console.log("opened");

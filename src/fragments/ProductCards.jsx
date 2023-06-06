@@ -204,4 +204,22 @@ const BalanceCard = ({amount}) => {
 
 }
 
-export {BasicProductCard, ReviewCard, BuyerProductCard, VendorProductCard, OrderCard, BalanceCard}
+const ChatRequestCard = ({customerId, chatId, openChat}) => {
+    return (
+        <Card sx={{ minWidth: 275 }}>
+            <CardContent>
+                <Typography sx={{ fontSize: 16 }} color="text.secondary" gutterBottom>
+                    {customerId}
+                </Typography>
+                <Typography sx={{ fontSize: 10 }} color="text.secondary" gutterBottom>
+                    {chatId}
+                </Typography>
+                <div style={{margin: "auto"}}>
+                    <Button size="small" style={{marginRight: 10}} onClick={openChat}>Open chat</Button>
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
+
+export {BasicProductCard, ReviewCard, BuyerProductCard, VendorProductCard, OrderCard, BalanceCard, ChatRequestCard}

@@ -64,43 +64,36 @@ const VendorPage = () => {
 
     const [functionsManageChat, setFunctionsManageChat] = useState();
 
-    const openChat  = (handleToggle) => {
+    const openChat = (handleToggle) => {
         toggleInputDisabled();
 
-        //TODO: metti l'id del vendor qui
-        requestChat(21)
-        .then(chatIdResp => {
-            
-            setChatId(chatIdResp);
-            
-            
-            
-            const [sendMsg, closeChat] = 
-                openChatSession(
+        requestChat(vendor.id)
+            .then(chatIdResp => {
+                setChatId(chatIdResp);
+                const [sendMsg, closeChat] = openChatSession(
                     chatIdResp, 
                     () => {}, 
                     (ws) => toggleInputDisabled(), 
                     manageArrivingMessages,
                     () => closeByVendor(), 
                     () => {throw new Error("error while communicating")}
-            );
+                );
 
-            console.log("qui no")
+                console.log("qui no")
 
-            if(sendMsg) {
-                console.log("we");
+                if (sendMsg) {
+                    console.log("we");
+                }
+                setFunctionsManageChat( [sendMsg, closeChat] );
             }
-
-            setFunctionsManageChat( [sendMsg, closeChat] );
-
-        });
+        );
 
         handleToggle();
     }
     
     const getCustomLauncher = (handleToggle) => (
         <ConfirmationButton title="LIVE CHAT WITH THIS VENDOR" onClick={() => {
-            if(functionsManageChat) {
+            if (functionsManageChat) {
                 handleToggle();
                 setFunctionsManageChat();
                 const [sendMsg, closeChat] = functionsManageChat;
@@ -108,15 +101,13 @@ const VendorPage = () => {
             } else {
                 openChat(handleToggle);
             }
-        } 
-        }
-        />
+        }}/>
     )
         
     const handleNewUserMessage = (newMessage) => {
         // console.log(`New message incoming! ${newMessage}`);
         // Now send the message throught the backend API
-        const [sendMsg, closeChat] = functionsManageChat();
+        const [sendMsg, closeChat] = functionsManageChat;
 
         sendMsg(newMessage);
 
