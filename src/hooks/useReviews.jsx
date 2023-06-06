@@ -7,9 +7,20 @@ export function useReviews (token) {
     //as well as setProducts for clients should be disabled
     const [reviews, setReviews] = useState([]);
 
+    async function postCreateQuery({query}) {
+      return axios.post('/v1/reviews/search',  {
+              query: query
+          },
+          { 
+              headers: {"Authorization" : `Bearer ${token}`} 
+          })
+          .then(message => message)
+          .catch((e) => {throw new Error(e.message)});
+      }
 
     async function post({title, description, stars, replyFromReviewId, productId, authorId}) {
-
+      
+      
       let data = {
         "title": title,
         "description": description,

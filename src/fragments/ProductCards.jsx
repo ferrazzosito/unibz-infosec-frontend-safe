@@ -40,13 +40,6 @@ const ContentProductCard = ({type, name, price, vendorName, vendorId, descriptio
 )}
 
 const UnsafeContentProductCard = ({type, name, price, vendorName, vendorId, description}) => {
-
-    const navigate = useNavigate();
-
-    const redirectVendorPage = () => navigate(`/vendor?id=${vendorId}`);
-
-    
-    return(
     <CardContent>
         <div color="text.secondary" gutterBottom dangerouslySetInnerHTML={{__html: type}}/>
         <div dangerouslySetInnerHTML={{__html: name}}/>
@@ -57,7 +50,6 @@ const UnsafeContentProductCard = ({type, name, price, vendorName, vendorId, desc
         <div variant="body2" dangerouslySetInnerHTML={{__html: description}}/>
         <br />
     </CardContent>
-)
 }
 const BasicProductCard = ({type, name, price, vendorId, description}) => {
     // <ContentProductCard type={type} name = {name} price ={price} description={description }/>
@@ -135,26 +127,17 @@ const VendorProductCard = ({id, type, name, price,vendorName, description, delet
             </CardActions>
         </Card>
     )
-
 }
 
 const ReviewCard = ({rating, title, description, writer, answer}) => {
     return (
         <Card sx={{ minWidth: 275 }}>
             <CardContent>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    {rating}
-                </Typography>
-                <Typography variant="h5" component="div">
-                    {title}
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    written by {writer}
-                </Typography>
-                <Typography variant="body2">
-                    {description}
-                <br />
-                </Typography>
+                <div style= {{fontSize: 14}} dangerouslySetInnerHTML={{__html: rating}}/>
+                <div style= {{fontSize: 19, fontWeight: "bold" }} dangerouslySetInnerHTML={{__html: title}}/>
+                
+                <div style= {{fontSize: 14}} dangerouslySetInnerHTML={{__html: "Written by " + rating}}/>
+                <div style= {{fontSize: 14}} dangerouslySetInnerHTML={{__html: description}}/>
                 {/* {answer ? <div style={{marginTop: 10}}> */}
                     {answer}
                     {/* <div/> : <></>} */}
