@@ -72,7 +72,8 @@ const BasicProductCard = ({type, name, price, vendorId, description}) => {
     React.useEffect(
         () => {
             findUser(vendorId)
-            .then(resp => setVendor(resp));
+            .then(resp => setVendor(resp))
+            .catch((e) => {console.log(e); setVendor({})});
         }, [vendorId]
     )
 
@@ -98,7 +99,8 @@ const BuyerProductCard = ({id, type, name, price, vendorId, description, buyFunc
     React.useEffect(
         () => {
             findUser(vendorId)
-            .then(resp => setVendor(resp));
+            .then(resp => setVendor(resp))
+            .catch((e) => {console.log(e); setVendor({})});
         }, []
     )
 
