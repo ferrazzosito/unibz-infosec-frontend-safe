@@ -378,6 +378,9 @@ const gcd = function(a, b) {
     return a;
 };
 
-exports.desEncrypt = desEncrypt;
-exports.desDecrypt = desDecrypt;
-exports.decimalToBinaryString = decimalToBinaryString;
+const _desEncrypt = desEncrypt;
+export { _desEncrypt as desEncrypt };
+const _desDecrypt = desDecrypt;
+export { _desDecrypt as desDecrypt };
+const _decimalToBinaryString = decimalToBinaryString;
+export { _decimalToBinaryString as decimalToBinaryString };

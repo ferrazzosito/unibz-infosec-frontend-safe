@@ -1,6 +1,6 @@
 // @ts-check
 
-const { createDiffieHellman } = require('crypto');
+import { createDiffieHellman } from 'diffie-hellman/browser';
 
 /**
  * Create a Diffie Hellman exchange generating a key pair with the specified bit-length.
@@ -46,5 +46,7 @@ const reconstructDiffieHellman = function(pub, priv, n, g) {
     return dh;
 };
 
-exports.beginDiffieHellman = beginDiffieHellman;
-exports.reconstructDiffieHellman = reconstructDiffieHellman;
+const _beginDiffieHellman = beginDiffieHellman;
+export { _beginDiffieHellman as beginDiffieHellman };
+const _reconstructDiffieHellman = reconstructDiffieHellman;
+export { _reconstructDiffieHellman as reconstructDiffieHellman };

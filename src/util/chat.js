@@ -1,9 +1,9 @@
 // @ts-check
 
-const { beginDiffieHellman, reconstructDiffieHellman } = require('./dh.js');
-const { desEncrypt, desDecrypt, decimalToBinaryString } = require('./crypto.js');
-const store = require('store');
-const { WebSocket } = require('ws');
+import { beginDiffieHellman, reconstructDiffieHellman } from './dh.js';
+import { desEncrypt, desDecrypt, decimalToBinaryString } from './crypto.js';
+import { set, get, remove } from 'store';
+import { WebSocket } from 'ws';
 
 const KEY_LENGTH = 1024;
 
@@ -29,7 +29,7 @@ const requestChat = async function(vendor) {
  */
 const beginHandshake = function(ws) {
     const dh = beginDiffieHellman("alice", KEY_LENGTH);
-    store.set('dh', {
+    set('dh', {
         pub: dh.getPublicKey('hex'),
         priv: dh.getPrivateKey('hex'),
         keyLength: KEY_LENGTH,
@@ -63,7 +63,7 @@ const handleHandshake = function(ws, msg, readyCallback) {
         };
         const dh = beginDiffieHellman("bob", msg.keyLength, n, g);
         const sharedKey = dh.computeSecret(otherPub);
-        store.set('shared', sharedKey.toString('hex'));
+        set('shared', sharedKey.toString('hex'));
         ws.send(JSON.stringify({
             type: "handshake",
             role: "bob",
@@ -72,7 +72,7 @@ const handleHandshake = function(ws, msg, readyCallback) {
         }));
     } else if (role === "bob") {
         const { pub: otherPub } = msg;
-        const { pub, priv, n, g } = store.get('dh');
+        const { pub, priv, n, g } = get('dh');
         const dh = reconstructDiffieHellman(
             Buffer.from(pub, 'hex'), 
             Buffer.from(priv, 'hex'), 
@@ -80,8 +80,8 @@ const handleHandshake = function(ws, msg, readyCallback) {
             Buffer.from(g, 'hex')
         );
         const sharedKey = dh.computeSecret(Buffer.from(otherPub, 'hex'));
-        store.remove('dh');
-        store.set('shared', sharedKey.toString('hex'));
+        remove('dh');
+        set('shared', sharedKey.toString('hex'));
         ws.send(JSON.stringify({
             "type": "ready"
         }));
@@ -109,7 +109,7 @@ const handleWelcome = function(ws, msg) {
  * @param {(ws: WebSocket, plain: string) => void} clb 
  */
 const handleMessage = function(ws, enc, clb) {
-    const sharedKey = store.get('shared');
+    const sharedKey = get('shared');
     const plain = desDecrypt(enc, sharedKey);
     clb(ws, plain);
 }
@@ -121,7 +121,7 @@ const handleMessage = function(ws, enc, clb) {
  * @param {string} plain
  */
 const sendMessageWrapper = function(ws, plain) {
-    const sharedKey = store.get('shared');
+    const sharedKey = get('shared');
     ws.send(JSON.stringify({
         "type": "message",
         "message": desEncrypt(plain, sharedKey)
@@ -161,7 +161,7 @@ const openChatSession = function(chatId, onOpen, onReady, onMessage, onClose, on
                 break;
             case "close":
                 ws.close();
-                store.remove('shared');
+                remove('shared');
                 break;
         }
     });
@@ -170,4 +170,5 @@ const openChatSession = function(chatId, onOpen, onReady, onMessage, onClose, on
     return [(text) => sendMessageWrapper(ws, text), () => ws.close()];
 };
 
-exports.openChatSession = openChatSession;
+const _openChatSession = openChatSession;
+export { _openChatSession as openChatSession };

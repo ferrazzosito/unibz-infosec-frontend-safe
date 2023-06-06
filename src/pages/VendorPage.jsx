@@ -17,7 +17,8 @@ import { useReviews } from "../hooks/useReviews";
 import { TopUpMoneyForm } from "../fragments/Forms";
 import { useSearchParams } from "react-router-dom";
 import {Typography} from "@mui/material";
-import { Widget, toggleWidget} from 'react-chat-widget';
+import { Widget, toggleInputDisabled} from 'react-chat-widget';
+import { openChatSession } from "../util/chat";
 
 import 'react-chat-widget/lib/styles.css';
 import { useChat } from "../hooks/useChat";
@@ -51,10 +52,33 @@ const VendorPage = () => {
         
     const {requestChat} = useChat(user.accessToken);
 
+    const manageArrivingMessages = () => {
+
+    }
+
+    const closeByVendor = () => {
+
+    }
+
     const getCustomLauncher = (handleToggle) => (
         <ConfirmationButton title="LIVE CHAT WITH THIS VENDOR" onClick={() => {
+
+            toggleInputDisabled();
+
             requestChat(21)
-            .then(chatIdResp => setChatId(chatIdResp));
+            .then(chatIdResp => {
+                
+                setChatId(chatIdResp);
+
+                openChatSession(chatIdResp, 
+                    () => {}, 
+                    () => toggleInputDisabled(), 
+                    () => manageArrivingMessages(),
+                    () => closeByVendor(), 
+                    () => {throw new Error("error while communicating")});
+
+            });
+
             handleToggle();
         }} />
     )
@@ -72,7 +96,9 @@ const VendorPage = () => {
 
             <Widget 
                 launcher={handleToggle => getCustomLauncher(handleToggle)} 
-                handleNewUserMessage={handleNewUserMessage}/>
+                handleNewUserMessage={handleNewUserMessage}
+            
+                />
 
             <Grid item xs={12}>
                 <Title text="Vendor Page" />
