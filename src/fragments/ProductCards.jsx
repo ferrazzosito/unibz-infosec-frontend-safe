@@ -43,7 +43,7 @@ const UnsafeContentProductCard = ({type, name, price, vendorName, vendorId, desc
     
     const navigate = useNavigate();
     const redirectVendorPage = () => navigate(`/vendor?id=${vendorId}`);
-    
+    return (
     <CardContent>
         <div color="text.secondary" gutterBottom dangerouslySetInnerHTML={{__html: type}}/>
         <div dangerouslySetInnerHTML={{__html: name}}/>
@@ -53,7 +53,7 @@ const UnsafeContentProductCard = ({type, name, price, vendorName, vendorId, desc
         </div>
         <div variant="body2" dangerouslySetInnerHTML={{__html: description}}/>
         <br />
-    </CardContent>
+    </CardContent>)
 }
 const BasicProductCard = ({type, name, price, vendorId, description}) => {
     // <ContentProductCard type={type} name = {name} price ={price} description={description }/>
