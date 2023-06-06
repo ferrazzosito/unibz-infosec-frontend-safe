@@ -123,7 +123,14 @@ const ProductForm = ({onSubmitForm}) => {
     const [type, setType] = useState("");
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [cost, setCost] = useState(0);
+    const [cost, setCost] = useState(1);
+
+    const setCheckCost = (val) => {
+        if(+val < 1)
+            setCost(1);
+        else
+            setCost(val);
+    }
 
     return (
         <Card sx={{ minWidth: 275 }}>
@@ -132,18 +139,21 @@ const ProductForm = ({onSubmitForm}) => {
                     Create a Product
                 </Typography>
                 <Grid container rowSpacing={2} columnSpacing={2}  justifyContent="center">
-                    {/* <Grid item xs={6}>
-                        <StringField string={type} setString={setType} title={"Type"}  />
-                    </Grid> */}
-                    <Grid item xs={12}>
-                        <StringField string={name} setString={setName} title={"Name"}  />
+                    <Grid item container xs={12} justifyContent="center">
+                        <Grid item xs={6}>
+                            <StringField string={name} setString={setName} title={"Name"}  />
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                        <StringField string={cost} setString={(e) => setCost(+e)} title= "Price" />
+                    <Grid item container xs={12} justifyContent="center">
+                        <Grid item xs={6}>
+                            <NumericField number={cost} 
+                                setNumber={setCheckCost} 
+                                title={"Price (€)"} 
+                                inputProps={{ inputMode: 'numeric',  pattern: "d*",  min: 1, max: 5}}  
+                                defaultValue = {1}
+                            />
+                        </Grid>
                     </Grid>
-                    {/* <Grid item xs={12}>
-                        <TextArea text={description} setText={setDescription} placeholder={"Insert the description of your product.."}  />
-                    </Grid> */}
                     <Grid item xs={7}>
                         <ConfirmationButton title={"Add"} onClick={() => onSubmitForm({name, cost})} />
                     </Grid>
