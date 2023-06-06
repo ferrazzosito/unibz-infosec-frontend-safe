@@ -70,9 +70,19 @@ const SignInForm = ({onSubmitForm, redirect}) => {
 
 const ReviewForm = ({header, isReply, replyFromReviewId, onSubmitForm}) => {
 
-    const [stars, setStars] = useState("");
+    const [stars, setStars] = useState(1);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+
+    const setCheckStars = (val) => {
+        if(+val < 1)
+            setStars(1);
+        else if (+val > 5)
+            setStars(5);
+        else
+            setStars(val);
+    }
+
 
     return (
         <Card sx={{ minWidth: 275 }}>
@@ -83,8 +93,13 @@ const ReviewForm = ({header, isReply, replyFromReviewId, onSubmitForm}) => {
                 <Grid container rowSpacing={2} columnSpacing={2}  justifyContent="center">
                     {
                         isReply ?  <></> :
-                        <Grid item xs={12}>
-                            <StringField string={stars} setString={setStars} title={"Stars"}  />
+                        <Grid item xs={6}>
+                            <NumericField number={stars} 
+                                setNumber={setCheckStars} 
+                                title={"Stars ★★★★★"} 
+                                inputProps={{ inputMode: 'numeric',  pattern: "d*",  min: 1, max: 5}}  
+                                defaultValue = {1}
+                            />
                         </Grid>
                     }
                     <Grid item xs={12}>

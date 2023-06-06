@@ -81,7 +81,7 @@ const ProductPage = () => {
                     }
                 </Grid>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item container xs={12} justifyContent="center">
                 
                 {
 

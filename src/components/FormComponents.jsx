@@ -67,15 +67,6 @@ const NumericField = ({number, setNumber, title, inputProps}) => {
     const isFieldValid = (fieldVal) => (fieldVal !== '' && !isNaN(fieldVal) && fieldVal !== null)
 
     return (
-        // <TextField
-        //     id="numeric-field"
-        //     label={title}
-        //     variant="outlined"
-        //     onChange={(e) => setNumber(+e.target.value)}
-        //     error = { !isFieldValid(number) }
-        //     fullWidth
-            
-        // />
         <TextField id="filled-basic" 
             onChange = {(val) => setNumber(+val.target.value)} 
             label={title}
@@ -85,6 +76,7 @@ const NumericField = ({number, setNumber, title, inputProps}) => {
             error = { !isFieldValid(number) }
             InputLabelProps={{ shrink: true }} 
             inputProps={inputProps}
+            fullWidth
         />
 
     )
