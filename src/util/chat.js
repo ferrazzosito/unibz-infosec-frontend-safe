@@ -1,9 +1,12 @@
 // @ts-check
 
 import { beginDiffieHellman, reconstructDiffieHellman } from './dh.js';
+// @ts-ignore
 import { desEncrypt, desDecrypt, decimalToBinaryString } from './crypto.js';
 import { set, get, remove } from 'store';
-import { WebSocket } from 'ws';
+// const WebSocket = require('isomorphic-ws');
+import WebSocket from 'isomorphic-ws';
+
 
 const KEY_LENGTH = 1024;
 
@@ -12,6 +15,7 @@ const KEY_LENGTH = 1024;
  *  
  * @param {string} vendor 
  */
+// @ts-ignore
 const requestChat = async function(vendor) {
     return await fetch("http://localhost:8080/v1/chats/request", {
         method: 'POST',
@@ -142,31 +146,63 @@ const sendMessageWrapper = function(ws, plain) {
  * @returns {[(plain: string) => void, () => void]} array of callbacks containing a callback for sending @see sendMessageWrapper and a wrapper for closing the socket
  */
 const openChatSession = function(chatId, onOpen, onReady, onMessage, onClose, onError) {
-    const ws = new WebSocket(`ws://localhost:8080/chat/${chatId}`);
-    ws.on('open', onOpen);
-    ws.on('message', (data) => {
-        const payload = JSON.parse(data.toString('utf8'));
-        switch (payload.type) {
-            case "message":
-                handleMessage(ws, payload.message, onMessage);
-                break;
-            case "handshake":
-                handleHandshake(ws, payload, onReady);
-                break;
-            case "welcome":
-                handleWelcome(ws, payload);
-                break;
-            case "ready":
-                onReady(ws);
-                break;
-            case "close":
-                ws.close();
-                remove('shared');
-                break;
-        }
-    });
-    ws.on('close', onClose);
-    ws.on('error', onError);
+    const ws = new WebSocket(`wss://localhost:8080/chat/${chatId}`);
+
+    console.log(JSON.stringify(ws));
+
+    // @ts-ignore
+    // ws.onopen(onOpen);
+    // // @ts-ignore
+    // ws.onmessage((data) => {
+    //     const payload = JSON.parse(data.toString('utf8'));
+    //     switch (payload.type) {
+    //         case "message":
+    //             handleMessage(ws, payload.message, onMessage);
+    //             break;
+    //         case "handshake":
+    //             handleHandshake(ws, payload, onReady);
+    //             break;
+    //         case "welcome":
+    //             handleWelcome(ws, payload);
+    //             break;
+    //         case "ready":
+    //             onReady(ws);
+    //             break;
+    //         case "close":
+    //             ws.close();
+    //             remove('shared');
+    //             break;
+    //     }
+    // });
+    // // @ts-ignore
+    // ws.onclose(onClose);
+    // // @ts-ignore
+    // ws.onerror(onError);
+
+    // ws.on('open', onOpen);
+    // ws.on('message', (data) => {
+    //     const payload = JSON.parse(data.toString('utf8'));
+    //     switch (payload.type) {
+    //         case "message":
+    //             handleMessage(ws, payload.message, onMessage);
+    //             break;
+    //         case "handshake":
+    //             handleHandshake(ws, payload, onReady);
+    //             break;
+    //         case "welcome":
+    //             handleWelcome(ws, payload);
+    //             break;
+    //         case "ready":
+    //             onReady(ws);
+    //             break;
+    //         case "close":
+    //             ws.close();
+    //             remove('shared');
+    //             break;
+    //     }
+    // });
+    // ws.on('close', onClose);
+    // ws.on('error', onError);
     return [(text) => sendMessageWrapper(ws, text), () => ws.close()];
 };
 
