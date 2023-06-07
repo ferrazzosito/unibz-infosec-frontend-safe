@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router';
 import { useContext } from 'react';
 import { authContext } from '../hooks/useUser';
 
-const ContentProductCard = ({type, name, price, vendorName, vendorId, description}) => {
+const ContentProductCard = ({type, name, price, vendorName, vendorId, description, isVendor = false}) => {
     
     const navigate = useNavigate();
     const redirectVendorPage = () => navigate(`/vendor?id=${vendorId}`);
@@ -27,11 +27,18 @@ const ContentProductCard = ({type, name, price, vendorName, vendorId, descriptio
         <Typography variant="h5" sx={{ mb: 1.5 }} color="text.secondary">
             {price} €
         </Typography>
-        <span onClick = {() => redirectVendorPage()} style={{textDecorationLine : "underline", cursor: "pointer"}}>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                by vendor {vendorName}
-            </Typography>
-        </span>
+        {
+            isVendor ? 
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    by vendor {vendorName}
+                </Typography>
+            :
+            <span onClick = {() => redirectVendorPage()} style={{textDecorationLine : "underline", cursor: "pointer"}}>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    by vendor {vendorName}
+                </Typography>
+            </span>
+        }
         <Typography variant="body2">
             {description}
         <br />
@@ -124,7 +131,7 @@ const VendorProductCard = ({id, type, name, price,vendorName, description, delet
 
     return (
         <Card sx={{ minWidth: 275 }}>
-            <ContentProductCard type={type} name = {name} price ={price} vendorName={vendorName} description={description }/>
+            <ContentProductCard type={type} name = {name} price ={price} vendorName={vendorName} description={description } isVendor={true} />
             <CardActions >
                 <div style={{margin: "auto"}}>
                     <Button size="small" style={{marginRight: 10}} onClick={() => redirect()}>See Reviews</Button>

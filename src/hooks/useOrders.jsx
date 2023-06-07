@@ -60,13 +60,13 @@ export function useOrders (token) {
         data : JSON.stringify(data)
       };
 
-      return axios.request(config)
+      return await axios.request(config)
       .then(response => JSON.stringify(response.data))
-      .catch(e => {throw new Error("Error while creating the order: " + e.message)})
+      .catch(e => {throw new Error("Insufficient money")})
     }
 
-    function makeAnOrder(idProduct) {
-      return post(idProduct);
+    async function makeAnOrder(idProduct) {
+      return await post(idProduct)
     }
     
     return {orders, makeAnOrder};

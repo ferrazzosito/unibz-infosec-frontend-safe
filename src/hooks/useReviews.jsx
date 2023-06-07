@@ -49,8 +49,8 @@ export function useReviews (token) {
       .catch(e => {throw new Error("Error while creating the review: " + e.message)})
     }
 
-    function createAReview({title, description, stars, replyFromReviewId, productId, authorId}) {
-      return post({title, description, stars, replyFromReviewId, productId, authorId})
+    async function createAReview({title, description, stars, replyFromReviewId, productId, authorId}) {
+      return await post({title, description, stars, replyFromReviewId, productId, authorId})
         .then(() => getReviews());
     }
 
@@ -76,6 +76,17 @@ export function useReviews (token) {
     }
 
     useEffect(getReviews, []);
+
+
+  async function getReviewReply(idReview) {
+
+    const {data} = await 
+      axios.get(`/v1/reviews/${idReview}/replies`, { headers: {"Authorization" : `Bearer ${token}`} })
+      .catch(e => {throw new Error("Error while getting the review reply: " + e.message)});
+
+    return data;
+
+  }
     
-    return {reviews, createAReview};
+    return {reviews, createAReview, getReviewReply};
 }

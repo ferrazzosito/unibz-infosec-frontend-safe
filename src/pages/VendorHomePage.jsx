@@ -89,6 +89,7 @@ const VendorHomePage = ({value}) => {
                                 id={prod.id}
                                 price={prod.cost} 
                                 name={prod.name} 
+                                vendorName = {user.payload.sub}
                                 description={prod.description}
                                 deleteFunction={deleteProduct}
                             />
