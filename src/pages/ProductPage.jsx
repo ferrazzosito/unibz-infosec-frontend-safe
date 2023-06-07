@@ -10,7 +10,27 @@ import { useReviews } from "../hooks/useReviews";
 
 const Review = ({id, title, description, stars, author, replyFromReviewId}) =>  {
 
-    const {user, logUser, registerUser, logout} = useContext(authContext);    
+    const {user, logUser, registerUser, logout} = useContext(authContext); 
+    
+    const {getReviewReply} = useReviews(user.accessToken);
+
+    const [reply, setReply] = useState();
+
+    useEffect( () => {
+
+        getReviewReply(id)
+        .then(result => {
+                if(!result || result.length === 0)
+                    setReply()
+                else {
+                    //TO CHANGE THIS IF RESULT IS NOT AN ARRAY ANYMORE
+                    const [res1 ] = result;
+                    setReply(res1);
+                }
+        })
+        .catch((e) => {setReply(); console.log(e.message)});
+
+    }, [])
 
     return  (
         <>
@@ -22,12 +42,19 @@ const Review = ({id, title, description, stars, author, replyFromReviewId}) =>  
                         writer= {author} 
                         description= {description}                        
                         answer={
-                                replyFromReviewId === 0 ?
+
+                                !reply ?  
+
                                     user.payload.role === "vendor" ? 
-                                        <ReviewForm header="Answer to client's review" replyFromReviewId={id} isReply={true}/> 
-                                        : <></>
-                                    :
-                                <></>
+                                    <ReviewForm header="Answer to client's review" replyFromReviewId={id} isReply={true}/> 
+                                    : <></>
+
+                                :
+                                <ReviewCard 
+                                    title = {reply.title} 
+                                    writer= {reply.author} 
+                                    description= {reply.description}              
+                                />
                             }
                     />
                 </Grid>
@@ -87,7 +114,8 @@ const ProductPage = () => {
 
                     reviews.length !== 0 ?
 
-                        reviews.map((review) => (
+                        //they are filtered such that we take at first only the reviews which are not answers of other reviews
+                        reviews.filter(rev => rev.replyFromReviewId === 0).map((review) => (
                             <Review 
                                 id = {review.id}
                                 title = {review.title}

@@ -65,6 +65,17 @@ export function useReviews (token) {
     }
 
     useEffect(getReviews, []);
+
+
+  async function getReviewReply(idReview) {
+
+    const {data} = await 
+      axios.get(`/v1/reviews/${idReview}/replies`, { headers: {"Authorization" : `Bearer ${token}`} })
+      .catch(e => {throw new Error("Error while getting the review reply: " + e.message)});
+
+    return data;
+
+  }
     
-    return {reviews, createAReview};
+    return {reviews, createAReview, getReviewReply};
 }
