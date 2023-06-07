@@ -50,9 +50,10 @@ const VendorProfilePage = () => {
                                                 // type="vulnerability" 
                                                 name={ord.product.name}
                                                 price={ord.product.cost}
+                                                vendorId={user.payload.id}
                                                 // escription="lorem ipsum lorem ipsum lorem ipsum" 
                                             />}
-                                        buyer={ord.clientId}
+                                        buyer={ord.customer.email}
                                             // date="10/20/2024"
                                         idProd = {ord.productId}
                                     />

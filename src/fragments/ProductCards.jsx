@@ -86,7 +86,13 @@ const BasicProductCard = ({type, name, price, vendorId, description}) => {
 
     return (
         <Card sx={{ minWidth: 275 }}>
-            <ContentProductCard type={type} name = {name} price ={price} vendorName={vendor.email}  vendorId={vendorId} description={description }/>
+            <ContentProductCard type={type} 
+                name = {name} 
+                price ={price} 
+                vendorName={vendor.email}  
+                vendorId={vendorId} 
+                description={description } 
+                isVendor={vendor.role === "VENDOR"}/>
         </Card>
     )
 
