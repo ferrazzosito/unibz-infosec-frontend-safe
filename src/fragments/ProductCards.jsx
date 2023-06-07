@@ -211,18 +211,15 @@ const BalanceCard = ({amount}) => {
 
 }
 
-const ChatRequestCard = ({customerId, chatId, openChat}) => {
+const ChatRequestCard = ({customerId, chatId, openChat, disabled}) => {
     return (
         <Card sx={{ minWidth: 275 }}>
             <CardContent>
                 <Typography sx={{ fontSize: 16 }} color="text.secondary" gutterBottom>
-                    {customerId}
-                </Typography>
-                <Typography sx={{ fontSize: 10 }} color="text.secondary" gutterBottom>
-                    {chatId}
+                    from  {customerId}
                 </Typography>
                 <div style={{margin: "auto"}}>
-                    <Button size="small" style={{marginRight: 10}} onClick={openChat}>Open chat</Button>
+                    <Button size="small" style={{marginRight: 10}} onClick={openChat} disabled={disabled}>Open chat</Button>
                 </div>
             </CardContent>
         </Card>

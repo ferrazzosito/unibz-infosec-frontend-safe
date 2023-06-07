@@ -49,16 +49,16 @@ const VendorHomePage = ({value}) => {
         setFunctionsManageChat([ sendMsg, closeChat ]);
     };
 
-    const getCustomLauncher = (handleToggle) => (
-        <ConfirmationButton title="CHAT WITH CUSTOMER" onClick={() => {
-            if (functionsManageChat) {
-                handleToggle();
-                setFunctionsManageChat();
-                const [sendMsg, closeChat] = functionsManageChat;
-                closeChat();
-            }
-        }}/>
-    );
+    // const getCustomLauncher = (handleToggle) => (
+    //     <ConfirmationButton title="CHAT WITH CUSTOMER" onClick={() => {
+    //         if (functionsManageChat) {
+    //             handleToggle();
+    //             setFunctionsManageChat();
+    //             const [sendMsg, closeChat] = functionsManageChat;
+    //             closeChat();
+    //         }
+    //     }}/>
+    // );
 
     const handleChatInput = (message) => {
         const [sendMsg, closeChat] = functionsManageChat;
@@ -133,6 +133,9 @@ const VendorHomePage = ({value}) => {
             </Grid>
             <Grid item container xs={9} spacing={7} justifyContent="center">
             {
+
+                chatRequests.length !== 0 ? 
+
                     chatRequests.map((request) => (
                             <Grid item xs={3}>
                                 <ChatRequestCard
@@ -142,9 +145,12 @@ const VendorHomePage = ({value}) => {
                                         toggleWidget();
                                         openChat(request.chatId);
                                     }}
+                                    
                                 />
                             </Grid>
                         ))
+
+                : <h1 style={{marginTop: "40px"}}>No Chat Requests Yet</h1>
                 
             }
             </Grid>

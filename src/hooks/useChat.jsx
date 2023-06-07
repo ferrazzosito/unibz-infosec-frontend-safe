@@ -41,7 +41,17 @@ export function useChat (token, type = "customer") {
 
     useEffect(() => {
       if (type === "vendor") {
-        getChatRequests().then(requests => setChatRequests(requests))
+        const fetchData = async () => {
+          await getChatRequests().then(requests => setChatRequests(requests));
+        };
+    
+        const interval = setInterval(fetchData, 3000); 
+
+        fetchData();
+    
+        return () => {
+          clearInterval(interval);
+        };
       }
     }, []);
     
