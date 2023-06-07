@@ -19,10 +19,11 @@ export function useOrders (token) {
       if(role === "vendor")
         url += "sold";
 
-
-      try {
+        
+        try {
           const { data } = await axios.get(url, { headers: {"Authorization" : `Bearer ${token}`} });
-
+          
+          
           if(!data.error) {
             setOrders(data); 
           }

@@ -38,7 +38,11 @@ const VendorProfilePage = () => {
 
                         orders.length !== 0 ?       
                     
-                        orders.map((ord) => (
+                        orders.map((ord) => {
+                            
+                            console.log(JSON.stringify(ord));
+
+                            return (
                                 <Grid item xs={7}>
                                     <OrderCard
                                         basicProductCard={ 
@@ -53,7 +57,7 @@ const VendorProfilePage = () => {
                                         idProd = {ord.productId}
                                     />
                                 </Grid>
-                            ))
+                            )})
 
                             : <h1 style={{marginTop: "10px"}}>No Orders To Display</h1>
                         
