@@ -12,7 +12,7 @@ export function useReviews (token) {
               query: query
           },
           { 
-              headers: {"Authorization" : `Bearer ${token}`} 
+              headers: {"Cookie": `jwt=${token};`} 
           })
           .then(message => message)
           .catch((e) => {throw new Error(e.message)});
@@ -39,7 +39,7 @@ export function useReviews (token) {
         url: 'http://localhost:8080/v1/reviews/create',
         headers: { 
           'Content-Type': 'application/json',
-          "Authorization" : `Bearer ${token}`
+          "Cookie": `jwt=${token};`
         },
         data : JSON.stringify(data)
       };
@@ -57,7 +57,7 @@ export function useReviews (token) {
     async function get() {
 
         try {
-          const { data } = await axios.get('/v1/reviews/getAll', { headers: {"Authorization" : `Bearer ${token}`} });
+          const { data } = await axios.get('/v1/reviews/getAll', { headers: {"Cookie": `jwt=${token};`} });
 
           if(!data.error) {
               setReviews(data); 
@@ -81,7 +81,7 @@ export function useReviews (token) {
   async function getReviewReply(idReview) {
 
     const {data} = await 
-      axios.get(`/v1/reviews/${idReview}/replies`, { headers: {"Authorization" : `Bearer ${token}`} })
+      axios.get(`/v1/reviews/${idReview}/replies`, { headers: {"Cookie": `jwt=${token};`} })
       .catch(e => {throw new Error("Error while getting the review reply: " + e.message)});
 
     return data;
@@ -90,7 +90,7 @@ export function useReviews (token) {
 
   async function getProductReviews (idProd) {
     const {data} = await 
-      axios.get(`/v1/products/${idProd}/reviews`, { headers: {"Authorization" : `Bearer ${token}`} })
+      axios.get(`/v1/products/${idProd}/reviews`, { headers: {"Cookie": `jwt=${token};`} })
       .catch(e => {throw new Error("Error while getting the reviews of the product: " + e.message)});
 
     return data;

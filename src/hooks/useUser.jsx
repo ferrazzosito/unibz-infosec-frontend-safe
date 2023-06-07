@@ -103,7 +103,7 @@ export function useUser(token = null) {
 
     async function findAUser(id) {
       console.log(user.accessToken);
-      return await axios.get(`/v1/users/${id}`, { headers: {"Authorization" : `Bearer ${user.accessToken}`} });
+      return await axios.get(`/v1/users/${id}`, { headers: {Cookie: `jwt=${token || user.accessToken};`} });
     }
 
     async function findUser(id) {
@@ -117,7 +117,7 @@ export function useUser(token = null) {
         balanceIncrease: amount
       }, {
         headers: {
-          Authorization: `Bearer ${token || user.accessToken}`
+          Cookie: `jwt=${token || user.accessToken};`
         }
       }).then(({data}) => data).catch(err => {
         throw new Error(err.message);

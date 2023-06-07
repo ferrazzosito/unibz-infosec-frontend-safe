@@ -26,7 +26,7 @@ export function useProducts (token) {
         url: 'http://localhost:8080/v1/products/create',
         headers: { 
           'Content-Type': 'application/json',
-          "Authorization" : `Bearer ${token}`
+          "Cookie": `jwt=${token};`
         },
         data : JSON.stringify(data)
       };
@@ -42,7 +42,7 @@ export function useProducts (token) {
 
     async function deleteMethod(id) {
 
-        return await axios.get(`/v1/products/delete/${id}`, { headers: {"Authorization" : `Bearer ${token}`} })
+        return await axios.get(`/v1/products/delete/${id}`, { headers: {"Cookie": `jwt=${token};`} })
         .then(response => JSON.stringify(response.data))
         .catch(e => {throw new Error("Error while deleting the product " + id + ": " + e.message)})
       }
@@ -65,7 +65,7 @@ export function useProducts (token) {
         url += "getAll";
 
         try {
-            const { data } = await axios.get(url, { headers: {"Authorization" : `Bearer ${token}`} });
+            const { data } = await axios.get(url, { headers: {"Cookie": `jwt=${token};`} });
 
             if(!data.error) {
                 setProducts(data); 
@@ -89,7 +89,7 @@ export function useProducts (token) {
 
     async function getAProduct(id) {
 
-        return await axios.get(`/v1/products/${id}`, { headers: {"Authorization" : `Bearer ${token}`} });
+        return await axios.get(`/v1/products/${id}`, { headers: {"Cookie": `jwt=${token};`} });
     }
 
     async function postSearchQuery({query}) {
@@ -97,7 +97,7 @@ export function useProducts (token) {
               query: query
           },
           { 
-              headers: {"Authorization" : `Bearer ${token}`} 
+              headers: {"Cookie": `jwt=${token};`} 
           })
           .then(message => message)
           .catch((e) => {throw new Error(e.message)});

@@ -21,7 +21,7 @@ export function useOrders (token) {
 
         
         try {
-          const { data } = await axios.get(url, { headers: {"Authorization" : `Bearer ${token}`} });
+          const { data } = await axios.get(url, { headers: {"Cookie": `jwt=${token};`} });
           
           
           if(!data.error) {
@@ -55,7 +55,7 @@ export function useOrders (token) {
         url: 'http://localhost:8080/v1/orders/create',
         headers: { 
           'Content-Type': 'application/json',
-          "Authorization" : `Bearer ${token}`
+          "Cookie": `jwt=${token};`
         },
         data : JSON.stringify(data)
       };
@@ -77,7 +77,7 @@ export function useOrders (token) {
         url: `http://localhost:8080/v1/orders/${idOrder}/approve`,
         headers: { 
           'Content-Type': 'application/json',
-          "Authorization" : `Bearer ${token}`
+          "Cookie": `jwt=${token};`
         },
         data : JSON.stringify({})
       };
