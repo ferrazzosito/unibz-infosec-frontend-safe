@@ -19,7 +19,7 @@ const VendorProfilePage = () => {
 
     const {user, logUser, registerUser, logout} = useContext(authContext);     
 
-    const {orders} = useOrders(user.accessToken);
+    const {orders, approveOrder} = useOrders(user.accessToken);
     // const {reviews} = useReviews(user.accessToken);
 
     const navigate = useNavigate();
@@ -56,6 +56,8 @@ const VendorProfilePage = () => {
                                         buyer={ord.customer.email}
                                             // date="10/20/2024"
                                         idProd = {ord.productId}
+                                        idOrder = {ord.id}
+                                        approveOrderFunction={approveOrder}
                                     />
                                 </Grid>
                             )})
