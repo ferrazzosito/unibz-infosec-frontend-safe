@@ -12,10 +12,14 @@ import { ConfirmationButton } from "../components/Buttons";
 import { useContext } from "react";
 import { authContext } from "../hooks/useUser";
 import { useOrders } from "../hooks/useOrders";
+import { ErrorAlert, SuccessAlert } from "../components/Alerts";
 
 const BuyerHomePage = () => {
 
     const [query, setQuery] = useState("");
+
+    const [succAlert, setSuccAlert] = useState();
+    const [errorAlert, setErrorAlert] = useState();
 
     const {user, logUser, registerUser, logout, findUser} = useContext(authContext);     
 
@@ -39,6 +43,18 @@ const BuyerHomePage = () => {
             <Grid item xs={12}>
                 <UnsafeSearchBar query={query} setQuery={setQuery} />
             </Grid>
+            {
+                succAlert ?
+                    <SuccessAlert message={succAlert} />
+                : <></>
+
+            }
+
+            {
+                errorAlert ?
+                    <ErrorAlert message={errorAlert} />
+                : <></>
+            }
             <Grid item container xs={12} justifyContent="center">
                 <Grid item container xs={9} spacing={7} justifyContent="center" >
                     {
@@ -54,7 +70,13 @@ const BuyerHomePage = () => {
                                         name={prod.name} 
                                         vendorId = {prod.vendorId}
                                         description={prod.description}
-                                        buyFunction={() => makeAnOrder(prod.id)}
+                                        buyFunction={() => {
+                                                            setSuccAlert();
+                                                            setErrorAlert();
+                                                            makeAnOrder(prod.id)
+                                                            .then(() => setSuccAlert("Bought the product successfully"))
+                                                            .catch((e) => setErrorAlert(e.message))}
+                                        }
                                     />
                                 </Grid>
                             )})
