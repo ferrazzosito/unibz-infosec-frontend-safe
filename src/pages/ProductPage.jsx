@@ -20,7 +20,8 @@ const Review = ({id, title, description, stars, author, replyFromReviewId, produ
 
     const [reply, setReply] = useState();
 
-    useEffect( () => {
+
+    const getReplyOfAReview = () => {
 
         getReviewReply(id)
         .then(result => {
@@ -34,7 +35,9 @@ const Review = ({id, title, description, stars, author, replyFromReviewId, produ
         })
         .catch((e) => {setReply(); console.log(e.message)});
 
-    }, [])
+    }
+
+    useEffect(getReplyOfAReview, []);
 
     return  (
         <>
@@ -53,7 +56,8 @@ const Review = ({id, title, description, stars, author, replyFromReviewId, produ
                                     <ReviewForm header="Answer to client's review" 
                                         replyFromReviewId={id} 
                                         isReply={true}
-                                        onSubmitForm={(review) => createAReview({...review, productId, authorId})}
+                                        onSubmitForm={(review) => {createAReview({...review, productId, authorId})
+                                                                .then((resp) => getReplyOfAReview())}}
                                     /> 
                                     : <></>
 

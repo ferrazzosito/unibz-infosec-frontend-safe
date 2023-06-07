@@ -38,8 +38,8 @@ export function useReviews (token) {
       .catch(e => {throw new Error("Error while creating the review: " + e.message)})
     }
 
-    function createAReview({title, description, stars, replyFromReviewId, productId, authorId}) {
-      return post({title, description, stars, replyFromReviewId, productId, authorId})
+    async function createAReview({title, description, stars, replyFromReviewId, productId, authorId}) {
+      return await post({title, description, stars, replyFromReviewId, productId, authorId})
         .then(() => getReviews());
     }
 
