@@ -46,7 +46,7 @@ const ContentProductCard = ({type, name, price, vendorName, vendorId, descriptio
     </CardContent>
 )}
 
-const UnsafeContentProductCard = ({type, name, price, vendorName, vendorId, description}) => {
+const UnsafeContentProductCard = ({type, name, price, vendorName, vendorId, description, isVendor = false}) => {
     
     const navigate = useNavigate();
     const redirectVendorPage = () => navigate(`/vendor?id=${vendorId}`);
@@ -55,9 +55,17 @@ const UnsafeContentProductCard = ({type, name, price, vendorName, vendorId, desc
         <div color="text.secondary" gutterBottom dangerouslySetInnerHTML={{__html: type}}/>
         <div dangerouslySetInnerHTML={{__html: name}}/>
         <div sx={{ mb: 1.5 }} color="text.secondary" dangerouslySetInnerHTML={{__html: price + " €"}}/>
-        <div sx={{ mb: 1.5 }} color="text.secondary" onClick = {() => redirectVendorPage()} style={{textDecorationLine : "underline", cursor: "pointer"}} >
-            by vendor {vendorName}
-        </div>
+        {
+            isVendor ? 
+                <div sx={{ mb: 1.5 }} color="text.secondary" >
+                    by vendor {vendorName}
+                </div>
+            :
+                <div sx={{ mb: 1.5 }} color="text.secondary" onClick = {() => redirectVendorPage()} style={{textDecorationLine : "underline", cursor: "pointer"}} >
+                    by vendor {vendorName}
+                </div>
+        }
+        
         <div variant="body2" dangerouslySetInnerHTML={{__html: description}}/>
         <br />
     </CardContent>)
