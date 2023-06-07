@@ -1,6 +1,7 @@
 // @ts-check
 
 import { createDiffieHellman } from 'diffie-hellman/browser';
+window.Buffer = window.Buffer || require("buffer").Buffer;
 
 /**
  * Create a Diffie Hellman exchange generating a key pair with the specified bit-length.
@@ -13,7 +14,7 @@ import { createDiffieHellman } from 'diffie-hellman/browser';
  * @param {Buffer?} prime
  * @param {Buffer?} generator 
  */
-const beginDiffieHellman = function(role, keyLength = 1024, prime = null, generator = null) {
+const beginDiffieHellman = function(role, keyLength = 256, prime = null, generator = null) {
     let dh;
     switch (role) {
         case "alice":

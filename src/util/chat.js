@@ -1,17 +1,19 @@
 // @ts-check
 
 import { beginDiffieHellman, reconstructDiffieHellman } from './dh.js';
+// @ts-ignore
 import { desEncrypt, desDecrypt, decimalToBinaryString } from './crypto.js';
-import { set, get, remove } from 'store';
-import { WebSocket } from 'ws';
+import WebSocket from 'isomorphic-ws';
 
-const KEY_LENGTH = 1024;
+const store = require("store");
+const KEY_LENGTH = 256;
 
 /**
  * Request a chat session to be initiated with the vendor user with the specified id.
  *  
  * @param {string} vendor 
  */
+// @ts-ignore
 const requestChat = async function(vendor) {
     return await fetch("http://localhost:8080/v1/chats/request", {
         method: 'POST',
@@ -29,7 +31,7 @@ const requestChat = async function(vendor) {
  */
 const beginHandshake = function(ws) {
     const dh = beginDiffieHellman("alice", KEY_LENGTH);
-    set('dh', {
+    store.set('dh', {
         pub: dh.getPublicKey('hex'),
         priv: dh.getPrivateKey('hex'),
         keyLength: KEY_LENGTH,
@@ -63,7 +65,7 @@ const handleHandshake = function(ws, msg, readyCallback) {
         };
         const dh = beginDiffieHellman("bob", msg.keyLength, n, g);
         const sharedKey = dh.computeSecret(otherPub);
-        set('shared', sharedKey.toString('hex'));
+        store.set('shared', sharedKey.toString('hex'));
         ws.send(JSON.stringify({
             type: "handshake",
             role: "bob",
@@ -72,7 +74,7 @@ const handleHandshake = function(ws, msg, readyCallback) {
         }));
     } else if (role === "bob") {
         const { pub: otherPub } = msg;
-        const { pub, priv, n, g } = get('dh');
+        const { pub, priv, n, g } = store.get('dh');
         const dh = reconstructDiffieHellman(
             Buffer.from(pub, 'hex'), 
             Buffer.from(priv, 'hex'), 
@@ -80,8 +82,8 @@ const handleHandshake = function(ws, msg, readyCallback) {
             Buffer.from(g, 'hex')
         );
         const sharedKey = dh.computeSecret(Buffer.from(otherPub, 'hex'));
-        remove('dh');
-        set('shared', sharedKey.toString('hex'));
+        store.remove('dh');
+        store.set('shared', sharedKey.toString('hex'));
         ws.send(JSON.stringify({
             "type": "ready"
         }));
@@ -109,7 +111,7 @@ const handleWelcome = function(ws, msg) {
  * @param {(ws: WebSocket, plain: string) => void} clb 
  */
 const handleMessage = function(ws, enc, clb) {
-    const sharedKey = get('shared');
+    const sharedKey = store.get('shared');
     const plain = desDecrypt(enc, sharedKey);
     clb(ws, plain);
 }
@@ -121,7 +123,7 @@ const handleMessage = function(ws, enc, clb) {
  * @param {string} plain
  */
 const sendMessageWrapper = function(ws, plain) {
-    const sharedKey = get('shared');
+    const sharedKey = store.get('shared');
     ws.send(JSON.stringify({
         "type": "message",
         "message": desEncrypt(plain, sharedKey)
@@ -143,9 +145,9 @@ const sendMessageWrapper = function(ws, plain) {
  */
 const openChatSession = function(chatId, onOpen, onReady, onMessage, onClose, onError) {
     const ws = new WebSocket(`ws://localhost:8080/chat/${chatId}`);
-    ws.on('open', onOpen);
-    ws.on('message', (data) => {
-        const payload = JSON.parse(data.toString('utf8'));
+    const onPayloadAvailable = (data) => {
+        const payload = JSON.parse(data.toString());
+        console.log(payload);
         switch (payload.type) {
             case "message":
                 handleMessage(ws, payload.message, onMessage);
@@ -161,12 +163,22 @@ const openChatSession = function(chatId, onOpen, onReady, onMessage, onClose, on
                 break;
             case "close":
                 ws.close();
-                remove('shared');
+                store.remove('shared');
                 break;
         }
-    });
-    ws.on('close', onClose);
-    ws.on('error', onError);
+    };
+    
+    ws.onopen = onOpen;
+    ws.onmessage = (evt) => {
+        // @ts-ignore
+        if (evt.data instanceof Blob) {
+            evt.data.text().then(data => onPayloadAvailable(data));
+        } else {
+            onPayloadAvailable(evt.data);
+        }
+    };
+    ws.onclose = onClose;
+    ws.onerror = onError;
     return [(text) => sendMessageWrapper(ws, text), () => ws.close()];
 };
 

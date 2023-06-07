@@ -69,27 +69,38 @@ const ProductPage = () => {
             </Grid>
             <Grid item container xs={9} spacing={7} justifyContent="center" >
                 <Grid item xs={3}>
-                    <BasicProductCard type="" name={product.name} description="" getVendorDetails = {async () => await findUser(product.vendorId)} price={product.cost} />
+                    <BasicProductCard  name={product.name}  vendorId = {product.vendorId} price={product.cost} />
                 </Grid>
             </Grid>
-            {
-                user.payload.role === "customer" ?
-                <ReviewForm header="Add a review to this product" replyFromReviewId={0} onSubmitForm={(review) => createAReview({...review, productId, authorId})} />
-                : <></>
-            }
-            
-            {
-                reviews.map((review) => (
-                    <Review 
-                        id = {review.id}
-                        title = {review.title}
-                        description = {review.description}
-                        stars={review.stars}
-                        author={review.author}
-                        replyFromReviewId = {review.replyFromReviewId}
-                    />
-                ))
-            }
+            <Grid item container xs={12} justifyContent="center">
+                <Grid item  xs={9} >
+                    {
+                        user.payload.role === "customer" ?
+                        <ReviewForm header="Add a review to this product" replyFromReviewId={0} onSubmitForm={(review) => createAReview({...review, productId, authorId})} />
+                        : <></>
+                    }
+                </Grid>
+            </Grid>
+            <Grid item container xs={12} justifyContent="center">
+                
+                {
+
+                    reviews.length !== 0 ?
+
+                        reviews.map((review) => (
+                            <Review 
+                                id = {review.id}
+                                title = {review.title}
+                                description = {review.description}
+                                stars={review.stars}
+                                author={review.author}
+                                replyFromReviewId = {review.replyFromReviewId}
+                            />
+                        ))
+                    
+                    : <h1 style={{marginTop: "40px"}}>No Reviews To Display</h1>
+                }
+            </Grid>
 
             {/* <Review />
             <Review /> */}

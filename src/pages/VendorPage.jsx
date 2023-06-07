@@ -17,7 +17,7 @@ import { useReviews } from "../hooks/useReviews";
 import { TopUpMoneyForm } from "../fragments/Forms";
 import { useSearchParams } from "react-router-dom";
 import {Typography} from "@mui/material";
-import { Widget, toggleInputDisabled} from 'react-chat-widget';
+import { Widget, toggleInputDisabled, addResponseMessage, toggleWidget} from 'react-chat-widget';
 import { openChatSession } from "../util/chat";
 
 import 'react-chat-widget/lib/styles.css';
@@ -52,52 +52,76 @@ const VendorPage = () => {
         
     const {requestChat} = useChat(user.accessToken);
 
-    const manageArrivingMessages = () => {
-
+    const manageArrivingMessages = (ws, text) => {
+        addResponseMessage(text);
     }
 
     const closeByVendor = () => {
-
+        setChatId(undefined);
+        toggleInputDisabled();
+        toggleWidget();
     }
 
+    const [functionsManageChat, setFunctionsManageChat] = useState();
+
+    const openChat = (handleToggle) => {
+        toggleInputDisabled();
+
+        requestChat(vendor.id)
+            .then(chatIdResp => {
+                setChatId(chatIdResp);
+                const [sendMsg, closeChat] = openChatSession(
+                    chatIdResp, 
+                    () => {}, 
+                    (ws) => toggleInputDisabled(), 
+                    manageArrivingMessages,
+                    () => closeByVendor(), 
+                    () => {throw new Error("error while communicating")}
+                );
+
+                console.log("qui no")
+
+                if (sendMsg) {
+                    console.log("we");
+                }
+                setFunctionsManageChat( [sendMsg, closeChat] );
+            }
+        );
+
+        handleToggle();
+    }
+    
     const getCustomLauncher = (handleToggle) => (
         <ConfirmationButton title="LIVE CHAT WITH THIS VENDOR" onClick={() => {
-
-            toggleInputDisabled();
-
-            requestChat(21)
-            .then(chatIdResp => {
-                
-                setChatId(chatIdResp);
-
-                openChatSession(chatIdResp, 
-                    () => {}, 
-                    () => toggleInputDisabled(), 
-                    () => manageArrivingMessages(),
-                    () => closeByVendor(), 
-                    () => {throw new Error("error while communicating")});
-
-            });
-
-            handleToggle();
-        }} />
+            if (functionsManageChat) {
+                handleToggle();
+                setFunctionsManageChat();
+                const [sendMsg, closeChat] = functionsManageChat;
+                closeChat();
+            } else {
+                openChat(handleToggle);
+            }
+        }}/>
     )
-
-    const handleNewUserMessage = (newMessage) => {
-        console.log(`New message incoming! ${newMessage}`);
-        // Now send the message throught the backend API
         
+    const handleNewUserMessage = (newMessage) => {
+        // console.log(`New message incoming! ${newMessage}`);
+        // Now send the message throught the backend API
+        const [sendMsg, closeChat] = functionsManageChat;
 
-        console.log(chatId);
-        };
-    
-    return (
-        <Grid container justifyContent="center" >
+        sendMsg(newMessage);
+
+        // console.log(chatId);
+    };
+        
+        return (
+            <Grid container justifyContent="center" >
 
             <Widget 
+            //se non vanno prova a passare le cose come prop qui
                 launcher={handleToggle => getCustomLauncher(handleToggle)} 
                 handleNewUserMessage={handleNewUserMessage}
-            
+                
                 />
 
             <Grid item xs={12}>

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import {client as axios} from '../utils/axios'
 
-export function useChat (token) {
+export function useChat (token, type = "customer") {
 
-
+    const [chatRequests, setChatRequests] = useState([]);
+    
     async function postChat(vendorId) {
-
       let data = {
         "vendorId": vendorId
       };
@@ -28,10 +28,22 @@ export function useChat (token) {
 
     async function requestChat(vendorId) {
       return await postChat(vendorId)
-      .then(resp => resp.chatId);
+        .then(resp => resp.chatId);
     }
 
+    async function getChatRequests() {
+      return await axios.get(`/v1/chats/requests`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then(res => res.data);
+    }
 
+    useEffect(() => {
+      if (type === "vendor") {
+        getChatRequests().then(requests => setChatRequests(requests))
+      }
+    }, []);
     
-    return {requestChat};
+    return {requestChat, chatRequests, getChatRequests};
 }

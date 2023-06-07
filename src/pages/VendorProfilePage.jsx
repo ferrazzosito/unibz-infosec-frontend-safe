@@ -20,7 +20,7 @@ const VendorProfilePage = () => {
     const {user, logUser, registerUser, logout} = useContext(authContext);     
 
     const {orders} = useOrders(user.accessToken);
-    const {reviews} = useReviews(user.accessToken);
+    // const {reviews} = useReviews(user.accessToken);
 
     const navigate = useNavigate();
     const redirect = () => navigate("/");
@@ -34,21 +34,34 @@ const VendorProfilePage = () => {
             </Grid>
             <Grid item container xs={12} justifyContent="center" spacing={7}>
                 <Grid item container xs={12} justifyContent="center"> 
-                    {orders.map((ord) => (
-                            <Grid item xs={7}>
-                                <OrderCard
-                                    basicProductCard={ 
-                                        <BasicProductCard 
-                                            // type="vulnerability" 
-                                            name={ord.id}
-                                            // escription="lorem ipsum lorem ipsum lorem ipsum" 
-                                        />}
-                                    buyer={ord.clientId}
-                                        // date="10/20/2024"
-                                    idProd = {ord.productId}
-                                />
-                            </Grid>
-                        ))}
+                    {
+
+                        orders.length !== 0 ?       
+                    
+                        orders.map((ord) => {
+                            
+                            console.log(JSON.stringify(ord));
+
+                            return (
+                                <Grid item xs={7}>
+                                    <OrderCard
+                                        basicProductCard={ 
+                                            <BasicProductCard 
+                                                // type="vulnerability" 
+                                                name={ord.product.name}
+                                                price={ord.product.cost}
+                                                // escription="lorem ipsum lorem ipsum lorem ipsum" 
+                                            />}
+                                        buyer={ord.clientId}
+                                            // date="10/20/2024"
+                                        idProd = {ord.productId}
+                                    />
+                                </Grid>
+                            )})
+
+                            : <h1 style={{marginTop: "10px"}}>No Orders To Display</h1>
+                        
+                        }
                     
                 </Grid>
             </Grid>

@@ -56,11 +56,18 @@ export function useReviews (token) {
 
     async function get() {
 
-        const { data } = await axios.get('/v1/reviews/getAll', { headers: {"Authorization" : `Bearer ${token}`} });
+        try {
+          const { data } = await axios.get('/v1/reviews/getAll', { headers: {"Authorization" : `Bearer ${token}`} });
 
-        if(!data.error) {
-            setReviews(data); 
-        }
+          if(!data.error) {
+              setReviews(data); 
+          }
+
+      } catch (e) {
+          console.log("Error: " + e.message);
+
+          setReviews([]); 
+      }
 
     }
 

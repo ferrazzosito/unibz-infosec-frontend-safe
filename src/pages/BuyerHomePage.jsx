@@ -58,19 +58,29 @@ const BuyerHomePage = () => {
             </Grid>
             <Grid item container xs={12} justifyContent="center">
                 <Grid item container xs={9} spacing={7} justifyContent="center" >
-                    {usedProducts.map((prod, index) => {
-                        return (
-                        <Grid item xs={3}>
-                            <BuyerProductCard /*type={prod.type}*/ 
-                                id={prod.id}
-                                price={prod.cost} 
-                                name={prod.name} 
-                                vendorId = {prod.vendorId}
-                                description={prod.description}
-                                buyFunction={() => makeAnOrder(prod.id)}
-                            />
-                        </Grid>
-                    )})}
+                    {
+                    
+                         products.length !== 0 ?
+
+                            usedProducts.map((prod) => {
+                                return (
+                                <Grid item xs={3}>
+                                    <BuyerProductCard /*type={prod.type}*/ 
+                                        id={prod.id}
+                                        price={prod.cost} 
+                                        name={prod.name} 
+                                        vendorId = {prod.vendorId}
+                                        description={prod.description}
+                                        buyFunction={() => makeAnOrder(prod.id)}
+                                    />
+                                </Grid>
+                            )})
+
+                        : <h1 style={{marginTop: "100px"}}>No Products To Display</h1>
+
+                    }
+
+                    
                 </Grid>
             </Grid>
             <Grid item container xs={12} >
