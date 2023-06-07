@@ -175,15 +175,16 @@ const OrderCard = ({basicProductCard, buyer, date, role, approved, idProd, idOrd
             <CardContent>
                 {
                     role === "customer" ?
-                        approved === true ?
+                        (approved === true ?
                         <Typography sx={{ mb: 1.5 }} color="green"> Approved by vendor </Typography>    
                         :            
-                        <Typography sx={{ mb: 1.5 }} color="red"> Not yet approved by vendor </Typography>
+                        <Typography sx={{ mb: 1.5 }} color="red"> Not yet approved by vendor </Typography>)
                     :
-                        approved === true ? 
+                        (approved === true ? 
                         <Typography sx={{ mb: 1.5 }} color="green"> Already Approved </Typography> 
                         :
                         <ConfirmationButton title="Approve Order" onClick= {() => approveOrderFunction(idOrder)} />
+                        )
 
                 }
                 {basicProductCard}
@@ -210,18 +211,15 @@ const BalanceCard = ({amount}) => {
 
 }
 
-const ChatRequestCard = ({customerId, chatId, openChat}) => {
+const ChatRequestCard = ({customerId, chatId, openChat, disabled}) => {
     return (
         <Card sx={{ minWidth: 275 }}>
             <CardContent>
                 <Typography sx={{ fontSize: 16 }} color="text.secondary" gutterBottom>
-                    {customerId}
-                </Typography>
-                <Typography sx={{ fontSize: 10 }} color="text.secondary" gutterBottom>
-                    {chatId}
+                    from  {customerId}
                 </Typography>
                 <div style={{margin: "auto"}}>
-                    <Button size="small" style={{marginRight: 10}} onClick={openChat}>Open chat</Button>
+                    <Button size="small" style={{marginRight: 10}} onClick={openChat} disabled={disabled}>Open chat</Button>
                 </div>
             </CardContent>
         </Card>
