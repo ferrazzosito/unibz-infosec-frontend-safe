@@ -8,11 +8,15 @@ import { useContext, useEffect, useState } from "react";
 import { authContext } from "../hooks/useUser";
 import { useReviews } from "../hooks/useReviews";
 
-const Review = ({id, title, description, stars, author, replyFromReviewId}) =>  {
+const Review = ({id, title, description, stars, author, replyFromReviewId, productId}) =>  {
 
     const {user, logUser, registerUser, logout} = useContext(authContext); 
+
+    const authorId = user.payload.id;
     
     const {getReviewReply} = useReviews(user.accessToken);
+
+    const {createAReview} = useReviews(user.accessToken);
 
     const [reply, setReply] = useState();
 
@@ -46,7 +50,11 @@ const Review = ({id, title, description, stars, author, replyFromReviewId}) =>  
                                 !reply ?  
 
                                     user.payload.role === "vendor" ? 
-                                    <ReviewForm header="Answer to client's review" replyFromReviewId={id} isReply={true}/> 
+                                    <ReviewForm header="Answer to client's review" 
+                                        replyFromReviewId={id} 
+                                        isReply={true}
+                                        onSubmitForm={(review) => createAReview({...review, productId, authorId})}
+                                    /> 
                                     : <></>
 
                                 :
@@ -123,6 +131,7 @@ const ProductPage = () => {
                                 stars={review.stars}
                                 author={review.author}
                                 replyFromReviewId = {review.replyFromReviewId}
+                                productId = {productId}
                             />
                         ))
                     
