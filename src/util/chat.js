@@ -107,12 +107,13 @@ const handleWelcome = function(ws, msg) {
  * Unwrap and decrypt message, invoke message callback.
  *  
  * @param {WebSocket} ws 
- * @param {string} enc
+ * @param {boolean} encrypted
+ * @param {string} payload
  * @param {(ws: WebSocket, plain: string) => void} clb 
  */
-const handleMessage = function(ws, enc, clb) {
+const handleMessage = function(ws, encrypted, payload, clb) {
     const sharedKey = store.get('shared');
-    const plain = desDecrypt(enc, sharedKey);
+    const plain = encrypted ? desDecrypt(payload, sharedKey) : payload;
     clb(ws, plain);
 }
 
@@ -122,11 +123,11 @@ const handleMessage = function(ws, enc, clb) {
  * @param {WebSocket} ws 
  * @param {string} plain
  */
-const sendMessageWrapper = function(ws, plain) {
+const sendMessageWrapper = function(ws, plain, encrypt = true) {
     const sharedKey = store.get('shared');
     ws.send(JSON.stringify({
         "type": "message",
-        "message": desEncrypt(plain, sharedKey)
+        "message": encrypt ? desEncrypt(plain, sharedKey) : plain
     }));
 }
 
@@ -136,6 +137,7 @@ const sendMessageWrapper = function(ws, plain) {
  * when a message is received and after the socket is closed.
  * 
  * @param {string} chatId
+ * @param {boolean} encrypt
  * @param {(this: WebSocket) => void} onOpen 
  * @param {(ws: WebSocket) => void} onReady 
  * @param {(ws: WebSocket, plain: string) => void} onMessage 
@@ -143,14 +145,14 @@ const sendMessageWrapper = function(ws, plain) {
  * @param {(this: WebSocket) => void} onError
  * @returns {[(plain: string) => void, () => void]} array of callbacks containing a callback for sending @see sendMessageWrapper and a wrapper for closing the socket
  */
-const openChatSession = function(chatId, onOpen, onReady, onMessage, onClose, onError) {
+const openChatSession = function(chatId, encrypt, onOpen, onReady, onMessage, onClose, onError) {
     const ws = new WebSocket(`ws://localhost:8080/chat/${chatId}`);
     const onPayloadAvailable = (data) => {
         const payload = JSON.parse(data.toString());
         console.log(payload);
         switch (payload.type) {
             case "message":
-                handleMessage(ws, payload.message, onMessage);
+                handleMessage(ws, encrypt, payload.message, onMessage);
                 break;
             case "handshake":
                 handleHandshake(ws, payload, onReady);
@@ -179,7 +181,7 @@ const openChatSession = function(chatId, onOpen, onReady, onMessage, onClose, on
     };
     ws.onclose = onClose;
     ws.onerror = onError;
-    return [(text) => sendMessageWrapper(ws, text), () => ws.close()];
+    return [(text) => sendMessageWrapper(ws, text, encrypt), () => ws.close()];
 };
 
 const _openChatSession = openChatSession;
