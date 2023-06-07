@@ -17,16 +17,14 @@ import { ErrorAlert, SuccessAlert } from "../components/Alerts";
 const BuyerHomePage = () => {
 
     const [query, setQuery] = useState("");
-    const [qresponse, setQresponse] = useState({"data": {"query": ""}});
+    const [qresponse, setQresponse] = useState({data: {query: "", results: []}});
 
     const [succAlert, setSuccAlert] = useState();
     const [errorAlert, setErrorAlert] = useState();
 
     const {user, logUser, registerUser, logout, findUser} = useContext(authContext);     
-
-    const {postSearchQuery} = useProducts(user.accessToken);
     
-    const {products} = useProducts(user.accessToken);
+    const {products, postSearchQuery} = useProducts(user.accessToken);
 
     const {makeAnOrder} = useOrders(user.accessToken);
 
@@ -37,20 +35,20 @@ const BuyerHomePage = () => {
           try {
             const response = await postSearchQuery({ query });
             setQresponse(response);
-            console.log('Search results:', response);
+            console.log('Search results:');
           } catch (error) {
             console.log('Error:', error);
           }
         };
       
-        if (query !== "") {
+        // if (query !== "") {
           performSearch();
-        }
+        // }
       }, [query]);
     //TODO: should this be done through a backend call, to retrieve fewer objects?
-    const queriedProducts = () => products.filter((prod) => (prod.name.indexOf(query) >= 0));
+    // const queriedProducts = () => products.filter((prod) => (prod.name.indexOf(qresponse.data.query) >= 0));
 
-    const usedProducts = queriedProducts();
+    // const usedProducts = queriedProducts();
 
     return (
         <Grid container justifyContent="center" >
@@ -76,9 +74,9 @@ const BuyerHomePage = () => {
                 <Grid item container xs={9} spacing={7} justifyContent="center" >
                     {
                     
-                         products.length !== 0 ?
+                    qresponse.data.results.length !== 0 ?
 
-                            usedProducts.map((prod) => {
+                    qresponse.data.results.map((prod) => {
                                 return (
                                 <Grid item xs={3}>
                                     <BuyerProductCard /*type={prod.type}*/ 

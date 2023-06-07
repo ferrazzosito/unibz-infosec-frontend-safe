@@ -14,11 +14,12 @@ import { useNavigate } from "react-router";
 import { useChat } from "../hooks/useChat";
 import { openChatSession } from "../util/chat";
 import { createRef } from "react";
+import { UnsafeSearchBar } from "../fragments/SearchBar";
 
 const VendorHomePage = ({value}) => {
 
     const {user, logUser, registerUser, logout} = useContext(authContext);    
-    const {products, myProducts, addProduct, deleteProduct} = useProducts(user.accessToken);
+    const {addProduct, deleteProduct, postSearchQuery} = useProducts(user.accessToken);
     
     const {chatRequests} = useChat(user.accessToken, "vendor");
     const [functionsManageChat, setFunctionsManageChat] = useState();
@@ -64,6 +65,29 @@ const VendorHomePage = ({value}) => {
         sendMsg(message);
     };
 
+    const [query, setQuery] = useState("");
+    const [qresponse, setQresponse] = useState({data: {query: "", results : []} });
+
+    useEffect(() => {
+        const performSearch = async () => {
+          try {
+            const response = await postSearchQuery({ query });
+            setQresponse(response);
+            console.log('Search results:', JSON.stringify(response));
+          } catch (error) {
+            console.log('Error:', error);
+          }
+        }; 
+      
+        // if (query !== "") {
+          performSearch();
+        // }
+      }, [query]);
+    //TODO: should this be done through a backend call, to retrieve fewer objects?
+    // const queriedProducts = () => myProducts.filter((prod) => (prod.name.indexOf(qresponse.data.query) >= 0));
+
+    // const usedProducts = queriedProducts();
+
     return (
         <Grid container justifyContent="center" >
             <Widget 
@@ -79,11 +103,15 @@ const VendorHomePage = ({value}) => {
             <Grid item xs={12} marginTop={8}>
                 <Title text="Your Products" />
             </Grid>
+            <Grid item xs={12}>
+                <UnsafeSearchBar query={qresponse.data.query} setQuery={setQuery}/>
+            </Grid>
             <Grid item container xs={9} spacing={7} justifyContent="center" >
                 {
 
-                        myProducts.length !== 0 ?    
-                    myProducts.map((prod) => (
+                        qresponse.data.results.length !== 0 ?
+
+                        qresponse.data.results.map((prod) => (
                         <Grid item xs={3}>
                             <VendorProductCard /*type={prod.type}*/ 
                                 id={prod.id}
