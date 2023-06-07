@@ -87,6 +87,14 @@ export function useReviews (token) {
     return data;
 
   }
+
+  async function getProductReviews (idProd) {
+    const {data} = await 
+      axios.get(`/v1/products/${idProd}/reviews`, { headers: {"Authorization" : `Bearer ${token}`} })
+      .catch(e => {throw new Error("Error while getting the reviews of the product: " + e.message)});
+
+    return data;
+  }
     
-    return {reviews, createAReview, getReviewReply};
+    return {reviews, createAReview, getReviewReply, getProductReviews};
 }

@@ -20,6 +20,9 @@ const Review = ({id, title, description, stars, author, replyFromReviewId, produ
 
     const [reply, setReply] = useState();
 
+    console.log(JSON.stringify(author));
+
+
 
     const getReplyOfAReview = () => {
 
@@ -64,7 +67,7 @@ const Review = ({id, title, description, stars, author, replyFromReviewId, produ
                                 :
                                 <ReviewCard 
                                     title = {reply.title} 
-                                    writer= {reply.author} 
+                                    writer= {reply.customer.email} 
                                     description= {reply.description}              
                                 />
                             }
@@ -87,8 +90,9 @@ const ProductPage = () => {
     const {getProduct} = useProducts(user.accessToken);
 
     const [product, setProduct] = useState({});
+    const [reviewsProd, setReviewsProd] = useState([]);
 
-    const {reviews, createAReview} = useReviews(user.accessToken);
+    const {reviews, createAReview, getProductReviews} = useReviews(user.accessToken);
 
     const authorId = user.payload.id;
     const productId = id;
@@ -98,8 +102,16 @@ const ProductPage = () => {
         getProduct(id)
         .then((result) => setProduct(result))
         .catch(e => setProduct({}));
+
+        getAllReviewsForTheProd();
         
     }, [id])
+
+    const getAllReviewsForTheProd = () => getProductReviews(id)
+                                        .then((result) => setReviewsProd(result) )
+                                        .catch(e => setReviewsProd([]));
+
+    
 
     return (
         <Grid container justifyContent="center" spacing={7} >
@@ -115,7 +127,9 @@ const ProductPage = () => {
                 <Grid item  xs={9} >
                     {
                         user.payload.role === "customer" ?
-                        <ReviewForm header="Add a review to this product" replyFromReviewId={0} onSubmitForm={(review) => createAReview({...review, productId, authorId})} />
+                        <ReviewForm header="Add a review to this product" replyFromReviewId={0} 
+                            onSubmitForm={(review) => createAReview({...review, productId, authorId})
+                            .then(() => getAllReviewsForTheProd())} />
                         : <></>
                     }
                 </Grid>
@@ -124,22 +138,25 @@ const ProductPage = () => {
                 
                 {
 
-                    reviews.length !== 0 ?
+                        reviewsProd.length !== 0 ?
 
                         //they are filtered such that we take at first only the reviews which are not answers of other reviews
-                        reviews.filter(rev => rev.replyFromReviewId === 0).map((review) => (
-                            <Review 
-                                id = {review.id}
-                                title = {review.title}
-                                description = {review.description}
-                                stars={review.stars}
-                                author={review.author}
-                                replyFromReviewId = {review.replyFromReviewId}
-                                productId = {productId}
-                            />
-                        ))
-                    
-                    : <h1 style={{marginTop: "40px"}}>No Reviews To Display</h1>
+                            reviewsProd.filter(rev => rev.replyFromReviewId === 0).map((review) => {
+
+                                
+                                return (
+                                <Review 
+                                    id = {review.id}
+                                    title = {review.title}
+                                    description = {review.description}
+                                    stars={review.stars}
+                                    author={review.customer.email}
+                                    replyFromReviewId = {review.replyFromReviewId}
+                                    productId = {productId}
+                                />
+                            )})
+                        
+                        : <h1 style={{marginTop: "40px"}}>No Reviews To Display</h1>
                 }
             </Grid>
 

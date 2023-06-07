@@ -155,7 +155,7 @@ const ReviewCard = ({rating, title, description, writer, answer}) => {
                 <div style= {{fontSize: 14}} dangerouslySetInnerHTML={{__html: rating}}/>
                 <div style= {{fontSize: 19, fontWeight: "bold" }} dangerouslySetInnerHTML={{__html: title}}/>
                 
-                <div style= {{fontSize: 14}} dangerouslySetInnerHTML={{__html: "Written by " + rating}}/>
+                <div style= {{fontSize: 14}} dangerouslySetInnerHTML={{__html: "Written by " + writer}}/>
                 <div style= {{fontSize: 14}} dangerouslySetInnerHTML={{__html: description}}/>
                 {/* {answer ? <div style={{marginTop: 10}}> */}
                     {answer}

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import {client as axios} from '../utils/axios';
+import Cookies from 'universal-cookie';
 import jwt_decode from "jwt-decode";
 import * as React from "react";
 import store from 'store';
@@ -9,6 +10,8 @@ export const authContext = React.createContext();
 export function useUser(token = null) {
 
     const [user, setUser] = useState(undefined);
+    const cookies = new Cookies();
+    
 
     const retrieveFromStore = () => {
       
@@ -24,8 +27,10 @@ export function useUser(token = null) {
 
     useEffect (() => {
       
-      if(user !== undefined)
+      if(user !== undefined){
         store.set('user', user);
+        cookies.set('jwt', user.accessToken, { path: '/' }); // da rimuove nella parte secure
+      }
 
     }, [user])
 
