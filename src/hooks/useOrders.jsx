@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import {client as axios} from '../utils/axios'
+import {client as axios} from '../utils/axios';
+import jwt_decode from "jwt-decode";
 
 export function useOrders (token) {
 
@@ -9,8 +10,18 @@ export function useOrders (token) {
 
     async function get() {
 
+      let url = "/v1/orders/";
+      const role = jwt_decode(token).role;
+
+      if(role === "customer")
+        url += "mine";
+
+      if(role === "vendor")
+        url += "sold";
+
+
       try {
-          const { data } = await axios.get('/v1/orders/getAll', { headers: {"Authorization" : `Bearer ${token}`} });
+          const { data } = await axios.get(url, { headers: {"Authorization" : `Bearer ${token}`} });
 
           if(!data.error) {
             setOrders(data); 
@@ -22,13 +33,13 @@ export function useOrders (token) {
           setOrders([]);  
       }
 
-  }
+    }
 
-  function getProducts() {
+  function getOrders() {
     get()
   }
 
-  useEffect(getProducts, []);
+  useEffect( () => getOrders(), []);
 
     async function post(idProduct, idUser) {
 

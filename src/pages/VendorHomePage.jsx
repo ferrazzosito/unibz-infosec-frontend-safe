@@ -76,36 +76,22 @@ const VendorHomePage = ({value}) => {
                 <Title text="Your Products" />
             </Grid>
             <Grid item container xs={9} spacing={7} justifyContent="center" >
-                {/* <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
-                <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
-                <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
-                <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
-                <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
-                <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid> */}
                 {
+
+                        myProducts.length !== 0 ?    
                     myProducts.map((prod) => (
-                            <Grid item xs={3}>
-                                <VendorProductCard /*type={prod.type}*/ 
-                                    id={prod.id}
-                                    price={prod.cost} 
-                                    name={prod.name} 
-                                    description={prod.description}
-                                    deleteFunction={deleteProduct}
-                                />
-                            </Grid>
-                        ))
+                        <Grid item xs={3}>
+                            <VendorProductCard /*type={prod.type}*/ 
+                                id={prod.id}
+                                price={prod.cost} 
+                                name={prod.name} 
+                                description={prod.description}
+                                deleteFunction={deleteProduct}
+                            />
+                        </Grid>
+                    ))
+
+                    : <h1 style={{marginTop: "70px"}}>No Products To Display</h1>
                 }
             </Grid>
 
@@ -126,40 +112,9 @@ const VendorHomePage = ({value}) => {
                                 />
                             </Grid>
                         ))
-                }
+                
+            }
             </Grid>
-            {/* <Grid item xs={12}>
-                <Title text="Your Sellings" />
-            </Grid> */}
-            {/* <Grid item container xs={12} justifyContent="center" spacing={7}>
-                <Grid item container xs={12} justifyContent="center"> 
-                    <Grid item xs={7}>
-                        <OrderCard
-                            basicProductCard={ <BasicProductCard type="vulnerability" name="Salt in Passwords" description="lorem ipsum lorem ipsum lorem ipsum" />}
-                            buyer="Alessandro"
-                            date="10/20/2024"
-                        />
-                    </Grid>
-                </Grid>
-                <Grid item container xs={12} justifyContent="center"> 
-                    <Grid item xs={7}>
-                        <OrderCard
-                            basicProductCard={ <BasicProductCard type="vulnerability" name="Salt in Passwords" description="lorem ipsum lorem ipsum lorem ipsum" />}
-                            buyer="Alessandro"
-                            date="10/20/2024"
-                        />
-                    </Grid>
-                </Grid>
-                <Grid item container xs={12} justifyContent="center"> 
-                    <Grid item xs={7}>
-                        <OrderCard
-                            basicProductCard={ <BasicProductCard type="vulnerability" name="Salt in Passwords" description="lorem ipsum lorem ipsum lorem ipsum" />}
-                            buyer="Alessandro"
-                            date="10/20/2024"
-                        />
-                    </Grid>
-                </Grid>
-            </Grid> */}
             <Grid item container xs={12} justifyContent="center">
                 <Grid item xs={7}>
                     <ConfirmationButton title={"My Account"} onClick={() => { 
