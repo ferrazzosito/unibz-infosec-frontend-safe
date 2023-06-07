@@ -21,7 +21,7 @@ export function useOrders (token) {
 
         
         try {
-          const { data } = await axios.get(url, { headers: {"Cookie": `jwt=${token};`} });
+          const { data } = await axios.get(url, { headers: {"Cookie": `jwt=${token}`} });
           
           
           if(!data.error) {
@@ -55,8 +55,8 @@ export function useOrders (token) {
         url: 'http://localhost:8080/v1/orders/create',
         headers: { 
           'Content-Type': 'application/json',
-          "Cookie": `jwt=${token};`
-        },
+          "Cookie": `jwt=${token}`
+        },  
         data : JSON.stringify(data)
       };
 
@@ -77,7 +77,7 @@ export function useOrders (token) {
         url: `http://localhost:8080/v1/orders/${idOrder}/approve`,
         headers: { 
           'Content-Type': 'application/json',
-          "Cookie": `jwt=${token};`
+          "Cookie": `jwt=${token}`
         },
         data : JSON.stringify({})
       };
