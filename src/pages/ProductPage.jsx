@@ -20,8 +20,6 @@ const Review = ({id, title, description, stars, author, replyFromReviewId, produ
 
     const [reply, setReply] = useState();
 
-
-    
     const getReplyOfAReview = () => {
 
         getReviewReply(id)
@@ -84,16 +82,25 @@ const ProductPage = () => {
     const id = searchParams.get("id");
 
 
-    const {user, findUser} = useContext(authContext);    
+    const {user} = useContext(authContext);    
     const {getProduct} = useProducts(user.accessToken);
 
     const [product, setProduct] = useState({});
-    const [reviews, setReviews] = useState{[]};
+    const [reviews, setReviews] = useState([]);
     const {createAReview, getProductReviews} = useReviews(user.accessToken);
 
     const authorId = user.payload.id;
     const productId = id;
 
+    
+    
+    useEffect(() => {
+        
+        getProduct(id)
+        .then((result) => setProduct(result))
+        .catch(e => setProduct({}));
+        
+    }, [id])
     
     useEffect(() => {
         getProductReviews(id)
@@ -103,14 +110,6 @@ const ProductPage = () => {
          })
         .catch(e => setReviews([]));
 
-    }, [])
-
-    useEffect(() => {
-
-        getProduct(id)
-        .then((result) => setProduct(result))
-        .catch(e => setProduct({}));
-        
     }, [id])
 
     return (
