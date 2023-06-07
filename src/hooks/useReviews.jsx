@@ -6,6 +6,7 @@ export function useReviews (token) {
     //I should do an if so that if the role is vendor, in products there's only vendor products, otherwise, all products
     //as well as setProducts for clients should be disabled
     const [reviews, setReviews] = useState([]);
+    const [productReviews, setProductReviews] = useState([]);
 
     async function postCreateQuery({query}) {
       return axios.post('/v1/reviews/search',  {
@@ -17,6 +18,21 @@ export function useReviews (token) {
           .then(message => message)
           .catch((e) => {throw new Error(e.message)});
       }
+
+      
+    async function getProductReviews(productId) {
+      try {
+        const {data} = await axios.get(`/v1/reviews/product/${productId}`, { headers: {"Authorization" : `Bearer ${token}`} });
+        if(!data.error) {
+          setProductReviews(data);
+        }
+      
+      } catch (e) {
+        console.log("Error: " + e.message);
+        setProductReviews()
+      }
+        
+    }
 
     async function post({title, description, stars, replyFromReviewId, productId, authorId}) {
       
@@ -77,7 +93,6 @@ export function useReviews (token) {
 
     useEffect(getReviews, []);
 
-
   async function getReviewReply(idReview) {
 
     const {data} = await 
@@ -88,5 +103,5 @@ export function useReviews (token) {
 
   }
     
-    return {reviews, createAReview, getReviewReply};
+    return {reviews, createAReview, getReviewReply, getProductReviews};
 }

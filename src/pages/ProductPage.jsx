@@ -21,6 +21,7 @@ const Review = ({id, title, description, stars, author, replyFromReviewId, produ
     const [reply, setReply] = useState();
 
 
+    
     const getReplyOfAReview = () => {
 
         getReviewReply(id)
@@ -87,11 +88,22 @@ const ProductPage = () => {
     const {getProduct} = useProducts(user.accessToken);
 
     const [product, setProduct] = useState({});
-
-    const {reviews, createAReview} = useReviews(user.accessToken);
+    const [reviews, setReviews] = useState{[]};
+    const {createAReview, getProductReviews} = useReviews(user.accessToken);
 
     const authorId = user.payload.id;
     const productId = id;
+
+    
+    useEffect(() => {
+        getProductReviews(id)
+        .then((result) =>{ 
+            console.log(result)
+            setReviews(result)
+         })
+        .catch(e => setReviews([]));
+
+    }, [])
 
     useEffect(() => {
 
