@@ -68,6 +68,25 @@ export function useOrders (token) {
     async function makeAnOrder(idProduct) {
       return await post(idProduct)
     }
+
+    async function approveOrder(idOrder) {
+     
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `http://localhost:8080/v1/orders/${idOrder}/approve`,
+        headers: { 
+          'Content-Type': 'application/json',
+          "Authorization" : `Bearer ${token}`
+        },
+        data : JSON.stringify({})
+      };
+
+      return await axios.request(config)
+        .then(response => { getOrders(); return JSON.stringify(response.data)})
+        .catch(e => {throw new Error("Error while approving the order: " + e.message)})
+
+    }
     
-    return {orders, makeAnOrder};
+    return {orders, makeAnOrder, approveOrder};
 }

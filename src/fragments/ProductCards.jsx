@@ -6,7 +6,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { BuyButton, DeleteButton } from '../components/Buttons';
+import { BuyButton, ConfirmationButton, DeleteButton } from '../components/Buttons';
 import { useNavigate } from 'react-router';
 import { useContext } from 'react';
 import { authContext } from '../hooks/useUser';
@@ -82,7 +82,13 @@ const BasicProductCard = ({type, name, price, vendorId, description}) => {
 
     return (
         <Card sx={{ minWidth: 275 }}>
-            <ContentProductCard type={type} name = {name} price ={price} vendorName={vendor.email}  vendorId={vendorId} description={description }/>
+            <ContentProductCard type={type} 
+                name = {name} 
+                price ={price} 
+                vendorName={vendor.email}  
+                vendorId={vendorId} 
+                description={description } 
+                isVendor={vendor.role === "VENDOR"}/>
         </Card>
     )
 
@@ -159,7 +165,7 @@ const ReviewCard = ({rating, title, description, writer, answer}) => {
     )
 }
 
-const OrderCard = ({basicProductCard, buyer, date, role, approved, idProd}) => {
+const OrderCard = ({basicProductCard, buyer, date, role, approved, idProd, idOrder, approveOrderFunction}) => {
 
     const navigate = useNavigate();
     const reviewRedirect = () => navigate(`/product?id=${idProd}`);
@@ -169,12 +175,15 @@ const OrderCard = ({basicProductCard, buyer, date, role, approved, idProd}) => {
             <CardContent>
                 {
                     role === "customer" ?
-                        approved ?
+                        approved === true ?
                         <Typography sx={{ mb: 1.5 }} color="green"> Approved by vendor </Typography>    
                         :            
                         <Typography sx={{ mb: 1.5 }} color="red"> Not yet approved by vendor </Typography>
                     :
-                    <></>
+                        approved === true ? 
+                        <Typography sx={{ mb: 1.5 }} color="green"> Already Approved </Typography> 
+                        :
+                        <ConfirmationButton title="Approve Order" onClick= {() => approveOrderFunction(idOrder)} />
 
                 }
                 {basicProductCard}
@@ -189,6 +198,7 @@ const OrderCard = ({basicProductCard, buyer, date, role, approved, idProd}) => {
         </Card>
     )
 }
+
 
 const BalanceCard = ({amount}) => {
 
