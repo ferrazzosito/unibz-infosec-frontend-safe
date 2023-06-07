@@ -175,15 +175,16 @@ const OrderCard = ({basicProductCard, buyer, date, role, approved, idProd, idOrd
             <CardContent>
                 {
                     role === "customer" ?
-                        approved === true ?
+                        (approved === true ?
                         <Typography sx={{ mb: 1.5 }} color="green"> Approved by vendor </Typography>    
                         :            
-                        <Typography sx={{ mb: 1.5 }} color="red"> Not yet approved by vendor </Typography>
+                        <Typography sx={{ mb: 1.5 }} color="red"> Not yet approved by vendor </Typography>)
                     :
-                        approved === true ? 
+                        (approved === true ? 
                         <Typography sx={{ mb: 1.5 }} color="green"> Already Approved </Typography> 
                         :
                         <ConfirmationButton title="Approve Order" onClick= {() => approveOrderFunction(idOrder)} />
+                        )
 
                 }
                 {basicProductCard}

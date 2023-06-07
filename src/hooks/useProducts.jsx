@@ -93,7 +93,17 @@ export function useProducts (token) {
     }
 
     async function postSearchQuery({query}) {
-      return axios.post('/v1/products/search',  {
+
+      let url = "/v1/products/";
+      const role = jwt_decode(token).role;
+
+      if(role === "vendor")
+        url += "mine/";
+
+      if(role === "customer")
+        url += "";
+
+      return axios.post(url + 'search',  {
               query: query
           },
           { 
