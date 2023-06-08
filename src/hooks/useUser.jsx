@@ -62,7 +62,7 @@ export function useUser(token = null) {
 
       return axios.request(config)
       .then(response => response.data)
-      .catch(e => {throw new Error("Error while registering the user: " + e.message)})
+      .catch(e => {throw new Error(e.message)})
     }
 
     /**
@@ -70,7 +70,7 @@ export function useUser(token = null) {
      */
     async function logUser(email, password) {
       return await log(email, password)
-      .then(async response => {
+      .then( response => {
         
         setUser({
           accessToken : response.accessToken,
@@ -79,7 +79,7 @@ export function useUser(token = null) {
 
         return {payload: jwt_decode(response.accessToken)};
   
-      })
+      }).catch(e => {throw new Error("Error while loggin the user: " + e.message)})
     }
 
     async function register({email, role, password }) {

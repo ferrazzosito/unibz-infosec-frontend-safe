@@ -4,6 +4,7 @@ import { ConfirmationButton } from '../components/Buttons';
 import { Grid, Item } from '@mui/material';
 import {Card, CardContent,Typography} from '@mui/material';
 import { useReviews } from '../hooks/useReviews';
+import { ErrorAlert } from '../components/Alerts';
 
 /**
  * Form for signing up
@@ -53,9 +54,15 @@ const SignInForm = ({onSubmitForm, redirect}) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [errorAlert, setErrorAlert] = useState();
 
     return (
         <Grid container rowSpacing={2} columnSpacing={2}  justifyContent="center">
+            {
+                errorAlert ?
+                    <ErrorAlert message={errorAlert} />
+                : <></>
+            }
             <Grid item xs={12}>
                 <EmailField email = {email} setEmail={setEmail}/>
             </Grid>
@@ -64,8 +71,12 @@ const SignInForm = ({onSubmitForm, redirect}) => {
             </Grid>
             <Grid item xs={7}>
                 <ConfirmationButton title={"Sign In"} onClick={() => { 
+
+                    setErrorAlert();
+
                     onSubmitForm(email, password)
                     .then( (user) => redirect(user.payload.role))
+                    .catch(e => setErrorAlert("Incorrect credentials"));
                 }} />
             </Grid>
         </Grid>
