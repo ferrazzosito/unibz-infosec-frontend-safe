@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import {client as axios} from '../utils/axios'
 
+/**
+ * This custom hook handles everything that concerns the chats
+ */
 export function useChat (token, type = "customer") {
 
     const [chatRequests, setChatRequests] = useState([]);
@@ -26,11 +29,19 @@ export function useChat (token, type = "customer") {
       .catch(e => {throw new Error("Error while creating the chat: " + e.message)})
     }
 
+    /**
+   * It requests a chat to a vendor
+   * 
+   * @param vendorId id of the vendor, who the customer wants to chat with
+   */
     async function requestChat(vendorId) {
       return await postChat(vendorId)
         .then(resp => resp.chatId);
     }
 
+    /**
+   * It gets all the pending chat requests of this user (who has to be a vendor)
+   */
     async function getChatRequests() {
       return await axios.get(`/v1/chats/requests`, {
         headers: {

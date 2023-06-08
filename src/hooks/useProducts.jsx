@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import {client as axios} from '../utils/axios';
 import jwt_decode from "jwt-decode";
 
-
+/**
+ * This custom hook handles everything that concerns the products
+ */
 export function useProducts (token) {
 
     const [myProducts, setMyProducts] = useState([]);
@@ -32,6 +34,12 @@ export function useProducts (token) {
       .catch(e => {throw new Error("Error while posting the product: " + e.message)})
     }
 
+    /**
+     * It adds a new product, defined from the attributes in the product object, which at the moment are
+     * 
+     * @param name name of the product
+     * @param cost price of the product
+     */
     async function addProduct(product) {
       return await post(product).then(() => getProducts());
     }
@@ -43,6 +51,9 @@ export function useProducts (token) {
         .catch(e => {throw new Error("Error while deleting the product " + id + ": " + e.message)})
       }
 
+    /**
+     * It deletes a product from its id
+     */
     async function deleteProduct(id) {
         return await deleteMethod(id).then(() => getProducts());
     }
@@ -75,6 +86,9 @@ export function useProducts (token) {
 
     }
 
+    /**
+     * It retrieves the products, either those of the vendor or all of them in case is the customer asking them
+     */
     function getProducts() {
       get()
     }
@@ -86,6 +100,10 @@ export function useProducts (token) {
         return await axios.get(`/v1/products/${id}`, { headers: {"Authorization" : `Bearer ${token}`} });
     }
 
+    /**
+     * It retrieves the products, either those of the vendor or all of them in case is the customer asking them,
+     *  but following the query asked
+     */
     async function postSearchQuery({query}) {
 
       let url = "/v1/products/";
@@ -107,6 +125,9 @@ export function useProducts (token) {
           .catch((e) => {throw new Error(e.message)});
     }
 
+    /**
+     * It retrieves a specific product from its id
+     */
     async function getProduct(id) {
         return getAProduct(id)
         .then(({data}) => data)

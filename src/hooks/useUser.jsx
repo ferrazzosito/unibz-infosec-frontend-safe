@@ -82,7 +82,7 @@ export function useUser(token = null) {
       })
     }
 
-    async function register({/*name, lastName, */email, role, password /*, type*/ }) {
+    async function register({email, role, password }) {
 
       let data = {
         "email": email,
@@ -145,6 +145,6 @@ export function useUser(token = null) {
       });
     }
 
-    return {user, logUser, registerUser, logout/*, reload*/, findUser, topUp};
+    return {user, logUser, registerUser, logout, findUser, topUp};
 
 }
