@@ -2,6 +2,7 @@ import { SearchField } from "../components/FormComponents";
 import { Grid } from "@mui/material";
 import {Typography} from "@mui/material";
 import React, { useState, useEffect } from 'react';
+import xss from "xss";
 
 // const SearchBar = ({query, setQuery}) => {
 //     return (
@@ -33,6 +34,8 @@ import React, { useState, useEffect } from 'react';
  */
 const UnsafeSearchBar = ({query, setQuery}) => {
 
+    const sanificatedQuery = xss(query);
+
     return(
         <Grid container justifyContent="center" >
             <Grid item container justifyContent="center" xs={12} style={{margin: "10 0 0 5"}}>
@@ -42,7 +45,7 @@ const UnsafeSearchBar = ({query, setQuery}) => {
             </Grid>
             <Grid item container justifyContent="center" xs={12} style={{margin: "5 0 0 5"}}>
                 <Grid item xs={6}>
-                    <div color="text.secondary" dangerouslySetInnerHTML={{__html: 'results shown for: ' + query}}/>
+                    <div color="text.secondary" dangerouslySetInnerHTML={{__html: 'results shown for: ' + sanificatedQuery}}/>
                 </Grid>
             </Grid>
         </Grid>
