@@ -137,7 +137,10 @@ export function useUser(token = null) {
       return await axios.post(`/v1/users/topup`, {
         balanceIncrease: amount
       }, {
-        withCredentials: true
+        withCredentials: true,
+        headers: {
+          'X-CSRF-Token': jwt_decode(token).csrf
+        }
       }).then(({data}) => data).catch(err => {
         throw new Error(err.message);
       });

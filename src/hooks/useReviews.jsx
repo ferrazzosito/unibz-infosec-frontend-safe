@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import {client as axios} from '../utils/axios'
+import jwt_decode from "jwt-decode";
+
 
 /**
  * This custom hook handles everything that concerns the reviews
@@ -11,13 +13,13 @@ export function useReviews (token) {
 
     async function postCreateQuery({query}) {
       return axios.post('/v1/reviews/search',  {
-              query: query
-          },
-          { 
-              withCredentials: true
-          })
-          .then(message => message)
-          .catch((e) => {throw new Error(e.message)});
+        query: query
+      }, { 
+        withCredentials: true,
+        headers: {
+          'X-CSRF-Token': jwt_decode(token).csrf
+        }
+      }).then(message => message).catch((e) => {throw new Error(e.message)});
       }
 
     // async function postCreateQuery({query}) {
@@ -53,7 +55,8 @@ export function useReviews (token) {
         url: 'http://localhost:8080/v1/reviews/create',
         withCredentials: true,
         headers: { 
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': jwt_decode(token).csrf
         },
         data : JSON.stringify(data)
       };

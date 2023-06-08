@@ -71,7 +71,7 @@ const VendorPage = () => {
                 setChatId(chatIdResp);
                 const [sendMsg, closeChat] = openChatSession(
                     chatIdResp, 
-                    false,
+                    true,
                     () => {}, 
                     (ws) => toggleInputDisabled(), 
                     manageArrivingMessages,
