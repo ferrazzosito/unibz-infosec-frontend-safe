@@ -91,7 +91,20 @@ Now if you followed the steps correctly you should be ready to start using the a
 
 ## Usage 
 
-In [http://localhost:3000/sign-up](http://localhost:3000/sign-up) you can sign up either as a vendor or 
+In [http://localhost:3000/sign-up](http://localhost:3000/sign-up) you can sign up either as a vendor or as a customer.  
+After that, you'll be redirected to the [http://localhost:3000/login](http://localhost:3000/login) in which you can sign in.  
+
+### As a Customer  
+
+In [http://localhost:3000/](http://localhost:3000/) you'll find the homepage for customer. You can search a name of a product
+and find them. On the products you can buy, see their reviews, and see the account of the vendor just by clicking its name in
+`by vendor < name >`.  
+In the bottom part you can click on `LOGOUT` to log out or on `MY ACCOUNT` to go on your customer account page.    
+  
+By clicking `SEE REVIEWS` button you get redirected to [http://localhost:3000/product?id=1](http://localhost:3000/product?id=1) where the id is equal to the id of the product you'd like to see. In this page you can find a form to publish a review for this product and below you can read all of the reviews already present, which can maybe have a reply or not (the reply is an innerbox with a similar structure as a review). To come back to the previous page you can just go back with your browser.  
+
+By clicking `MY ACCOUNT` button you get redirected to [http://localhost:3000/my-profile-buyer](http://localhost:3000/my-profile-buyer) in which you can see all the information related to your customer account. You can see at the very top your current balance and top it up for free in the form below that. You can see your past orders and know if they have been approved or not by the vendor. When approved the money the price of the product is subtracted by your account. You can also see 
+
 
 
 ### Usage Notes
@@ -101,3 +114,7 @@ In [http://localhost:3000/sign-up](http://localhost:3000/sign-up) you can sign u
 - The chat takes a bit to load, wait until input chat allows you to write.
 
 - The chat is from a frontend point of view a bit buggy, because it was meant for a slight different version of react. Nevertheless, if you use it properly, without particular edge cases, it works as it should.
+
+-- vulnerabilities
+
+-- vulnerabilities notes (how things work or where to find them)
