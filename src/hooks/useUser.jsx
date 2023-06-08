@@ -45,6 +45,7 @@ export function useUser(token = null) {
         method: 'post',
         maxBodyLength: Infinity,
         url: 'http://localhost:8080/auth/login',
+        withCredentials: true,
         headers: { 
           'Content-Type': 'application/json'
         },
@@ -82,6 +83,7 @@ export function useUser(token = null) {
         method: 'post',
         maxBodyLength: Infinity,
         url: 'http://localhost:8080/auth/register',
+        withCredentials: true,
         headers: { 
           'Content-Type': 'application/json'
         },
@@ -103,7 +105,7 @@ export function useUser(token = null) {
 
     async function findAUser(id) {
       console.log(user.accessToken);
-      return await axios.get(`/v1/users/${id}`, { headers: {"Cookie": `jwt=${token || user.accessToken}`} });
+      return await axios.get(`/v1/users/${id}`, { withCredentials: true, headers: {"Cookie": `jwt=${token || user.accessToken}`} });
     }
 
     async function findUser(id) {
@@ -116,6 +118,7 @@ export function useUser(token = null) {
       return await axios.post(`/v1/users/topup`, {
         balanceIncrease: amount
       }, {
+        withCredentials: true,
         headers: {
           "Cookie": `jwt=${token || user.accessToken}`
         }

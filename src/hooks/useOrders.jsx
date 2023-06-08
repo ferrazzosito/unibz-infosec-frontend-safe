@@ -21,7 +21,7 @@ export function useOrders (token) {
 
         
         try {
-          const { data } = await axios.get(url, { headers: {"Cookie": `jwt=${token}`} });
+          const { data } = await axios.get(url, { withCredentials: true, headers: {"Cookie": `jwt=${token}`} });
           
           
           if(!data.error) {
@@ -53,6 +53,7 @@ export function useOrders (token) {
         method: 'post',
         maxBodyLength: Infinity,
         url: 'http://localhost:8080/v1/orders/create',
+        withCredentials: true,
         headers: { 
           'Content-Type': 'application/json',
           "Cookie": `jwt=${token}`
@@ -75,6 +76,7 @@ export function useOrders (token) {
         method: 'post',
         maxBodyLength: Infinity,
         url: `http://localhost:8080/v1/orders/${idOrder}/approve`,
+        withCredentials: true,
         headers: { 
           'Content-Type': 'application/json',
           "Cookie": `jwt=${token}`
