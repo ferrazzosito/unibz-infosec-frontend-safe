@@ -15,11 +15,14 @@ import { useChat } from "../hooks/useChat";
 import { openChatSession } from "../util/chat";
 import { createRef } from "react";
 import { UnsafeSearchBar } from "../fragments/SearchBar";
+import { ErrorAlert } from "../components/Alerts";
 
 const VendorHomePage = ({value}) => {
 
     const {user, logUser, registerUser, logout} = useContext(authContext);    
     const {addProduct, deleteProduct, postSearchQuery} = useProducts(user.accessToken);
+
+    const [errorAlert, setErrorAlert] = useState();
     
     const {chatRequests} = useChat(user.accessToken, "vendor");
     const [functionsManageChat, setFunctionsManageChat] = useState();
@@ -58,25 +61,20 @@ const VendorHomePage = ({value}) => {
     const [query, setQuery] = useState("");
     const [qresponse, setQresponse] = useState({data: {query: "", results : []} });
 
-    useEffect(() => {
-        const performSearch = async () => {
-          try {
-            const response = await postSearchQuery({ query });
-            setQresponse(response);
-            console.log('Search results:', JSON.stringify(response));
-          } catch (error) {
-            console.log('Error:', error);
-          }
-        }; 
-      
-        // if (query !== "") {
-          performSearch();
-        // }
-      }, [query]);
-    //TODO: should this be done through a backend call, to retrieve fewer objects?
-    // const queriedProducts = () => myProducts.filter((prod) => (prod.name.indexOf(qresponse.data.query) >= 0));
+    const performSearch = async () => {
+        setErrorAlert();
+        try {
+          const response = await postSearchQuery({ query });
+          setQresponse(response);
+          console.log('Search results:', JSON.stringify(response));
+        } catch (error) {
+          console.log('Error:', error);
+        }
+      }; 
 
-    // const usedProducts = queriedProducts();
+    useEffect(() => {
+          performSearch();
+      }, [query]);
 
     return (
         <Grid container justifyContent="center" >
@@ -87,7 +85,7 @@ const VendorHomePage = ({value}) => {
             </Grid>
             <Grid item container xs={12} justifyContent="center"> 
                 <Grid item xs={7}>
-                    <ProductForm  onSubmitForm={addProduct}/>
+                    <ProductForm  onSubmitForm={(product) => addProduct(product).then(() => performSearch())}/>
                 </Grid>
             </Grid>
             <Grid item xs={12} marginTop={8}>
@@ -96,6 +94,11 @@ const VendorHomePage = ({value}) => {
             <Grid item xs={12}>
                 <UnsafeSearchBar query={qresponse.data.query} setQuery={setQuery}/>
             </Grid>
+            {
+                errorAlert ?
+                    <ErrorAlert message={errorAlert} />
+                : <></>
+            }
             <Grid item container xs={9} spacing={7} justifyContent="center" >
                 {
 
@@ -109,7 +112,7 @@ const VendorHomePage = ({value}) => {
                                 name={prod.name} 
                                 vendorName = {user.payload.sub}
                                 description={prod.description}
-                                deleteFunction={deleteProduct}
+                                deleteFunction={(id) => deleteProduct(id).then(() => performSearch()).catch((e) => setErrorAlert("A Product that is involved in some actions, like an order or reviews, cannot be deleted"))}
                             />
                         </Grid>
                     ))

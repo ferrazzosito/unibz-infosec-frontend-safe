@@ -5,10 +5,6 @@ import jwt_decode from "jwt-decode";
 
 export function useProducts (token) {
 
-    //I should do an if so that if the role is vendor, in products there's only vendor products, otherwise, all products
-    //as well as setProducts for clients should be disabled
-    const [products, setProducts] = useState([]);
-
     const [myProducts, setMyProducts] = useState([]);
 
 
@@ -36,8 +32,8 @@ export function useProducts (token) {
       .catch(e => {throw new Error("Error while posting the product: " + e.message)})
     }
 
-    function addProduct(product) {
-      return post(product).then(() => getProducts());
+    async function addProduct(product) {
+      return await post(product).then(() => getProducts());
     }
 
     async function deleteMethod(id) {
@@ -47,8 +43,8 @@ export function useProducts (token) {
         .catch(e => {throw new Error("Error while deleting the product " + id + ": " + e.message)})
       }
 
-    function deleteProduct(id) {
-        return deleteMethod(id).then(() => getProducts());
+    async function deleteProduct(id) {
+        return await deleteMethod(id).then(() => getProducts());
     }
     
 
@@ -68,14 +64,12 @@ export function useProducts (token) {
             const { data } = await axios.get(url, { headers: {"Authorization" : `Bearer ${token}`} });
 
             if(!data.error) {
-                setProducts(data); 
                 setMyProducts(data); 
             }
 
         } catch (e) {
             console.log("Error: " + e.message);
 
-            setProducts([]); 
             setMyProducts([]); 
         }
 
@@ -119,5 +113,5 @@ export function useProducts (token) {
         .catch((e) => {throw new Error(e.message)});
     }
     
-    return {products, myProducts, addProduct, deleteProduct, getProduct, postSearchQuery};
+    return {myProducts, addProduct, deleteProduct, getProduct, postSearchQuery};
 }

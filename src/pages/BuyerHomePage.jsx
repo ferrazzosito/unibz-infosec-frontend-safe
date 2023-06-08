@@ -24,7 +24,7 @@ const BuyerHomePage = () => {
 
     const {user, logUser, registerUser, logout, findUser} = useContext(authContext);     
     
-    const {products, postSearchQuery} = useProducts(user.accessToken);
+    const {myProducts, postSearchQuery} = useProducts(user.accessToken);
 
     const {makeAnOrder} = useOrders(user.accessToken);
 
@@ -41,15 +41,8 @@ const BuyerHomePage = () => {
           }
         };
       
-        // if (query !== "") {
           performSearch();
-        // }
       }, [query]);
-    //TODO: should this be done through a backend call, to retrieve fewer objects?
-    // const queriedProducts = () => products.filter((prod) => (prod.name.indexOf(qresponse.data.query) >= 0));
-
-    // const usedProducts = queriedProducts();
-
     return (
         <Grid container justifyContent="center" >
             <Grid item xs={12}>
