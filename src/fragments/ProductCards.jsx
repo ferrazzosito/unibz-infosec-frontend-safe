@@ -38,9 +38,9 @@ const UnsafeContentProductCard = ({type, name, price, vendorName, vendorId, desc
 
     return (
     <CardContent>
-        <div color="text.secondary" gutterBottom dangerouslySetInnerHTML={{__html: type}}/>
-        <div dangerouslySetInnerHTML={{__html: name}}/>
-        <div sx={{ mb: 1.5 }} color="text.secondary" dangerouslySetInnerHTML={{__html: price + " €"}}/>
+        <div color="text.secondary" gutterBottom dangerouslySetInnerHTML={{__html: sanificatedType}}/>
+        <div dangerouslySetInnerHTML={{__html: sanificatedName}}/>
+        <div sx={{ mb: 1.5 }} color="text.secondary" dangerouslySetInnerHTML={{__html: sanificatedPrice + " €"}}/>
         {
             isVendor ? 
                 <div sx={{ mb: 1.5 }} color="text.secondary" >
@@ -52,7 +52,7 @@ const UnsafeContentProductCard = ({type, name, price, vendorName, vendorId, desc
                 </div>
         }
         
-        <div variant="body2" dangerouslySetInnerHTML={{__html: description}}/>
+        <div variant="body2" dangerouslySetInnerHTML={{__html: sanificatedDescription}}/>
         <br />
     </CardContent>)
 }
