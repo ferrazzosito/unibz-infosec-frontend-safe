@@ -2,12 +2,10 @@ import { useState, useEffect } from 'react';
 import {client as axios} from '../utils/axios';
 import jwt_decode from "jwt-decode";
 
-
+/**
+ * This custom hook handles everything that concerns the products
+ */
 export function useProducts (token) {
-
-    //I should do an if so that if the role is vendor, in products there's only vendor products, otherwise, all products
-    //as well as setProducts for clients should be disabled
-    const [products, setProducts] = useState([]);
 
     const [myProducts, setMyProducts] = useState([]);
 
@@ -37,8 +35,14 @@ export function useProducts (token) {
       .catch(e => {throw new Error("Error while posting the product: " + e.message)})
     }
 
-    function addProduct(product) {
-      return post(product).then(() => getProducts());
+    /**
+     * It adds a new product, defined from the attributes in the product object, which at the moment are
+     * 
+     * @param name name of the product
+     * @param cost price of the product
+     */
+    async function addProduct(product) {
+      return await post(product).then(() => getProducts());
     }
 
     async function deleteMethod(id) {
@@ -48,8 +52,11 @@ export function useProducts (token) {
         .catch(e => {throw new Error("Error while deleting the product " + id + ": " + e.message)})
       }
 
-    function deleteProduct(id) {
-        return deleteMethod(id).then(() => getProducts());
+    /**
+     * It deletes a product from its id
+     */
+    async function deleteProduct(id) {
+        return await deleteMethod(id).then(() => getProducts());
     }
     
 
@@ -69,19 +76,20 @@ export function useProducts (token) {
             const { data } = await axios.get(url, { withCredentials: true });
 
             if(!data.error) {
-                setProducts(data); 
                 setMyProducts(data); 
             }
 
         } catch (e) {
             console.log("Error: " + e.message);
 
-            setProducts([]); 
             setMyProducts([]); 
         }
 
     }
 
+    /**
+     * It retrieves the products, either those of the vendor or all of them in case is the customer asking them
+     */
     function getProducts() {
       get()
     }
@@ -93,8 +101,22 @@ export function useProducts (token) {
         return await axios.get(`/v1/products/${id}`, { withCredentials: true});
     }
 
+    /**
+     * It retrieves the products, either those of the vendor or all of them in case is the customer asking them,
+     *  but following the query asked
+     */
     async function postSearchQuery({query}) {
-      return axios.post('/v1/products/search',  {
+
+      let url = "/v1/products/";
+      const role = jwt_decode(token).role;
+
+      if(role === "vendor")
+        url += "mine/";
+
+      if(role === "customer")
+        url += "";
+
+      return axios.post(url + 'search',  {
               query: query
           },
           { withCredentials: true })
@@ -102,11 +124,14 @@ export function useProducts (token) {
           .catch((e) => {throw new Error(e.message)});
     }
 
+    /**
+     * It retrieves a specific product from its id
+     */
     async function getProduct(id) {
         return getAProduct(id)
         .then(({data}) => data)
         .catch((e) => {throw new Error(e.message)});
     }
     
-    return {products, myProducts, addProduct, deleteProduct, getProduct, postSearchQuery};
+    return {myProducts, addProduct, deleteProduct, getProduct, postSearchQuery};
 }

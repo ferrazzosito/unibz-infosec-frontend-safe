@@ -5,14 +5,22 @@ import jwt_decode from "jwt-decode";
 import * as React from "react";
 import store from 'store';
 
+/**
+ * This context keeps the user object and makes it available for every component 
+ */
 export const authContext = React.createContext();
 
+/**
+ * This custom hook handles everything that concerns the users
+ */
 export function useUser(token = null) {
 
     const [user, setUser] = useState(undefined);
     const cookies = new Cookies();
     
-
+    /**
+     * Get the user jwt token from the local storage to resume the session
+     */
     const retrieveFromStore = () => {
       
       const userStore = store.get('user');
@@ -28,12 +36,13 @@ export function useUser(token = null) {
     useEffect (() => {
       
       if(user !== undefined){
-        store.set('user', user);
-        cookies.set('jwt', user.accessToken, { path: '/' }); // da rimuove nella parte secure
+        store.set('user', user);// da rimuove nella parte secure
+        cookies.set('jwt', user.accessToken, { path: '/' }); 
       }
 
     }, [user])
 
+    
     async function log(email, password) {
 
       let data = {
@@ -56,6 +65,9 @@ export function useUser(token = null) {
       .catch(e => {throw new Error("Error while registering the user: " + e.message)})
     }
 
+    /**
+     * Allows to log the user in through email and password
+     */
     async function logUser(email, password) {
       return await log(email, password)
       .then(async response => {
@@ -70,7 +82,7 @@ export function useUser(token = null) {
       })
     }
 
-    async function register({/*name, lastName, */email, role, password /*, type*/ }) {
+    async function register({email, role, password }) {
 
       let data = {
         "email": email,
@@ -93,6 +105,9 @@ export function useUser(token = null) {
       .catch(e => {throw new Error("Error while registering the user: " + e.message)})
     }
 
+    /**
+     * Allows to sign up the user through email and password
+     */
     async function registerUser({/*name, lastName, */email, role, password /*, type*/}) {
       return await register({email, role, password});
     }
@@ -106,12 +121,18 @@ export function useUser(token = null) {
       return await axios.get(`/v1/users/${id}`, { withCredentials: true });
     }
 
+    /**
+     * Allows to get user informatino through their id
+     */
     async function findUser(id) {
         return await findAUser(id)
         .then(({data}) => data)
         .catch((e) => {throw new Error(e.message)});
     }
 
+    /**
+     * Allows to top up the user balance of a certain amount
+     */
     async function topUp(amount) {
       return await axios.post(`/v1/users/topup`, {
         balanceIncrease: amount
@@ -122,20 +143,6 @@ export function useUser(token = null) {
       });
     }
 
-    function reload() {
-      retrieveFromStore();
-    }
-
-    return {user, logUser, registerUser, logout/*, reload*/, findUser, topUp};
+    return {user, logUser, registerUser, logout, findUser, topUp};
 
 }
-
-// export function AuthProvider({ children }) {
-//   const auth = useUser();
-
-//   return <authContext.Provider value={auth}>{children}</authContext.Provider>;
-// }
-
-// export default function AuthConsumer() {
-//   return React.useContext(authContext);
-// }

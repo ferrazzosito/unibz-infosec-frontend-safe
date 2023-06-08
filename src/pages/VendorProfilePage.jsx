@@ -39,8 +39,6 @@ const VendorProfilePage = () => {
                         orders.length !== 0 ?       
                     
                         orders.map((ord) => {
-                            
-                            console.log(JSON.stringify(ord));
 
                             return (
                                 <Grid item xs={7}>
@@ -58,6 +56,7 @@ const VendorProfilePage = () => {
                                         idProd = {ord.productId}
                                         idOrder = {ord.id}
                                         approveOrderFunction={approveOrder}
+                                        approved={ord.approved}
                                     />
                                 </Grid>
                             )})
