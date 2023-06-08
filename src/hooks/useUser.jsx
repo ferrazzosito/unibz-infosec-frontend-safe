@@ -45,7 +45,6 @@ export function useUser(token = null) {
         method: 'post',
         maxBodyLength: Infinity,
         url: 'http://localhost:8080/auth/login',
-        withCredentials: true,
         headers: { 
           'Content-Type': 'application/json'
         },
@@ -83,7 +82,6 @@ export function useUser(token = null) {
         method: 'post',
         maxBodyLength: Infinity,
         url: 'http://localhost:8080/auth/register',
-        withCredentials: true,
         headers: { 
           'Content-Type': 'application/json'
         },
