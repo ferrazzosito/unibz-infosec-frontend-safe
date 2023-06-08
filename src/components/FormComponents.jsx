@@ -1,5 +1,5 @@
 
-import { TextField } from "@mui/material"
+import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 import { useState } from "react";
 import { TextareaAutosize } from '@mui/base';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -62,25 +62,28 @@ const TextArea = ({text, setText, placeholder}) => {
 
 }
 
-const NumericField = ({number, setNumber, title}) => {
+const NumericField = ({number, setNumber, title, inputProps}) => {
 
     const isFieldValid = (fieldVal) => (fieldVal !== '' && !isNaN(fieldVal) && fieldVal !== null)
 
     return (
-        <TextField
-            id="numeric-field"
+        <TextField id="filled-basic" 
+            onChange = {(val) => setNumber(+val.target.value)} 
             label={title}
-            variant="outlined"
-            onChange={(e) => setNumber(+e.target.value)}
+            variant="outlined" 
+            type="number" 
+            value={number}
             error = { !isFieldValid(number) }
+            InputLabelProps={{ shrink: true }} 
+            inputProps={inputProps}
             fullWidth
-            
         />
+
     )
+
 }
 
 const SearchField =  ({query, setQuery}) => {
-
     return (
         <TextField
             id="input-with-icon-textfield"
@@ -88,7 +91,7 @@ const SearchField =  ({query, setQuery}) => {
             InputProps={{
             startAdornment: (
                     <InputAdornment position="end">
-                        <Search />
+                        <Search/>
                     </InputAdornment>
                 ),
             }}
@@ -99,4 +102,27 @@ const SearchField =  ({query, setQuery}) => {
     )
 }
 
-export {EmailField, PasswordField, StringField, TextArea, NumericField, SearchField};
+const OptionsSelector = ({fieldTitle, options, selectedOption, setSelectedOption}) => {
+    const isFieldValid = (fieldVal) => (fieldVal !== undefined && fieldVal !== null && fieldVal !== "");
+    
+    return (
+        <FormControl fullWidth error = { !isFieldValid(selectedOption)}>
+            <InputLabel>{fieldTitle}</InputLabel>
+            <Select
+                id="options-selector"
+                variant="outlined"
+                value={selectedOption}
+                label={fieldTitle}
+                onChange={(e) => setSelectedOption(e.target.value)}
+            >
+                {
+                    options.map(option => 
+                        <MenuItem value={option}>{option}</MenuItem>
+                    )
+                }
+            </Select>
+        </FormControl>
+    )
+}
+
+export {EmailField, PasswordField, StringField, TextArea, NumericField, SearchField, OptionsSelector};

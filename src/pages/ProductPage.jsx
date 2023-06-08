@@ -8,26 +8,77 @@ import { useContext, useEffect, useState } from "react";
 import { authContext } from "../hooks/useUser";
 import { useReviews } from "../hooks/useReviews";
 
-const Review = ({id, title, description, stars, author, replyFromReviewId}) => (
-    <>
-        <Grid item container xs={9} spacing={7} justifyContent="center" >
-            <Grid item xs={12}>
-                <ReviewCard 
-                    rating = {`${stars} stars`}
-                    title = {title} 
-                    writer= {author} 
-                    description= {description}
-                    
-                    answer={
-                            replyFromReviewId === 0 ?
-                            <ReviewForm header="Answer to client's review" replyFromReviewId={id} isReply={true}/> :
-                            <></>
-                        }
-                />
+const Review = ({id, title, description, stars, author, replyFromReviewId, productId}) =>  {
+
+    const {user, logUser, registerUser, logout} = useContext(authContext); 
+
+    const authorId = user.payload.id;
+    
+    const {getReviewReply} = useReviews(user.accessToken);
+
+    const {createAReview} = useReviews(user.accessToken);
+
+    const [reply, setReply] = useState();
+
+    console.log(JSON.stringify(author));
+
+
+
+    const getReplyOfAReview = () => {
+
+        getReviewReply(id)
+        .then(result => {
+                if(!result || result.length === 0)
+                    setReply()
+                else {
+                    //TO CHANGE THIS IF RESULT IS NOT AN ARRAY ANYMORE
+                    const [res1 ] = result;
+                    setReply(res1);
+                }
+        })
+        .catch((e) => {setReply(); console.log(e.message)});
+
+    }
+
+    useEffect(getReplyOfAReview, []);
+
+    return  (
+        <>
+            <Grid item container xs={9} spacing={7} justifyContent="center" >
+                <Grid item xs={12}>
+                    <ReviewCard 
+                        rating = {`${stars} stars`}
+                        title = {title} 
+                        writer= {author} 
+                        description= {description}                        
+                        answer={
+
+                                !reply ?  
+
+                                    user.payload.role === "vendor" ? 
+                                    <ReviewForm header="Answer to client's review" 
+                                        replyFromReviewId={id} 
+                                        isReply={true}
+                                        onSubmitForm={(review) => {createAReview({...review, productId, authorId})
+                                                                .then((resp) => getReplyOfAReview())}}
+                                    /> 
+                                    : <></>
+
+                                :
+                                <ReviewCard 
+                                    title = {reply.title} 
+                                    writer= {reply.customer.email} 
+                                    description= {reply.description}              
+                                />
+                            }
+                    />
+                </Grid>
             </Grid>
-        </Grid>
-    </>
-)
+        </>
+    )
+}
+
+
 
 const ProductPage = () => {
 
@@ -35,12 +86,13 @@ const ProductPage = () => {
     const id = searchParams.get("id");
 
 
-    const {user} = useContext(authContext);    
+    const {user, findUser} = useContext(authContext);    
     const {getProduct} = useProducts(user.accessToken);
 
     const [product, setProduct] = useState({});
+    const [reviewsProd, setReviewsProd] = useState([]);
 
-    const {reviews, createAReview} = useReviews(user.accessToken);
+    const {reviews, createAReview, getProductReviews} = useReviews(user.accessToken);
 
     const authorId = user.payload.id;
     const productId = id;
@@ -50,8 +102,16 @@ const ProductPage = () => {
         getProduct(id)
         .then((result) => setProduct(result))
         .catch(e => setProduct({}));
+
+        getAllReviewsForTheProd();
         
-    }, [])
+    }, [id])
+
+    const getAllReviewsForTheProd = () => getProductReviews(id)
+                                        .then((result) => setReviewsProd(result) )
+                                        .catch(e => setReviewsProd([]));
+
+    
 
     return (
         <Grid container justifyContent="center" spacing={7} >
@@ -60,23 +120,45 @@ const ProductPage = () => {
             </Grid>
             <Grid item container xs={9} spacing={7} justifyContent="center" >
                 <Grid item xs={3}>
-                    <BasicProductCard type="" name={product.name} description="" price={product.cost} />
+                    <BasicProductCard  name={product.name}  vendorId = {product.vendorId} price={product.cost} />
                 </Grid>
             </Grid>
-            <ReviewForm header="Add a review to this product" replyFromReviewId={0} onSubmitForm={(review) => createAReview({...review, productId, authorId})} />
-            
-            {
-                reviews.map((review) => (
-                    <Review 
-                        id = {review.id}
-                        title = {review.title}
-                        description = {review.description}
-                        stars={review.stars}
-                        author={review.author}
-                        replyFromReviewId = {review.replyFromReviewId}
-                    />
-                ))
-            }
+            <Grid item container xs={12} justifyContent="center">
+                <Grid item  xs={9} >
+                    {
+                        user.payload.role === "customer" ?
+                        <ReviewForm header="Add a review to this product" replyFromReviewId={0} 
+                            onSubmitForm={(review) => createAReview({...review, productId, authorId})
+                            .then(() => getAllReviewsForTheProd())} />
+                        : <></>
+                    }
+                </Grid>
+            </Grid>
+            <Grid item container xs={12} justifyContent="center">
+                
+                {
+
+                        reviewsProd.length !== 0 ?
+
+                        //they are filtered such that we take at first only the reviews which are not answers of other reviews
+                            reviewsProd.filter(rev => rev.replyFromReviewId === 0).map((review) => {
+
+                                
+                                return (
+                                <Review 
+                                    id = {review.id}
+                                    title = {review.title}
+                                    description = {review.description}
+                                    stars={review.stars}
+                                    author={review.customer.email}
+                                    replyFromReviewId = {review.replyFromReviewId}
+                                    productId = {productId}
+                                />
+                            )})
+                        
+                        : <h1 style={{marginTop: "40px"}}>No Reviews To Display</h1>
+                }
+            </Grid>
 
             {/* <Review />
             <Review /> */}

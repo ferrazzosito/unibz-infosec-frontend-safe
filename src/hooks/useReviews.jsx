@@ -7,9 +7,20 @@ export function useReviews (token) {
     //as well as setProducts for clients should be disabled
     const [reviews, setReviews] = useState([]);
 
+    async function postCreateQuery({query}) {
+      return axios.post('/v1/reviews/search',  {
+              query: query
+          },
+          { 
+              headers: {"Authorization" : `Bearer ${token}`} 
+          })
+          .then(message => message)
+          .catch((e) => {throw new Error(e.message)});
+      }
 
     async function post({title, description, stars, replyFromReviewId, productId, authorId}) {
-
+      
+      
       let data = {
         "title": title,
         "description": description,
@@ -38,18 +49,25 @@ export function useReviews (token) {
       .catch(e => {throw new Error("Error while creating the review: " + e.message)})
     }
 
-    function createAReview({title, description, stars, replyFromReviewId, productId, authorId}) {
-      return post({title, description, stars, replyFromReviewId, productId, authorId})
+    async function createAReview({title, description, stars, replyFromReviewId, productId, authorId}) {
+      return await post({title, description, stars, replyFromReviewId, productId, authorId})
         .then(() => getReviews());
     }
 
     async function get() {
 
-        const { data } = await axios.get('/v1/reviews/getAll', { headers: {"Authorization" : `Bearer ${token}`} });
+        try {
+          const { data } = await axios.get('/v1/reviews/getAll', { headers: {"Authorization" : `Bearer ${token}`} });
 
-        if(!data.error) {
-            setReviews(data); 
-        }
+          if(!data.error) {
+              setReviews(data); 
+          }
+
+      } catch (e) {
+          console.log("Error: " + e.message);
+
+          setReviews([]); 
+      }
 
     }
 
@@ -58,6 +76,25 @@ export function useReviews (token) {
     }
 
     useEffect(getReviews, []);
+
+
+  async function getReviewReply(idReview) {
+
+    const {data} = await 
+      axios.get(`/v1/reviews/${idReview}/replies`, { headers: {"Authorization" : `Bearer ${token}`} })
+      .catch(e => {throw new Error("Error while getting the review reply: " + e.message)});
+
+    return data;
+
+  }
+
+  async function getProductReviews (idProd) {
+    const {data} = await 
+      axios.get(`/v1/products/${idProd}/reviews`, { headers: {"Authorization" : `Bearer ${token}`} })
+      .catch(e => {throw new Error("Error while getting the reviews of the product: " + e.message)});
+
+    return data;
+  }
     
-    return {reviews, createAReview};
+    return {reviews, createAReview, getReviewReply, getProductReviews};
 }

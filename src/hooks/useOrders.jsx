@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import {client as axios} from '../utils/axios'
+import {client as axios} from '../utils/axios';
+import jwt_decode from "jwt-decode";
 
 export function useOrders (token) {
 
@@ -7,6 +8,39 @@ export function useOrders (token) {
     //as well as setProducts for clients should be disabled
     const [orders, setOrders] = useState([]);
 
+    async function get() {
+
+      let url = "/v1/orders/";
+      const role = jwt_decode(token).role;
+
+      if(role === "customer")
+        url += "mine";
+
+      if(role === "vendor")
+        url += "sold";
+
+        
+        try {
+          const { data } = await axios.get(url, { headers: {"Authorization" : `Bearer ${token}`} });
+          
+          
+          if(!data.error) {
+            setOrders(data); 
+          }
+
+      } catch (e) {
+          console.log("Error: " + e.message);
+
+          setOrders([]);  
+      }
+
+    }
+
+  function getOrders() {
+    get()
+  }
+
+  useEffect( () => getOrders(), []);
 
     async function post(idProduct, idUser) {
 
@@ -26,14 +60,33 @@ export function useOrders (token) {
         data : JSON.stringify(data)
       };
 
-      return axios.request(config)
+      return await axios.request(config)
       .then(response => JSON.stringify(response.data))
-      .catch(e => {throw new Error("Error while creating the order: " + e.message)})
+      .catch(e => {throw new Error("Insufficient money")})
     }
 
-    function makeAnOrder(idProduct, idUser) {
-      return post(idProduct, idUser);
+    async function makeAnOrder(idProduct) {
+      return await post(idProduct)
+    }
+
+    async function approveOrder(idOrder) {
+     
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `http://localhost:8080/v1/orders/${idOrder}/approve`,
+        headers: { 
+          'Content-Type': 'application/json',
+          "Authorization" : `Bearer ${token}`
+        },
+        data : JSON.stringify({})
+      };
+
+      return await axios.request(config)
+        .then(response => { getOrders(); return JSON.stringify(response.data)})
+        .catch(e => {throw new Error("Error while approving the order: " + e.message)})
+
     }
     
-    return {makeAnOrder};
+    return {orders, makeAnOrder, approveOrder};
 }

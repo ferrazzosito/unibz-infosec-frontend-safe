@@ -1,29 +1,97 @@
-import { Grid } from "@mui/material";
-import { BasicProductCard, BuyerProductCard, OrderCard, VendorProductCard } from "../fragments/ProductCards";
+import { Grid, List } from "@mui/material";
+import { Widget, toggleInputDisabled, addResponseMessage, toggleWidget } from 'react-chat-widget';
+import { BasicProductCard, BuyerProductCard, OrderCard, VendorProductCard, ChatRequestCard } from "../fragments/ProductCards";
 import { Title } from "../components/Typography";
 import { ProductForm } from "../fragments/Forms";
 import { useUser } from "../hooks/useUser";
 // import AuthConsumer from "../hooks/useUser";
 import { ConfirmationButton } from "../components/Buttons";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { authContext } from "../hooks/useUser";
 import { useEffect } from "react";
 import { useProducts } from "../hooks/useProducts";
+import { useNavigate } from "react-router";
+import { useChat } from "../hooks/useChat";
+import { openChatSession } from "../util/chat";
+import { createRef } from "react";
+import { UnsafeSearchBar } from "../fragments/SearchBar";
 
 const VendorHomePage = ({value}) => {
 
     const {user, logUser, registerUser, logout} = useContext(authContext);    
-    // reload();
+    const {addProduct, deleteProduct, postSearchQuery} = useProducts(user.accessToken);
+    
+    const {chatRequests} = useChat(user.accessToken, "vendor");
+    const [functionsManageChat, setFunctionsManageChat] = useState();
 
-    // useEffect( () => {
-    //     console.log(user)
-    //     // console.log(JSON.stringify(user && user.accessToken))  
-    // }, [])
+    const navigate = useNavigate();
+    const redirect = () => navigate("/my-profile-vendor");
 
-    const {products, myProducts, addProduct, deleteProduct} = useProducts(user.accessToken);
+    const openChat = (chatId) => {
+        toggleInputDisabled();
+        const [sendMsg, closeChat] = openChatSession(
+            chatId, 
+            false,
+            () => {}, 
+            (ws) => toggleInputDisabled(), 
+            (ws, text) => {
+                console.log(text);
+                addResponseMessage(text);
+            },
+            () => {
+                toggleInputDisabled();
+                toggleWidget();
+            }, 
+            () => {
+                throw new Error("error while communicating")
+            }
+        );
+        setFunctionsManageChat([ sendMsg, closeChat ]);
+    };
+
+    // const getCustomLauncher = (handleToggle) => (
+    //     <ConfirmationButton title="CHAT WITH CUSTOMER" onClick={() => {
+    //         if (functionsManageChat) {
+    //             handleToggle();
+    //             setFunctionsManageChat();
+    //             const [sendMsg, closeChat] = functionsManageChat;
+    //             closeChat();
+    //         }
+    //     }}/>
+    // );
+
+    const handleChatInput = (message) => {
+        const [sendMsg, closeChat] = functionsManageChat;
+        sendMsg(message);
+    };
+
+    const [query, setQuery] = useState("");
+    const [qresponse, setQresponse] = useState({data: {query: "", results : []} });
+
+    useEffect(() => {
+        const performSearch = async () => {
+          try {
+            const response = await postSearchQuery({ query });
+            setQresponse(response);
+            console.log('Search results:', JSON.stringify(response));
+          } catch (error) {
+            console.log('Error:', error);
+          }
+        }; 
+      
+        // if (query !== "") {
+          performSearch();
+        // }
+      }, [query]);
+    //TODO: should this be done through a backend call, to retrieve fewer objects?
+    // const queriedProducts = () => myProducts.filter((prod) => (prod.name.indexOf(qresponse.data.query) >= 0));
+
+    // const usedProducts = queriedProducts();
 
     return (
         <Grid container justifyContent="center" >
+            <Widget 
+                handleNewUserMessage={handleChatInput} />
             <Grid item xs={12}>
                 <Title text="Home Page" />
             </Grid>
@@ -32,72 +100,65 @@ const VendorHomePage = ({value}) => {
                     <ProductForm  onSubmitForm={addProduct}/>
                 </Grid>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} marginTop={8}>
                 <Title text="Your Products" />
             </Grid>
+            <Grid item xs={12}>
+                <UnsafeSearchBar query={qresponse.data.query} setQuery={setQuery}/>
+            </Grid>
             <Grid item container xs={9} spacing={7} justifyContent="center" >
-                {/* <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
-                <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
-                <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
-                <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
-                <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid>
-                <Grid item xs={3}>
-                    <VendorProductCard type="vulnerability" name="Salt in Passwords" price="15$" description="lorem ipsum lorem ipsum lorem ipsum" />
-                </Grid> */}
                 {
-                myProducts.map((prod) => (
+
+                        qresponse.data.results.length !== 0 ?
+
+                        qresponse.data.results.map((prod) => (
                         <Grid item xs={3}>
                             <VendorProductCard /*type={prod.type}*/ 
                                 id={prod.id}
                                 price={prod.cost} 
                                 name={prod.name} 
+                                vendorName = {user.payload.sub}
                                 description={prod.description}
                                 deleteFunction={deleteProduct}
                             />
                         </Grid>
                     ))
-                    }
+
+                    : <h1 style={{marginTop: "70px"}}>No Products To Display</h1>
+                }
             </Grid>
-            <Grid item xs={12}>
-                <Title text="Your Sellings" />
+
+            <Grid item xs={12} marginTop={8}>
+                <Title text="Your chat requests" />
             </Grid>
-            <Grid item container xs={12} justifyContent="center" spacing={7}>
-                <Grid item container xs={12} justifyContent="center"> 
-                    <Grid item xs={7}>
-                        <OrderCard
-                            basicProductCard={ <BasicProductCard type="vulnerability" name="Salt in Passwords" description="lorem ipsum lorem ipsum lorem ipsum" />}
-                            buyer="Alessandro"
-                            date="10/20/2024"
-                        />
-                    </Grid>
-                </Grid>
-                <Grid item container xs={12} justifyContent="center"> 
-                    <Grid item xs={7}>
-                        <OrderCard
-                            basicProductCard={ <BasicProductCard type="vulnerability" name="Salt in Passwords" description="lorem ipsum lorem ipsum lorem ipsum" />}
-                            buyer="Alessandro"
-                            date="10/20/2024"
-                        />
-                    </Grid>
-                </Grid>
-                <Grid item container xs={12} justifyContent="center"> 
-                    <Grid item xs={7}>
-                        <OrderCard
-                            basicProductCard={ <BasicProductCard type="vulnerability" name="Salt in Passwords" description="lorem ipsum lorem ipsum lorem ipsum" />}
-                            buyer="Alessandro"
-                            date="10/20/2024"
-                        />
-                    </Grid>
+            <Grid item container xs={9} spacing={7} justifyContent="center">
+            {
+
+                chatRequests.length !== 0 ? 
+
+                    chatRequests.map((request) => (
+                            <Grid item xs={3}>
+                                <ChatRequestCard
+                                    chatId={request.chatId}
+                                    customerId={request.customer.email}
+                                    openChat={() => {
+                                        toggleWidget();
+                                        openChat(request.chatId);
+                                    }}
+                                    
+                                />
+                            </Grid>
+                        ))
+
+                : <h1 style={{marginTop: "40px"}}>No Chat Requests Yet</h1>
+                
+            }
+            </Grid>
+            <Grid item container xs={12} justifyContent="center">
+                <Grid item xs={7}>
+                    <ConfirmationButton title={"My Account"} onClick={() => { 
+                        redirect()
+                    }} />
                 </Grid>
             </Grid>
             <Grid item container xs={12} justifyContent="center">

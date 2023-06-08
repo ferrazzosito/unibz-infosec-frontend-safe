@@ -1,32 +1,17 @@
 import { useState, useEffect } from 'react';
 import {client as axios} from '../utils/axios';
+import Cookies from 'universal-cookie';
 import jwt_decode from "jwt-decode";
 import * as React from "react";
 import store from 'store';
 
 export const authContext = React.createContext();
 
-export function useUser () {
+export function useUser(token = null) {
 
     const [user, setUser] = useState(undefined);
-
-    // useEffect(() => {
-
-    //   if(user !== undefined)
-    //     store.set('user', user);
-
-    //   // console.log("user:" + JSON.stringify(store.get('user')));
-    // }, [user]);
-
-    // useEffect(() => {
-    //   const userStore = store.get('user');
-
-    //   // console.log(JSON.stringify(userStore));
-
-    //   if (userStore) {
-    //    setUser(userStore);
-    //   }
-    // }, []); 
+    const cookies = new Cookies();
+    
 
     const retrieveFromStore = () => {
       
@@ -42,8 +27,10 @@ export function useUser () {
 
     useEffect (() => {
       
-      if(user !== undefined)
+      if(user !== undefined){
         store.set('user', user);
+        cookies.set('jwt', user.accessToken, { path: '/' }); // da rimuove nella parte secure
+      }
 
     }, [user])
 
@@ -70,23 +57,25 @@ export function useUser () {
     }
 
     async function logUser(email, password) {
-      await log(email, password)
+      return await log(email, password)
       .then(async response => {
         
         setUser({
           accessToken : response.accessToken,
           payload: jwt_decode(response.accessToken)
-        })
+        });
+
+        return {payload: jwt_decode(response.accessToken)};
   
       })
     }
 
-    async function register({/*name, lastName, */email, password /*, type*/ }) {
+    async function register({/*name, lastName, */email, role, password /*, type*/ }) {
 
       let data = {
         "email": email,
         "password": password,
-        "role" : "customer"
+        "role" : role
       };
       
       let config = {
@@ -104,19 +93,42 @@ export function useUser () {
       .catch(e => {throw new Error("Error while registering the user: " + e.message)})
     }
 
-    async function registerUser({/*name, lastName, */email, password /*, type*/}) {
-      return await register({email, password});
+    async function registerUser({/*name, lastName, */email, role, password /*, type*/}) {
+      return await register({email, role, password});
     }
 
     function logout () {
       setUser({});
     }
 
+    async function findAUser(id) {
+      console.log(user.accessToken);
+      return await axios.get(`/v1/users/${id}`, { headers: {"Authorization" : `Bearer ${user.accessToken}`} });
+    }
+
+    async function findUser(id) {
+        return await findAUser(id)
+        .then(({data}) => data)
+        .catch((e) => {throw new Error(e.message)});
+    }
+
+    async function topUp(amount) {
+      return await axios.post(`/v1/users/topup`, {
+        balanceIncrease: amount
+      }, {
+        headers: {
+          Authorization: `Bearer ${token || user.accessToken}`
+        }
+      }).then(({data}) => data).catch(err => {
+        throw new Error(err.message);
+      });
+    }
+
     function reload() {
       retrieveFromStore();
     }
 
-    return {user, logUser, registerUser, logout/*, reload*/};
+    return {user, logUser, registerUser, logout/*, reload*/, findUser, topUp};
 
 }
 

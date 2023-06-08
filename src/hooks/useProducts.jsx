@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import {client as axios} from '../utils/axios'
+import {client as axios} from '../utils/axios';
+import jwt_decode from "jwt-decode";
+
 
 export function useProducts (token) {
 
@@ -53,8 +55,17 @@ export function useProducts (token) {
 
     async function get() {
 
+      let url = "/v1/products/";
+      const role = jwt_decode(token).role;
+
+      if(role === "vendor")
+        url += "mine";
+
+      if(role === "customer")
+        url += "getAll";
+
         try {
-            const { data } = await axios.get('/v1/products/getAll', { headers: {"Authorization" : `Bearer ${token}`} });
+            const { data } = await axios.get(url, { headers: {"Authorization" : `Bearer ${token}`} });
 
             if(!data.error) {
                 setProducts(data); 
@@ -81,11 +92,32 @@ export function useProducts (token) {
         return await axios.get(`/v1/products/${id}`, { headers: {"Authorization" : `Bearer ${token}`} });
     }
 
+    async function postSearchQuery({query}) {
+
+      let url = "/v1/products/";
+      const role = jwt_decode(token).role;
+
+      if(role === "vendor")
+        url += "mine/";
+
+      if(role === "customer")
+        url += "";
+
+      return axios.post(url + 'search',  {
+              query: query
+          },
+          { 
+              headers: {"Authorization" : `Bearer ${token}`} 
+          })
+          .then(message => message)
+          .catch((e) => {throw new Error(e.message)});
+    }
+
     async function getProduct(id) {
         return getAProduct(id)
         .then(({data}) => data)
         .catch((e) => {throw new Error(e.message)});
     }
     
-    return {products, myProducts, addProduct, deleteProduct, getProduct};
+    return {products, myProducts, addProduct, deleteProduct, getProduct, postSearchQuery};
 }

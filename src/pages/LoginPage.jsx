@@ -9,7 +9,7 @@ const LoginPage = () => {
 
     const navigate = useNavigate();
 
-    const redirect = () => navigate("/");
+    const redirect = (role) => role === "customer" ? navigate("/") : (role === "vendor" ? navigate("/selling") : navigate("/login"));
 
     const {user, logUser, registerUser, logout} = useContext(authContext);   
     
@@ -18,7 +18,7 @@ const LoginPage = () => {
     useEffect( () => {
         
         if(user && user.accessToken)
-            redirect();
+            redirect(user.payload.role);
         
     }, [])
 
