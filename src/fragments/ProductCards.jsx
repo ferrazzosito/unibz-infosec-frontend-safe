@@ -12,41 +12,6 @@ import { useContext } from 'react';
 import { authContext } from '../hooks/useUser';
 import xss from 'xss';
 
-// const ContentProductCard = ({type, name, price, vendorName, vendorId, description, isVendor = false}) => {
-    
-//     const navigate = useNavigate();
-//     const redirectVendorPage = () => navigate(`/vendor?id=${vendorId}`);
-
-//     return(
-//     <CardContent>
-//         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-//             {type}
-//         </Typography>
-//         <Typography variant="h5" component="div">
-//             {name}
-//         </Typography>
-//         <Typography variant="h5" sx={{ mb: 1.5 }} color="text.secondary">
-//             {price} €
-//         </Typography>
-//         {
-//             isVendor ? 
-//                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-//                     by vendor {vendorName}
-//                 </Typography>
-//             :
-//             <span onClick = {() => redirectVendorPage()} style={{textDecorationLine : "underline", cursor: "pointer"}}>
-//                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-//                     by vendor {vendorName}
-//                 </Typography>
-//             </span>
-//         }
-//         <Typography variant="body2">
-//             {description}
-//         <br />
-//         </Typography>
-//     </CardContent>
-// )}
-
 /**
  * Component that represents the content of the product card.
  * React has a built-in XSS sanification so we call unsafe those components in which we use special React functions to avoid its built-in sanification

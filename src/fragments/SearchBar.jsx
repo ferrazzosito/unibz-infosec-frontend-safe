@@ -4,26 +4,6 @@ import {Typography} from "@mui/material";
 import React, { useState, useEffect } from 'react';
 import xss from "xss";
 
-// const SearchBar = ({query, setQuery}) => {
-//     return (
-//         <Grid container justifyContent="center" >
-//             <Grid item container justifyContent="center" xs={12} style={{margin: "10 0 0 5"}}>
-//                 <Grid item xs={6}>
-//                     <SearchField  query = {query} setQuery =  {setQuery} />
-//                 </Grid>
-//             </Grid>
-//             <Grid item container justifyContent="center" xs={12} style={{margin: "5 0 0 5"}}>
-//                 <Grid item xs={6}>
-//                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
-//                         results shown for: {query}
-//                     </Typography>
-//                 </Grid>
-//             </Grid>
-//         </Grid>
-//     );
-// }
-
-
 /**
  * Component representing the search bar.
  * React has a built-in XSS sanification so we call unsafe those components in which we use special React functions to avoid its built-in sanification
