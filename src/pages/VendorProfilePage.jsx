@@ -21,7 +21,6 @@ const VendorProfilePage = () => {
     const {user, logUser, registerUser, logout} = useContext(authContext);     
 
     const {orders, approveOrder} = useOrders(user.accessToken);
-    // const {reviews} = useReviews(user.accessToken);
 
     const navigate = useNavigate();
     const redirect = () => navigate("/");
@@ -58,14 +57,11 @@ const VendorProfilePage = () => {
                                     <OrderCard
                                         basicProductCard={ 
                                             <BasicProductCard 
-                                                // type="vulnerability" 
                                                 name={ord.product.name}
                                                 price={ord.product.cost}
                                                 vendorId={user.payload.id}
-                                                // escription="lorem ipsum lorem ipsum lorem ipsum" 
                                             />}
                                         buyer={ord.customer.email}
-                                            // date="10/20/2024"
                                         idProd = {ord.productId}
                                         idOrder = {ord.id}
                                         approveOrderFunction={(id) => approveOrder(id).catch((e) => setErrorAlert("The customer doesn't have enough money"))}

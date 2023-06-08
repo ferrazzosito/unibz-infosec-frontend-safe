@@ -18,25 +18,10 @@ import { TopUpMoneyForm } from "../fragments/Forms";
 
 const ProdCard = ({prodName, prodPrice, vendorId}) =>{
 
-    // const [vendorId, setVendorId] = useState(1);
-
-    // useEffect(
-    //     () => {
-    //         getProduct(prodId)
-    //         .then (resp => {
-    //             // console.log(JSON.stringify(resp))
-    //             setVendorId(resp.vendorId)});
-    //     }, []
-    // )
-
-    // console.log(vendorId);
-
     return (<BasicProductCard 
-        // type="vulnerability" 
         name={prodName}
         price = {prodPrice}
         vendorId={vendorId}
-        // escription="lorem ipsum lorem ipsum lorem ipsum" 
     />)
 }
 
@@ -95,7 +80,6 @@ const BuyerProfilePage = () => {
                                     buyer="you"
                                     role={user.payload.role}
                                     approved={ord.approved}
-                                        // date="10/20/2024"
                                     idProd = {ord.productId}
                                 />
                             </Grid>

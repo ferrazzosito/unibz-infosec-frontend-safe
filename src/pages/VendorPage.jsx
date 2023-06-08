@@ -105,7 +105,6 @@ const VendorPage = () => {
     )
         
     const handleNewUserMessage = (newMessage) => {
-        // console.log(`New message incoming! ${newMessage}`);
         // Now send the message throught the backend API
         const [sendMsg, closeChat] = functionsManageChat;
 
@@ -118,7 +117,6 @@ const VendorPage = () => {
             <Grid container justifyContent="center" >
 
             <Widget 
-            //se non vanno prova a passare le cose come prop qui
                 launcher={handleToggle => getCustomLauncher(handleToggle)} 
                 handleNewUserMessage={handleNewUserMessage}
                 
