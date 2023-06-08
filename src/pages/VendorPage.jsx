@@ -37,7 +37,6 @@ const VendorPage = () => {
     const navigate = useNavigate();
     const redirect = () => navigate("/");
     
-    
     const [searchParams, setSearchParams] = useSearchParams();
     const id = searchParams.get("id");
 

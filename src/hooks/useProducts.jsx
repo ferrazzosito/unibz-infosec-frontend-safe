@@ -22,9 +22,10 @@ export function useProducts (token) {
         method: 'post',
         maxBodyLength: Infinity,
         url: 'http://localhost:8080/v1/products/create',
+        withCredentials: true,
         headers: { 
-          'Content-Type': 'application/json',
-          "Authorization" : `Bearer ${token}`
+          'Content-Type': 'application/json'
+         
         },
         data : JSON.stringify(data)
       };
@@ -46,7 +47,7 @@ export function useProducts (token) {
 
     async function deleteMethod(id) {
 
-        return await axios.get(`/v1/products/delete/${id}`, { headers: {"Authorization" : `Bearer ${token}`} })
+        return await axios.get(`/v1/products/delete/${id}`, { withCredentials: true })
         .then(response => JSON.stringify(response.data))
         .catch(e => {throw new Error("Error while deleting the product " + id + ": " + e.message)})
       }
@@ -72,7 +73,7 @@ export function useProducts (token) {
         url += "getAll";
 
         try {
-            const { data } = await axios.get(url, { headers: {"Authorization" : `Bearer ${token}`} });
+            const { data } = await axios.get(url, { withCredentials: true });
 
             if(!data.error) {
                 setMyProducts(data); 
@@ -97,7 +98,7 @@ export function useProducts (token) {
 
     async function getAProduct(id) {
 
-        return await axios.get(`/v1/products/${id}`, { headers: {"Authorization" : `Bearer ${token}`} });
+        return await axios.get(`/v1/products/${id}`, { withCredentials: true});
     }
 
     /**
@@ -118,9 +119,7 @@ export function useProducts (token) {
       return axios.post(url + 'search',  {
               query: query
           },
-          { 
-              headers: {"Authorization" : `Bearer ${token}`} 
-          })
+          { withCredentials: true })
           .then(message => message)
           .catch((e) => {throw new Error(e.message)});
     }

@@ -17,9 +17,9 @@ export function useChat (token, type = "customer") {
         method: 'post',
         maxBodyLength: Infinity,
         url: 'http://localhost:8080/v1/chats/request',
+        withCredentials: true,
         headers: { 
-          'Content-Type': 'application/json',
-          "Authorization" : `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         data : JSON.stringify(data)
       };
@@ -44,9 +44,7 @@ export function useChat (token, type = "customer") {
    */
     async function getChatRequests() {
       return await axios.get(`/v1/chats/requests`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        withCredentials: true
       }).then(res => res.data);
     }
 

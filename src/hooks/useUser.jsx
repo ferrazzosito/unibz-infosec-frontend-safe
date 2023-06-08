@@ -118,7 +118,7 @@ export function useUser(token = null) {
 
     async function findAUser(id) {
       console.log(user.accessToken);
-      return await axios.get(`/v1/users/${id}`, { headers: {"Authorization" : `Bearer ${user.accessToken}`} });
+      return await axios.get(`/v1/users/${id}`, { withCredentials: true });
     }
 
     /**
@@ -137,9 +137,7 @@ export function useUser(token = null) {
       return await axios.post(`/v1/users/topup`, {
         balanceIncrease: amount
       }, {
-        headers: {
-          Authorization: `Bearer ${token || user.accessToken}`
-        }
+        withCredentials: true
       }).then(({data}) => data).catch(err => {
         throw new Error(err.message);
       });
