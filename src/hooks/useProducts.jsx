@@ -24,8 +24,8 @@ export function useProducts (token) {
         url: 'http://localhost:8080/v1/products/create',
         withCredentials: true,
         headers: { 
-          'Content-Type': 'application/json'
-         
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': jwt_decode(token).csrf
         },
         data : JSON.stringify(data)
       };
@@ -117,11 +117,13 @@ export function useProducts (token) {
         url += "";
 
       return axios.post(url + 'search',  {
-              query: query
-          },
-          { withCredentials: true })
-          .then(message => message)
-          .catch((e) => {throw new Error(e.message)});
+        query: query
+      }, { 
+        withCredentials: true,
+        headers: {
+          'X-CSRF-Token': jwt_decode(token).csrf
+        } 
+      }).then(message => message).catch((e) => {throw new Error(e.message)});
     }
 
     /**
