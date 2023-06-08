@@ -60,7 +60,8 @@ export function useOrders (token) {
         url: 'http://localhost:8080/v1/orders/create',
         withCredentials: true,
         headers: { 
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': jwt_decode(token).csrf
         },  
         data : JSON.stringify(data)
       };
@@ -88,7 +89,8 @@ export function useOrders (token) {
         url: `http://localhost:8080/v1/orders/${idOrder}/approve`,
         withCredentials: true,
         headers: { 
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': jwt_decode(token).csrf
         },
         data : JSON.stringify({})
       };
