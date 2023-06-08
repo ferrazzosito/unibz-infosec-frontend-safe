@@ -34,7 +34,7 @@ const VendorHomePage = ({value}) => {
         toggleInputDisabled();
         const [sendMsg, closeChat] = openChatSession(
             chatId, 
-            false,
+            true,
             () => {}, 
             (ws) => toggleInputDisabled(), 
             (ws, text) => {
