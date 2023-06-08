@@ -16,8 +16,7 @@ export function useChat (token, type = "customer") {
         url: 'http://localhost:8080/v1/chats/request',
         withCredentials: true,
         headers: { 
-          'Content-Type': 'application/json',
-          "Cookie": `jwt=${token}`
+          'Content-Type': 'application/json'
         },
         data : JSON.stringify(data)
       };
@@ -34,10 +33,7 @@ export function useChat (token, type = "customer") {
 
     async function getChatRequests() {
       return await axios.get(`/v1/chats/requests`, {
-        withCredentials: true,
-        headers: {
-          "Cookie": `jwt=${token}`
-        }
+        withCredentials: true
       }).then(res => res.data);
     }
 

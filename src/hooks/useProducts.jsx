@@ -26,8 +26,8 @@ export function useProducts (token) {
         url: 'http://localhost:8080/v1/products/create',
         withCredentials: true,
         headers: { 
-          'Content-Type': 'application/json',
-          "Cookie": `jwt=${token}`
+          'Content-Type': 'application/json'
+         
         },
         data : JSON.stringify(data)
       };
@@ -43,7 +43,7 @@ export function useProducts (token) {
 
     async function deleteMethod(id) {
 
-        return await axios.get(`/v1/products/delete/${id}`, { withCredentials: true, headers: {"Cookie": `jwt=${token}`} })
+        return await axios.get(`/v1/products/delete/${id}`, { withCredentials: true })
         .then(response => JSON.stringify(response.data))
         .catch(e => {throw new Error("Error while deleting the product " + id + ": " + e.message)})
       }
@@ -66,7 +66,7 @@ export function useProducts (token) {
         url += "getAll";
 
         try {
-            const { data } = await axios.get(url, { withCredentials: true, headers: {"Cookie": `jwt=${token}`} });
+            const { data } = await axios.get(url, { withCredentials: true });
 
             if(!data.error) {
                 setProducts(data); 
@@ -90,14 +90,14 @@ export function useProducts (token) {
 
     async function getAProduct(id) {
 
-        return await axios.get(`/v1/products/${id}`, { withCredentials: true, headers: {"Cookie": `jwt=${token}`} });
+        return await axios.get(`/v1/products/${id}`, { withCredentials: true});
     }
 
     async function postSearchQuery({query}) {
       return axios.post('/v1/products/search',  {
               query: query
           },
-          { withCredentials: true, headers: {"Cookie": `jwt=${token}`} })
+          { withCredentials: true })
           .then(message => message)
           .catch((e) => {throw new Error(e.message)});
     }
