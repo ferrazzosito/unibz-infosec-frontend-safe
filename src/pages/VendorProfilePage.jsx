@@ -14,6 +14,7 @@ import { authContext } from "../hooks/useUser";
 import { useOrders } from "../hooks/useOrders";
 import { OrderCard } from "../fragments/ProductCards";
 import { useReviews } from "../hooks/useReviews";
+import { ErrorAlert } from "../components/Alerts";
 
 const VendorProfilePage = () => {
 
@@ -24,7 +25,14 @@ const VendorProfilePage = () => {
 
     const navigate = useNavigate();
     const redirect = () => navigate("/");
-    
+
+    const [errorAlert, setErrorAlert] = useState();
+
+    useEffect(() => {
+
+        setErrorAlert();
+        
+    }, [orders])    
     
 
     return (
@@ -32,6 +40,11 @@ const VendorProfilePage = () => {
             <Grid item xs={12}>
                 <Title text="Your Sellings" />
             </Grid>
+            {
+                errorAlert ?
+                    <ErrorAlert message={errorAlert} />
+                : <></>
+            }
             <Grid item container xs={12} justifyContent="center" spacing={7}>
                 <Grid item container xs={12} justifyContent="center"> 
                     {
@@ -55,7 +68,7 @@ const VendorProfilePage = () => {
                                             // date="10/20/2024"
                                         idProd = {ord.productId}
                                         idOrder = {ord.id}
-                                        approveOrderFunction={approveOrder}
+                                        approveOrderFunction={(id) => approveOrder(id).catch((e) => setErrorAlert("The customer doesn't have enough money"))}
                                         approved={ord.approved}
                                     />
                                 </Grid>
