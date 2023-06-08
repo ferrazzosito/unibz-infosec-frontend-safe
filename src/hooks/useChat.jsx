@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import {client as axios} from '../utils/axios'
+import jwt_decode from "jwt-decode";
 
 /**
  * This custom hook handles everything that concerns the chats
@@ -19,7 +20,8 @@ export function useChat (token, type = "customer") {
         url: 'http://localhost:8080/v1/chats/request',
         withCredentials: true,
         headers: { 
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': jwt_decode(token).csrf
         },
         data : JSON.stringify(data)
       };
