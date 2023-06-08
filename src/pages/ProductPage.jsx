@@ -78,8 +78,6 @@ const Review = ({id, title, description, stars, author, replyFromReviewId, produ
     )
 }
 
-
-
 const ProductPage = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();

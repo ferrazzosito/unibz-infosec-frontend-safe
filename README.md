@@ -1,70 +1,120 @@
-# Getting Started with Create React App
+#  Vulnerabilities Store User Guide
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Installation
 
-## Available Scripts
 
-In the project directory, you can run:
+### Prerequisites 
 
-### `npm start`
+To set up the enviroment for this project you need to have installed on your system
+- [Maven](https://maven.apache.org/download.cgi)
+- [NodeJs](https://nodejs.org/en/download)
+- [PostgreSQL](https://www.postgresql.org/download/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Remember that on Windows to be able to use their commands, you need to add the Enviroment Variables.  
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Set up the Frontend
 
-### `npm test`
+Download the frontend at the frontend repository   
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+[https://github.com/ferrazzosito/unibz-infosec-frontend](https://github.com/ferrazzosito/unibz-infosec-frontend) 
+  
+using `git clone`  
+  
+then run   
+  
+```bash
+npm install
+```
 
-### `npm run build`
+then you are good to go. You can run  
+  
+```bash
+npm start
+```
+  
+and find in at [http://localhost:3000](http://localhost:3000/) the frontend but keep in mind that it needs also the backend to work, so it won't do anything now.  
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Set up the Database   
+  
+First of all create an empty database using postgres and gives the name you prefer  .
+You can do so, first, by running the following command to open PSQL command-line tool  
+  
+```bash
+psql -U < pgsql_username >
+``` 
+where username is your username of postgresql.
+  
+Now when prompted insert your postgresql password.
+Run a CREATE DATABASE command to create the new Database
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```sql
+CREATE DATABASE < database_name >;
+```
+ 
+### Set up the Backend
 
-### `npm run eject`
+Download the backend at the backend repository   
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+[https://github.com/ferrazzosito/unibz-infosec-backend](https://github.com/ferrazzosito/unibz-infosec-backend) 
+  
+using `git clone` 
+  
+then go in src/main/resources/ and create a file called application.properties if there's not.
+  
+Insert the following configuration  
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+spring.datasource.url=jdbc:postgresql://localhost:5432/< database_name >
+spring.datasource.username=< pgsql_name >
+spring.datasource.password=< pgsql_password >
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Once you are done, execute  
+  
+```bash
+    mvn clean compile install
+```
+    
+and then   
+  
+```bash  
+    mvn clean compile spring-boot:run  
+```  
+  
+Now if you followed the steps correctly you should be ready to start using the application, as everything is set up and linked.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Usage 
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+In [http://localhost:3000/sign-up](http://localhost:3000/sign-up) you can sign up either as a vendor or as a customer.  
+After that, you'll be redirected to the [http://localhost:3000/login](http://localhost:3000/login) in which you can sign in.  
 
-### Code Splitting
+### As a Customer  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+In [http://localhost:3000/](http://localhost:3000/) you'll find the homepage for customer. You can search a name of a product
+and find them. On the products you can buy, see their reviews, and see the account of the vendor just by clicking its name in
+`by vendor < name >`.  
+In the bottom part you can click on `LOGOUT` to log out or on `MY ACCOUNT` to go on your customer account page.    
+  
+By clicking `SEE REVIEWS` button you get redirected to [http://localhost:3000/product?id=1](http://localhost:3000/product?id=1) where the id is equal to the id of the product you'd like to see. In this page you can find a form to publish a review for this product and below you can read all of the reviews already present, which can maybe have a reply or not (the reply is an innerbox with a similar structure as a review). To come back to the previous page you can just go back with your browser.  
 
-### Analyzing the Bundle Size
+By clicking `MY ACCOUNT` button you get redirected to [http://localhost:3000/my-profile-buyer](http://localhost:3000/my-profile-buyer) in which you can see all the information related to your customer account. You can see at the very top your current balance and top it up for free in the form below that. You can see your past orders and know if they have been approved or not by the vendor. When approved the money the price of the product is subtracted by your account. You can also see 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Usage Notes
 
-### Advanced Configuration
+- To try the chat you need to open an icognito tab and login with another account having a counterpart role than the one you opened the chat with, so with a Vendor role.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- The chat takes a bit to load, wait until input chat allows you to write.
 
-### Deployment
+- The chat is from a frontend point of view a bit buggy, because it was meant for a slight different version of react. Nevertheless, if you use it properly, without particular edge cases, it works as it should.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+-- vulnerabilities
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+-- vulnerabilities notes (how things work or where to find them)

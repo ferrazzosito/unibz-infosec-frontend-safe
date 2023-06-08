@@ -4,23 +4,22 @@ import { ConfirmationButton } from '../components/Buttons';
 import { Grid, Item } from '@mui/material';
 import {Card, CardContent,Typography} from '@mui/material';
 import { useReviews } from '../hooks/useReviews';
+import { ErrorAlert } from '../components/Alerts';
 
+/**
+ * Form for signing up
+ * 
+ * @param onSubmitForm function to execute for form submission
+ * @param redirect function to execute after form submission - where the user has to be redirected
+ */
 const SignUpForm = ({onSubmitForm, redirect}) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
-    // const [name, setName] = useState("");
-    // const [lastName, setLastName] = useState("");
 
     return (
         <Grid container rowSpacing={2} columnSpacing={2}  justifyContent="center">
-            {/* <Grid item xs={6}>
-                <StringField string={name} setString={setName} title={"Name"} />
-            </Grid>
-            <Grid item xs={6}>
-               <StringField string={lastName} setString={setLastName} title={"Last Name"} />
-            </Grid> */}
             <Grid item xs={12}>
                 <EmailField email = {email} setEmail={setEmail}/>
             </Grid>
@@ -45,13 +44,25 @@ const SignUpForm = ({onSubmitForm, redirect}) => {
     )
 }
 
+/**
+ * Form for signing in
+ * 
+ * @param onSubmitForm function to execute for form submission
+ * @param redirect function to execute after form submission - where the user has to be redirected
+ */
 const SignInForm = ({onSubmitForm, redirect}) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [errorAlert, setErrorAlert] = useState();
 
     return (
         <Grid container rowSpacing={2} columnSpacing={2}  justifyContent="center">
+            {
+                errorAlert ?
+                    <ErrorAlert message={errorAlert} />
+                : <></>
+            }
             <Grid item xs={12}>
                 <EmailField email = {email} setEmail={setEmail}/>
             </Grid>
@@ -60,14 +71,26 @@ const SignInForm = ({onSubmitForm, redirect}) => {
             </Grid>
             <Grid item xs={7}>
                 <ConfirmationButton title={"Sign In"} onClick={() => { 
+
+                    setErrorAlert();
+
                     onSubmitForm(email, password)
                     .then( (user) => redirect(user.payload.role))
+                    .catch(e => setErrorAlert("Incorrect credentials"));
                 }} />
             </Grid>
         </Grid>
     )
 }
 
+/**
+ * Form for publishing a review
+ * 
+ * @param header headline of the form giving info on what the user is filling
+ * @param isReply says whether this form has to be a reply - meeaning that when it has to submit the form this information will be transmitted with the review id, which it is referring to
+ * @param replyFromReviewId optional id of the review, which this review is being a reply to
+ * @param onSubmitForm function to specify what to do when the form is submitted
+ */
 const ReviewForm = ({header, isReply, replyFromReviewId, onSubmitForm}) => {
 
     const [stars, setStars] = useState(1);
@@ -118,6 +141,11 @@ const ReviewForm = ({header, isReply, replyFromReviewId, onSubmitForm}) => {
 
 }
 
+/**
+ * Form for creating a new product
+ * 
+ * @param onSubmitForm function to specify what to do when the form is submitted
+ */
 const ProductForm = ({onSubmitForm}) => {
 
     const [type, setType] = useState("");
@@ -163,6 +191,11 @@ const ProductForm = ({onSubmitForm}) => {
     )
 }
 
+/**
+ * Form for topping up the balance of the user
+ * 
+ * @param onSubmitForm function to specify what to do when the form is submitted
+ */
 const TopUpMoneyForm = ({onSubmitForm}) => {
     const [money, setMoney] = useState(1);
 

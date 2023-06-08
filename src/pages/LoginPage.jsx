@@ -20,9 +20,8 @@ const LoginPage = () => {
         if(user && user.accessToken)
             redirect(user.payload.role);
         
-    }, [])
+    }, [])  
 
-    //cambia che sta a 12 ma cambia lo stile
     return(
         <Grid container justifyContent="center" >
             <Grid item xs={8}>
