@@ -131,13 +131,3 @@ export function useUser(token = null) {
     return {user, logUser, registerUser, logout/*, reload*/, findUser, topUp};
 
 }
-
-// export function AuthProvider({ children }) {
-//   const auth = useUser();
-
-//   return <authContext.Provider value={auth}>{children}</authContext.Provider>;
-// }
-
-// export default function AuthConsumer() {
-//   return React.useContext(authContext);
-// }

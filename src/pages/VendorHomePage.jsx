@@ -49,16 +49,6 @@ const VendorHomePage = ({value}) => {
         setFunctionsManageChat([ sendMsg, closeChat ]);
     };
 
-    // const getCustomLauncher = (handleToggle) => (
-    //     <ConfirmationButton title="CHAT WITH CUSTOMER" onClick={() => {
-    //         if (functionsManageChat) {
-    //             handleToggle();
-    //             setFunctionsManageChat();
-    //             const [sendMsg, closeChat] = functionsManageChat;
-    //             closeChat();
-    //         }
-    //     }}/>
-    // );
 
     const handleChatInput = (message) => {
         const [sendMsg, closeChat] = functionsManageChat;
