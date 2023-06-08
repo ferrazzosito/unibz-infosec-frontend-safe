@@ -1,70 +1,103 @@
-# Getting Started with Create React App
+#  Vulnerabilities Store User Guide
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Installation
 
-## Available Scripts
 
-In the project directory, you can run:
+### Prerequisites 
 
-### `npm start`
+To set up the enviroment for this project you need to have installed on your system
+- [Maven](https://maven.apache.org/download.cgi)
+- [NodeJs](https://nodejs.org/en/download)
+- [PostgreSQL](https://www.postgresql.org/download/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Remember that on Windows to be able to use their commands, you need to add the Enviroment Variables.  
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Set up the Frontend
 
-### `npm test`
+Download the frontend at the frontend repository   
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+[https://github.com/ferrazzosito/unibz-infosec-frontend](https://github.com/ferrazzosito/unibz-infosec-frontend) 
+  
+using `git clone`  
+  
+then run   
+  
+```bash
+npm install
+```
 
-### `npm run build`
+then you are good to go. You can run  
+  
+```bash
+npm start
+```
+  
+and find in at [http://localhost:3000](http://localhost:3000/) the frontend but keep in mind that it needs also the backend to work, so it won't do anything now.  
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Set up the Database   
+  
+First of all create an empty database using postgres and gives the name you prefer  .
+You can do so, first, by running the following command to open PSQL command-line tool  
+  
+```bash
+psql -U < pgsql_username >
+``` 
+where username is your username of postgresql.
+  
+Now when prompted insert your postgresql password.
+Run a CREATE DATABASE command to create the new Database
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```sql
+CREATE DATABASE < database_name >;
+```
+ 
+### Set up the Backend
 
-### `npm run eject`
+Download the backend at the backend repository   
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+[https://github.com/ferrazzosito/unibz-infosec-backend](https://github.com/ferrazzosito/unibz-infosec-backend) 
+  
+using `git clone` 
+  
+then go in src/main/resources/ and create a file called application.properties if there's not.
+  
+Insert the following configuration  
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+spring.datasource.url=jdbc:postgresql://localhost:5432/< database_name >
+spring.datasource.username=< pgsql_name >
+spring.datasource.password=< pgsql_password >
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Once you are done, execute  
+  
+```bash
+    mvn clean compile install
+```
+    
+and then   
+  
+```bash  
+    mvn clean compile spring-boot:run  
+```  
+  
+Now if you followed the steps correctly you should be ready to start using the application, as everything is set up and linked.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Usage 
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+In [http://localhost:3000/sign-up](http://localhost:3000/sign-up) you can sign up either as a vendor or 
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Usage Notes
 
-### Analyzing the Bundle Size
+- To try the chat you need to open an icognito tab and login with another account having a counterpart role than the one you opened the chat with, so with a Vendor role.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- The chat takes a bit to load, wait until input chat allows you to write.
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- The chat is from a frontend point of view a bit buggy, because it was meant for a slight different version of react. Nevertheless, if you use it properly, without particular edge cases, it works as it should.
