@@ -66,7 +66,7 @@ const VendorPage = () => {
     const openChat = (handleToggle) => {
         toggleInputDisabled();
 
-        requestChat(vendor.id)
+        requestChat(id)
             .then(chatIdResp => {
                 setChatId(chatIdResp);
                 const [sendMsg, closeChat] = openChatSession(

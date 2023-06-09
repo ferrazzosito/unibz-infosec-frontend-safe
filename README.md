@@ -108,8 +108,6 @@ By clicking `MY ACCOUNT` button you get redirected to [http://localhost:3000/my-
 By clicking `by vendor < name >` text you get redirected to [http://localhost:3000/vendor?id=1](http://localhost:3000/vendor?id=1) in which you can find the email of the selected vendor and the button in the bottom right cornern to chat with him in live.
 
 
-
-
 ### As a Vendor
 
 In [http://localhost:3000/selling](http://localhost:3000/selling) you'll find the homepage for vendor. There's a form to add products. Below you can search a name of a product of yours and find them. On the products you can see their reviews and delete them only if they haven't been involved in a relationship yet, like orders, reviews and so on.
