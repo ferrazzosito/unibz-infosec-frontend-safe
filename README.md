@@ -37,15 +37,15 @@ and find in at [http://localhost:3000](http://localhost:3000/) the frontend but 
 
 ### Set up the Database   
   
-First of all create an empty database using postgres and gives the name you prefer  .
+First of all create an empty database using postgres and give it the name you prefer.
 You can do so, first, by running the following command to open PSQL command-line tool  
   
 ```bash
 psql -U < pgsql_username >
 ``` 
-where username is your username of postgresql.
+where username is your username on postgresql.
   
-Now when prompted insert your postgresql password.
+Now when prompted, insert your postgresql password.
 Run a CREATE DATABASE command to create the new Database
 
 ```sql
@@ -60,7 +60,7 @@ Download the backend at the backend repository
   
 using `git clone` 
   
-then go in src/main/resources/ and create a file called application.properties if there's not.
+then go in src/main/resources/ and create a file called application.properties if it's not there yet.
   
 Insert the following configuration  
 
@@ -103,9 +103,9 @@ In the bottom part you can click on `LOGOUT` to log out or on `MY ACCOUNT` to go
   
 By clicking `SEE REVIEWS` button you get redirected to [http://localhost:3000/product?id=1](http://localhost:3000/product?id=1) where the id is equal to the id of the product you'd like to see. In this page you can find a form to publish a review for this product and below you can read all of the reviews already present, which can maybe have a reply or not (the reply is an innerbox with a similar structure as a review). To come back to the previous page you can just go back with your browser.  
 
-By clicking `MY ACCOUNT` button you get redirected to [http://localhost:3000/my-profile-buyer](http://localhost:3000/my-profile-buyer) in which you can see all the information related to your customer account. You can see at the very top your current balance and top it up for free in the form below that. You can see your past orders and know if they have been approved or not by the vendor. When approved the money the price of the product is subtracted by your account. You can also access the reviews page of the product of the order from these cards, as well as for the vendor's page.
+By clicking `MY ACCOUNT` button you get redirected to [http://localhost:3000/my-profile-buyer](http://localhost:3000/my-profile-buyer) in which you can see all the information related to your customer account. You can see at the very top your current balance and top it up for free in the form below that. You can see your past orders and know if they have been approved or not by the vendor. When approved the price of the product is subtracted from your account. You can also access the reviews page of the product of the order from these cards, as well as for the vendor's page.
 
-By clicking `by vendor < name >` text you get redirected to [http://localhost:3000/vendor?id=1](http://localhost:3000/vendor?id=1) in which you can find the email of the selected vendor and the button in the bottom right cornern to chat with him in live.
+By clicking `by vendor < name >` text you get redirected to [http://localhost:3000/vendor?id=1](http://localhost:3000/vendor?id=1) in which you can find the email of the selected vendor and the button in the bottom right corner to chat with them in live.
 
 
 ### As a Vendor
@@ -128,9 +128,11 @@ By clicking `MY ACCOUNT` button you get redirected to [http://localhost:3000/my-
 
 - Keep in mind that the insecure version doesn't use salt in the encryption therefore you have to access with different accounts to the safe/unsafe version.
 
+- The sign up of an account takes a while as well, as the RSA keys are generated at the sign up.
+
 ## Vulnerabilities
 
-We managed to have the secure version and the insecure version such that.
+We managed to have the secure version and the insecure version as follows.
 Insecure version is vulnerable to 
 - XSS stored attack
 - XSS reflected attack
@@ -143,15 +145,12 @@ plus BONUS:
 - password leaking attack
 - man in the middle XSS-driven attack
 
-whilst the secure version implements mechanisms to overcome these vulnerabilities.
-The secure version 
+whilst the secure version implements mechanisms to overcome these vulnerabilities,
+the secure version 
 - for XSS reflected and stored attacks, it implements in the backend the query sanification
 - for SQL injection, it performs in the backend a sanification with the prepared statements
-- for XSRF token attack, ....
-- for interception attacks, it implements a diffie hellman keys exchanges in order to have encrypted communication. It also implements the digital signature to avoid fraudolent changes due to an interception
+- for XSRF token attack, it assigns a randomly-generated token string during login (in our case embedded in the session JWT token), to be then sent in a header by the client and checked by the backend at every subsequent POST request (therefore ensuring that the request is not coming from a third party, that would not have access to the needed token)
+- for interception attacks, it implements a Diffie Hellman keys exchange in order to have encrypted communication. It also implements the digital signature to avoid fraudolent changes due to an interception
 - for password attacks, it implements mechanisms of hashing the password with a salt and using the SHA256 (much more secure than the MD5)
-- password leaking attack, it implements specific safer User Entities, to avoid in any way to leak password for a request
-- to avoid man in the middle XSS-driven attack, it implements also in the frontend the query sanification
-
-
-code struct?
+- for password leaking attacks, it implements specific safer User Entities, to avoid in any way to leak passwords after a request
+- to avoid man in the middle XSS-driven attack, it implements also in the frontend query sanification
